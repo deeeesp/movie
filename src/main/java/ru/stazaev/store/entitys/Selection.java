@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -16,17 +15,19 @@ import java.util.Set;
 @Table(name = "selections")
 public class Selection {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "selection_id")
     private Long id;
     private String tag;
     private String name;
 
-    @ManyToMany()
-    @JoinTable(
-            name = "films_selection",
-            joinColumns = @JoinColumn(name = "selection_id"),
-            inverseJoinColumns = @JoinColumn(name = "film_id")
-    )
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "films_selection",
+            joinColumns = { @JoinColumn(name = "selection_id") },
+            inverseJoinColumns = { @JoinColumn(name = "film_id") })
     private List<Film> films = new ArrayList<>();
 }

@@ -5,8 +5,6 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 
 @Getter
 @Setter
@@ -17,7 +15,7 @@ import java.util.Set;
 @Table(name = "films")
 public class Film {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id")
     private long id;
     private String title;
@@ -28,6 +26,11 @@ public class Film {
     private Long fees;
     private String plot;
 
-    @ManyToMany(mappedBy = "films")
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "films")
     private List<Selection> selections = new ArrayList<>();
 }

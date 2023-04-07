@@ -9,4 +9,8 @@ public interface SelectionService {
     SelectionDTO getById(long id);
 
     void save(SelectionDTO selectionDTO);
+
+    void addFilm(long id, long filmId);
+
+    void deleteFilm(long id, long filmId);
 }

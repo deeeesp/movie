@@ -6,9 +6,7 @@ import ru.stazaev.api.mappers.FilmDTOMapper;
 import ru.stazaev.api.services.FilmService;
 import ru.stazaev.store.repositories.FilmRepository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class FilmServiceImpl implements FilmService {

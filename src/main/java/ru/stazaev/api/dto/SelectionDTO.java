@@ -1,11 +1,9 @@
 package ru.stazaev.api.dto;
 
 import lombok.*;
-import ru.stazaev.store.entitys.Film;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter

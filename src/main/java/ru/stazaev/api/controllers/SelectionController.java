@@ -10,6 +10,9 @@ public class SelectionController {
 
     private final SelectionService selectionService;
     private final String SAVE_PATH = "/save";
+    private final String ADD_FILM_PATH = "/{id}/add";
+    private final String DELETE_FILM_PATH = "/{id}/delete";
+
     public SelectionController(SelectionService selectionService) {
         this.selectionService = selectionService;
     }
@@ -21,8 +24,19 @@ public class SelectionController {
 
     @PostMapping(SAVE_PATH)
     public String saveSelection(@RequestBody SelectionDTO selectionDTO){
-        System.out.println(selectionDTO);
         selectionService.save(selectionDTO);
+        return "success";
+    }
+
+    @PostMapping(ADD_FILM_PATH)
+    public String addFilmToSelection(@RequestParam("film") long filmId, @PathVariable long id){
+        selectionService.addFilm(id, filmId);
+        return "success";
+    }
+
+    @PostMapping(DELETE_FILM_PATH)
+    public String deleteFilmFromSelection(@RequestParam("film") long filmId, @PathVariable long id){
+        selectionService.deleteFilm(id, filmId);
         return "success";
     }
 }

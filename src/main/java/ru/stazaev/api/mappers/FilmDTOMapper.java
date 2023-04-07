@@ -5,9 +5,7 @@ import ru.stazaev.api.dto.FilmDTO;
 import ru.stazaev.store.entitys.Film;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class FilmDTOMapper {
@@ -39,7 +37,7 @@ public class FilmDTOMapper {
         return films;
     }
 
-    private Film DTOToEntity(FilmDTO filmDTO) {
+    public Film DTOToEntity(FilmDTO filmDTO) {
         return Film.builder()
                 .title(filmDTO.getTitle())
                 .budget(filmDTO.getBudget())

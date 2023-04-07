@@ -2,11 +2,9 @@ package ru.stazaev.api.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.stazaev.api.dto.FilmDTO;
 import ru.stazaev.api.dto.MainPageRequestDTO;
 import ru.stazaev.api.services.BaseService;
 
-import java.util.List;
 
 @RestController
 public class ApplicationController {

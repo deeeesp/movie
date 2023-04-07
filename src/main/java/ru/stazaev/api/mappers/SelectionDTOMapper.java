@@ -5,9 +5,7 @@ import ru.stazaev.api.dto.SelectionDTO;
 import ru.stazaev.store.entitys.Selection;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class SelectionDTOMapper {
