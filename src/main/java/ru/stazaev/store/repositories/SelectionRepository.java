@@ -19,4 +19,6 @@ public interface SelectionRepository extends JpaRepository<Selection, Long> {
     @Transactional
     @Query("update Selection s set s.films =:filmList where s.id = 1")
     void updateFilms(@Param("filmList") List<Film> filmList);
+    void deleteById(long id);
+    void deleteByTag(String tag);
 }

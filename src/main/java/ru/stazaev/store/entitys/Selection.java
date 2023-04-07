@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "selections")
 public class Selection {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "selection_id")
     private Long id;
     private String tag;

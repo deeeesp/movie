@@ -12,6 +12,9 @@ public class SelectionController {
     private final String SAVE_PATH = "/save";
     private final String ADD_FILM_PATH = "/{id}/add";
     private final String DELETE_FILM_PATH = "/{id}/delete";
+    private final String DELETE_BY_ID = "/delete/{id}";
+    private final String DELETE_BY_TAG = "/delete-tag/{tag}";
+
 
     public SelectionController(SelectionService selectionService) {
         this.selectionService = selectionService;
@@ -39,4 +42,17 @@ public class SelectionController {
         selectionService.deleteFilm(id, filmId);
         return "success";
     }
+
+    @PostMapping(DELETE_BY_ID)
+    public String addFilmToSelection(@PathVariable long id){
+        selectionService.deleteSelectionById(id);
+        return "success";
+    }
+
+    @PostMapping(DELETE_BY_TAG)
+    public String addFilmToSelection(@PathVariable String tag){
+        selectionService.deleteSelectionByTag(tag);
+        return "success";
+    }
+
 }

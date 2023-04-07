@@ -56,4 +56,14 @@ public class SelectionService implements ru.stazaev.api.services.SelectionServic
             selectionRepository.save(selection.get());
         }
     }
+
+    @Override
+    public void deleteSelectionById(long id) {
+        selectionRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteSelectionByTag(String tag) {
+        selectionRepository.deleteByTag(tag);
+    }
 }

@@ -28,4 +28,17 @@ public class FilmServiceImpl implements FilmService {
         var filmById = filmRepository.findById(id);
         return filmById.map(mapper::entityToDTO).orElse(null);
     }
+
+    @Override
+    public void deleteFilmById(long id) {
+        filmRepository.deleteById(id);
+
+    }
+
+    @Override
+    public void saveFilm(FilmDTO filmDTO) {
+        var film = mapper.DTOToEntity(filmDTO);
+        filmRepository.save(film);
+    }
+
 }

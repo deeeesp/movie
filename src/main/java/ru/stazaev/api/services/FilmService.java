@@ -8,4 +8,7 @@ import java.util.Set;
 public interface FilmService {
     List<FilmDTO> getTopFilms();
     FilmDTO getFilmById(long id);
+    void deleteFilmById(long id);
+    void saveFilm(FilmDTO filmDTO);
+
 }
