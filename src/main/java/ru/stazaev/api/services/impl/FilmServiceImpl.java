@@ -32,13 +32,30 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public void deleteFilmById(long id) {
         filmRepository.deleteById(id);
-
     }
 
     @Override
     public void saveFilm(FilmDTO filmDTO) {
         var film = mapper.DTOToEntity(filmDTO);
         filmRepository.save(film);
+    }
+
+    @Override
+    public List<FilmDTO> getByTitle(String title){
+        var film = filmRepository.findByTitle(title);
+        return film.map(mapper::EntityListToDTO).orElse(null);
+    }
+
+    @Override
+    public List<FilmDTO> getByTitleRatio(String title){
+        var film = filmRepository.findByRationTitle(title);
+        return film.map(mapper::EntityListToDTO).orElse(null);
+    }
+
+    @Override
+    public List<FilmDTO> getByPlotRatio(String title){
+        var film = filmRepository.findByRationPlot(title);
+        return film.map(mapper::EntityListToDTO).orElse(null);
     }
 
 }

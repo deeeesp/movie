@@ -10,5 +10,7 @@ public interface FilmService {
     FilmDTO getFilmById(long id);
     void deleteFilmById(long id);
     void saveFilm(FilmDTO filmDTO);
-
+    List<FilmDTO> getByTitle(String title);
+    List<FilmDTO> getByTitleRatio(String title);
+    List<FilmDTO> getByPlotRatio(String title);
 }
