@@ -1,13 +1,13 @@
 package ru.stazaev.api.mappers;
 
-import org.springframework.stereotype.Service;
-import ru.stazaev.api.dto.MainPageRequestDTO;
+import org.springframework.stereotype.Component;
+import ru.stazaev.api.dto.request.MainPageRequestDto;
 import ru.stazaev.store.entitys.Film;
 import ru.stazaev.store.entitys.Selection;
 
 import java.util.List;
 
-@Service
+@Component
 public class MainPageRequestDTOMapper {
     private final SelectionDTOMapper selectionDTOMapper;
     private final FilmDTOMapper filmDTOMapper;
@@ -17,8 +17,8 @@ public class MainPageRequestDTOMapper {
         this.filmDTOMapper = filmDTOMapper;
     }
 
-    public MainPageRequestDTO entitiesToDTO(List<Film> films, List<Selection> selections){
-        return MainPageRequestDTO.builder()
+    public MainPageRequestDto entitiesToDTO(List<Film> films, List<Selection> selections){
+        return MainPageRequestDto.builder()
                 .filmsDTO(filmDTOMapper.EntityListToDTO(films))
                 .selectionsDTO(selectionDTOMapper.entityListToDto(selections))
                 .build();

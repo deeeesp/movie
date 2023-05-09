@@ -1,34 +1,34 @@
 package ru.stazaev.api.mappers;
 
-import org.springframework.stereotype.Service;
-import ru.stazaev.api.dto.SelectionDTO;
+import org.springframework.stereotype.Component;
+import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.store.entitys.Selection;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 public class SelectionDTOMapper {
     private final FilmDTOMapper filmDTOMapper;
 
     public SelectionDTOMapper(FilmDTOMapper filmDTOMapper) {
         this.filmDTOMapper = filmDTOMapper;
     }
-    public SelectionDTO entityToDto(Selection selection){
-        return SelectionDTO.builder()
+    public SelectionDto entityToDto(Selection selection){
+        return SelectionDto.builder()
                 .name(selection.getName())
                 .tag(selection.getTag())
                 .films(filmDTOMapper.EntityListToDTO(selection.getFilms()))
                 .build();
     }
-    public List<SelectionDTO> entityListToDto(List<Selection> selections) {
-        List<SelectionDTO> selectionsDTO = new ArrayList<>();
+    public List<SelectionDto> entityListToDto(List<Selection> selections) {
+        List<SelectionDto> selectionsDTO = new ArrayList<>();
         for (Selection selection : selections){
             selectionsDTO.add(entityToDto(selection));
         }
         return selectionsDTO;
     }
-    public Selection DTOToEntity(SelectionDTO selectionDTO){
+    public Selection DTOToEntity(SelectionDto selectionDTO){
         return Selection.builder()
                 .name(selectionDTO.getName())
                 .tag(selectionDTO.getTag())

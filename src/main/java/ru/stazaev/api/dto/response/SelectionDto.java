@@ -1,4 +1,4 @@
-package ru.stazaev.api.dto;
+package ru.stazaev.api.dto.response;
 
 import lombok.*;
 
@@ -10,8 +10,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SelectionDTO {
+public class SelectionDto {
     private String tag;
     private String name;
-    private List<FilmDTO> films = new ArrayList<>();
+    private List<FilmDto> films = new ArrayList<>();
 }

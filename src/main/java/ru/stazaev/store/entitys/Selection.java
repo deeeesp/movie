@@ -13,11 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "selections")
-public class Selection {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "selection_id")
-    private Long id;
+public class Selection extends BaseEntity {
+
     private String tag;
     private String name;
 
@@ -27,7 +24,7 @@ public class Selection {
                     CascadeType.MERGE
             })
     @JoinTable(name = "films_selection",
-            joinColumns = { @JoinColumn(name = "selection_id") },
-            inverseJoinColumns = { @JoinColumn(name = "film_id") })
+            joinColumns = {@JoinColumn(name = "selection_id")},
+            inverseJoinColumns = {@JoinColumn(name = "film_id")})
     private List<Film> films = new ArrayList<>();
 }

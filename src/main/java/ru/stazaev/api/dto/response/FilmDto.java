@@ -1,4 +1,4 @@
-package ru.stazaev.api.dto;
+package ru.stazaev.api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FilmDTO {
+public class FilmDto {
     private String title;
     @JsonProperty("release_year")
     private int releaseYear;

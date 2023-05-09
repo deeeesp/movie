@@ -1,16 +1,16 @@
 package ru.stazaev.api.mappers;
 
-import org.springframework.stereotype.Service;
-import ru.stazaev.api.dto.FilmDTO;
+import org.springframework.stereotype.Component;
+import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.store.entitys.Film;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 public class FilmDTOMapper {
-    public FilmDTO entityToDTO(Film film){
-        return FilmDTO.builder()
+    public FilmDto entityToDTO(Film film){
+        return FilmDto.builder()
                 .title(film.getTitle())
                 .releaseYear(film.getReleaseYear())
                 .country(film.getCountry())
@@ -21,23 +21,23 @@ public class FilmDTOMapper {
                 .build();
     }
 
-    public List<FilmDTO> EntityListToDTO(List<Film> films){
-        List<FilmDTO> filmsDTO = new ArrayList<>();
+    public List<FilmDto> EntityListToDTO(List<Film> films){
+        List<FilmDto> filmsDTO = new ArrayList<>();
         for (Film film : films) {
             filmsDTO.add(entityToDTO(film));
         }
         return filmsDTO;
     }
 
-    public List<Film> DTOListToEntity(List<FilmDTO> filmsDTO) {
+    public List<Film> DTOListToEntity(List<FilmDto> filmsDTO) {
         List<Film> films = new ArrayList<>();
-        for (FilmDTO filmDTO : filmsDTO){
+        for (FilmDto filmDTO : filmsDTO){
             films.add(DTOToEntity(filmDTO));
         }
         return films;
     }
 
-    public Film DTOToEntity(FilmDTO filmDTO) {
+    public Film DTOToEntity(FilmDto filmDTO) {
         return Film.builder()
                 .title(filmDTO.getTitle())
                 .budget(filmDTO.getBudget())
