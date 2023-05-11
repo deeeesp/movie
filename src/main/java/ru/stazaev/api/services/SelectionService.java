@@ -1,15 +1,15 @@
 package ru.stazaev.api.services;
 
 import org.springframework.transaction.annotation.Transactional;
-import ru.stazaev.api.dto.SelectionDTO;
+import ru.stazaev.api.dto.response.SelectionDto;
 
 public interface SelectionService {
 
-    SelectionDTO getSelection();
+    SelectionDto getSelection();
 
-    SelectionDTO getById(long id);
+    SelectionDto getById(long id);
 
-    void save(SelectionDTO selectionDTO);
+    void save(SelectionDto selectionDTO);
 
     void addFilm(long id, long filmId);
 

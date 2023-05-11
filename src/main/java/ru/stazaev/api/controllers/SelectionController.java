@@ -1,7 +1,7 @@
 package ru.stazaev.api.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import ru.stazaev.api.dto.SelectionDTO;
+import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.api.services.SelectionService;
 
 @RestController
@@ -21,12 +21,12 @@ public class SelectionController {
     }
 
     @GetMapping("/{id}")
-    public SelectionDTO getSelection(@PathVariable long id){
+    public SelectionDto getSelection(@PathVariable long id){
         return selectionService.getById(id);
     }
 
     @PostMapping(SAVE_PATH)
-    public String saveSelection(@RequestBody SelectionDTO selectionDTO){
+    public String saveSelection(@RequestBody SelectionDto selectionDTO){
         selectionService.save(selectionDTO);
         return "success";
     }

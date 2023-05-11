@@ -1,16 +1,15 @@
 package ru.stazaev.api.services;
 
-import ru.stazaev.api.dto.FilmDTO;
+import ru.stazaev.api.dto.response.FilmDto;
 
 import java.util.List;
-import java.util.Set;
 
 public interface FilmService {
-    List<FilmDTO> getTopFilms();
-    FilmDTO getFilmById(long id);
+    List<FilmDto> getTopFilms();
+    FilmDto getFilmById(long id);
     void deleteFilmById(long id);
-    void saveFilm(FilmDTO filmDTO);
-    List<FilmDTO> getByTitle(String title);
-    List<FilmDTO> getByTitleRatio(String title);
-    List<FilmDTO> getByPlotRatio(String title);
+    void saveFilm(FilmDto filmDTO);
+    List<FilmDto> getByTitle(String title);
+    List<FilmDto> getByTitleRatio(String title);
+    List<FilmDto> getByPlotRatio(String title);
 }

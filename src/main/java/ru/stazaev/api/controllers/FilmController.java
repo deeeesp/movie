@@ -1,7 +1,7 @@
 package ru.stazaev.api.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import ru.stazaev.api.dto.FilmDTO;
+import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.services.FilmService;
 
 import java.util.List;
@@ -24,20 +24,23 @@ public class FilmController {
     }
 
     @GetMapping(FIND_BY_ID)
-    public FilmDTO getFilm(@PathVariable Long id) {return filmService.getFilmById(id);}
+    public FilmDto getFilm(@PathVariable Long id) {
+
+        return filmService.getFilmById(id);
+    }
 
     @GetMapping(FIND_BY_TITLE)
-    public List<FilmDTO> getFilmByTitle(@PathVariable String title) {return filmService.getByTitle(title);}
+    public List<FilmDto> getFilmByTitle(@PathVariable String title) {return filmService.getByTitle(title);}
 
     @GetMapping(FIND_BY_TITLE_RATIO)
-    public List<FilmDTO> getFilmByTitleRatio(@PathVariable String title) {return filmService.getByTitleRatio(title);}
+    public List<FilmDto> getFilmByTitleRatio(@PathVariable String title) {return filmService.getByTitleRatio(title);}
 
     @GetMapping(FIND_BY_PLOT_RATIO)
-    public List<FilmDTO> getFilmByPlotRatio(@PathVariable String title) {return filmService.getByPlotRatio(title);}
+    public List<FilmDto> getFilmByPlotRatio(@PathVariable String title) {return filmService.getByPlotRatio(title);}
 
 
     @PostMapping(SAVE_PATH)
-    public String saveFilm(@RequestBody FilmDTO filmDTO) {
+    public String saveFilm(@RequestBody FilmDto filmDTO) {
         System.out.println();
         filmService.saveFilm(filmDTO);
         return "success";
