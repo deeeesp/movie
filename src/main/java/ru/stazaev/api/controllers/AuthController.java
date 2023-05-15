@@ -14,17 +14,23 @@ import ru.stazaev.api.services.impl.AuthService;
 @RequestMapping("/api/auth")
 
 public class AuthController {
+    private final String REGISTER = "/register";
+    private final String LOGIN = "/login";
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public JwtTokensDto registerUser(
+    @PostMapping(REGISTER)
+    public ResponseEntity<JwtTokensDto> registerUser(
             @RequestBody UserRegistrationDto userRegistrationDto) {
-        return authService.registerUser(userRegistrationDto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.registerUser(userRegistrationDto));
     }
 
-    @PostMapping("/login")
-    public JwtTokensDto loginUser(@RequestBody UserLoginDto userLoginDto) {
-        return authService.loginUser(userLoginDto);
+    @PostMapping(LOGIN)
+    public ResponseEntity<JwtTokensDto> loginUser(@RequestBody UserLoginDto userLoginDto) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.loginUser(userLoginDto));
     }
 }

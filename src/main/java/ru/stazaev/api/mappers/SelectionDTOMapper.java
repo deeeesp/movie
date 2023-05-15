@@ -1,6 +1,7 @@
 package ru.stazaev.api.mappers;
 
 import org.springframework.stereotype.Component;
+import ru.stazaev.api.dto.request.SaveSelectionDto;
 import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.store.entitys.Selection;
 
@@ -28,10 +29,11 @@ public class SelectionDTOMapper {
         }
         return selectionsDTO;
     }
-    public Selection DTOToEntity(SelectionDto selectionDTO){
+    public Selection DTOToEntity(SaveSelectionDto selectionDTO){
         return Selection.builder()
                 .name(selectionDTO.getName())
                 .tag(selectionDTO.getTag())
+                .creatorId(selectionDTO.getCreatorId())
                 .films(filmDTOMapper.DTOListToEntity(selectionDTO.getFilms()))
                 .build();
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.UserLoginDto;
 import ru.stazaev.api.dto.request.UserRegistrationDto;
 import ru.stazaev.api.dto.response.JwtTokensDto;
+import ru.stazaev.api.mappers.UserRegDtoToActiveUserMapper;
 import ru.stazaev.api.security.JwtTokenProvider;
 import ru.stazaev.store.entitys.Role;
 import ru.stazaev.store.entitys.Status;
@@ -25,17 +26,14 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final UserRegDtoToActiveUserMapper userMapper;
 
     public JwtTokensDto  registerUser(UserRegistrationDto userRegistrationDto) {
         if (userRepository.findByUsername(userRegistrationDto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Пользователь с таким именем не существует");
         }
-        User user = new User();
-        user.setEmail(userRegistrationDto.getEmail());
-        user.setUsername(userRegistrationDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        user.setRole(Role.USER);
-        user.setStatus(Status.ACTIVE);
+        User user = userMapper.dtoToEntity(userRegistrationDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
         return createTokensForUser(user);
     }

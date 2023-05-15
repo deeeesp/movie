@@ -1,6 +1,8 @@
 package ru.stazaev.api.services.impl;
 
 import org.springframework.stereotype.Service;
+import ru.stazaev.api.dto.request.DeleteSelectionDto;
+import ru.stazaev.api.dto.request.SaveSelectionDto;
 import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.api.mappers.SelectionDTOMapper;
 import ru.stazaev.store.repositories.FilmRepository;
@@ -9,12 +11,12 @@ import ru.stazaev.store.repositories.SelectionRepository;
 import java.util.NoSuchElementException;
 
 @Service
-public class SelectionService implements ru.stazaev.api.services.SelectionService {
+public class SelectionServiceImpl implements ru.stazaev.api.services.SelectionService {
     private final SelectionRepository selectionRepository;
     private final FilmRepository filmRepository;
     private final SelectionDTOMapper mapper;
 
-    public SelectionService(SelectionRepository selectionRepository, FilmRepository filmRepository, SelectionDTOMapper mapper) {
+    public SelectionServiceImpl(SelectionRepository selectionRepository, FilmRepository filmRepository, SelectionDTOMapper mapper) {
         this.selectionRepository = selectionRepository;
         this.filmRepository = filmRepository;
         this.mapper = mapper;
@@ -32,7 +34,7 @@ public class SelectionService implements ru.stazaev.api.services.SelectionServic
                 .orElseThrow(() -> new NoSuchElementException("Не удалось найти подборку с таким id"));
     }
 
-    public void save(SelectionDto selectionDTO){
+    public void save(SaveSelectionDto selectionDTO){
         var selection = mapper.DTOToEntity(selectionDTO);
         selectionRepository.save(selection);
     }
@@ -63,8 +65,17 @@ public class SelectionService implements ru.stazaev.api.services.SelectionServic
     }
 
     @Override
-    public void deleteSelectionById(long id) {
-        selectionRepository.deleteById(id);
+    public void deleteSelectionById(DeleteSelectionDto selectionDto) {
+        var selection = selectionRepository.findById(selectionDto.getSelectionId());
+        if (selection.isPresent()){
+            if (selection.get().getCreatorId() == selectionDto.getUserId()){
+                selectionRepository.deleteById(selectionDto.getSelectionId());
+            }else {
+                throw new RuntimeException("Недостаточно прав");
+            }
+        }else {
+            throw new NoSuchElementException("Не удалось найти плейлист с таким id");
+        }
     }
 
     @Override

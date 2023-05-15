@@ -17,6 +17,7 @@ public class Selection extends BaseEntity {
 
     private String tag;
     private String name;
+    private long creatorId;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {

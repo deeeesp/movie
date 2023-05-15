@@ -1,5 +1,8 @@
 package ru.stazaev.api.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.stazaev.api.dto.request.MainPageRequestDto;
@@ -16,7 +19,11 @@ public class ApplicationController {
     }
 
     @GetMapping(MAIN_PAGE)
-    public MainPageRequestDto getMainPage(){
-        return baseService.get();
+    public ResponseEntity<MainPageRequestDto> getMainPage() {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(baseService.get());
+
     }
 }

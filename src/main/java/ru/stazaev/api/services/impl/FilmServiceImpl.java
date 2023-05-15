@@ -1,23 +1,25 @@
 package ru.stazaev.api.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.stazaev.api.dto.request.DeleteFilmDto;
+import ru.stazaev.api.dto.request.UserRegistrationDto;
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.mappers.FilmDTOMapper;
 import ru.stazaev.api.services.FilmService;
+import ru.stazaev.store.entitys.Role;
 import ru.stazaev.store.repositories.FilmRepository;
+import ru.stazaev.store.repositories.UserRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
     private final FilmRepository filmRepository;
+    private final UserRepository userRepository;
     private final FilmDTOMapper mapper;
-
-    public FilmServiceImpl(FilmRepository filmRepository, FilmDTOMapper mapper) {
-        this.filmRepository = filmRepository;
-        this.mapper = mapper;
-    }
 
     @Override
     public List<FilmDto> getTopFilms() {
@@ -31,8 +33,13 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void deleteFilmById(long id) {
-        filmRepository.deleteById(id);
+    public void deleteFilmById(DeleteFilmDto filmDto) {
+        var user = userRepository.findById(filmDto.getUserId());
+        if (user.isPresent() && user.get().getRole().equals(Role.ADMIN)){
+            filmRepository.deleteById(filmDto.getFilmId());
+        }else {
+            throw new RuntimeException("Недостаточно ролей для выполнения этой операции");
+        }
     }
 
     @Override
