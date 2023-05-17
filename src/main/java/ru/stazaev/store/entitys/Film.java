@@ -23,6 +23,10 @@ public class Film extends BaseEntity {
     private Long fees;
     private String plot;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
+
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,

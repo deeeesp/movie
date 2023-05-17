@@ -29,8 +29,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.cors();
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeHttpRequests().requestMatchers("/api/auth/login").permitAll();
-        http.authorizeHttpRequests().requestMatchers("/api/film/**").hasAuthority("USER");
+//        http.authorizeHttpRequests().requestMatchers("/api/auth/login").permitAll();
+//        http.authorizeHttpRequests().requestMatchers("/api/film/**").hasAuthority("USER");
 
         http.authorizeHttpRequests().anyRequest().permitAll();
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
