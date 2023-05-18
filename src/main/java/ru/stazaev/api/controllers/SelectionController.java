@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.stazaev.api.dto.request.DeleteSelectionDto;
 import ru.stazaev.api.dto.request.SaveSelectionDto;
+import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
+import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
+import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.api.services.SelectionService;
 
@@ -19,6 +22,8 @@ public class SelectionController {
     private final String DELETE_FILM_PATH = "/{id}/delete";
     private final String DELETE_BY_ID = "/delete";
     private final String DELETE_BY_TAG = "/delete-tag/{tag}";
+    private final String UPDATE_COVER = "/cover-update";
+    private final String GET_COVER = "/{id}/cover";
 
 
     public SelectionController(SelectionService selectionService) {
@@ -72,4 +77,19 @@ public class SelectionController {
                 .build();
     }
 
+    @PostMapping(UPDATE_COVER)
+    public ResponseEntity<Void> updateCover(@ModelAttribute UpdateSelectionCoverDto selectionCoverDto){
+        selectionService.updateSelectionCover(selectionCoverDto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @GetMapping(GET_COVER)
+    public ResponseEntity<ResponsePictureDto> getCover(@PathVariable long id){
+        var cover = selectionService.getSelectionCover(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(cover);
+    }
 }

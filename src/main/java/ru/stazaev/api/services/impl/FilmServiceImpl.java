@@ -20,6 +20,12 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
+    private final String NO_SUCH_ELEMENT = "Не удалось найти элемент с таким id";
+    private final String NOT_ENOUGH_RIGHT = "Недостаточно прав";
+    private final String SAVE_STORAGE_COVER_ERROR = "Ошибка при загрузке изображения в облако";
+    private final String DELETE_STORAGE_COVER_ERROR = "Ошибка при удалении изображения из облака";
+    private final String GET_STORAGE_COVER_ERROR = "Ошибка при получении изображения из облака";
+
     private final FilmRepository filmRepository;
     private final UserRepository userRepository;
     private final FilmDTOMapper mapper;
@@ -43,7 +49,7 @@ public class FilmServiceImpl implements FilmService {
         if (user.isPresent() && user.get().getRole().equals(Role.ADMIN)) {
             filmRepository.deleteById(filmDto.getFilmId());
         } else {
-            throw new RuntimeException("Недостаточно прав для выполнения этой операции");
+            throw new RuntimeException(NOT_ENOUGH_RIGHT);
         }
     }
 
@@ -58,21 +64,21 @@ public class FilmServiceImpl implements FilmService {
     public List<FilmDto> getByTitle(String title) {
         var film = filmRepository.findByTitle(title);
         return film.map(mapper::EntityListToDTO)
-                .orElseThrow(() -> new NoSuchElementException("Не удалось найти фильм с таким названием"));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
     @Override
     public List<FilmDto> getByTitleRatio(String title) {
         var film = filmRepository.findByRationTitle(title);
         return film.map(mapper::EntityListToDTO)
-                .orElseThrow(() -> new NoSuchElementException("Не удалось найти фильм с таким содержанием"));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
     @Override
     public List<FilmDto> getByPlotRatio(String title) {
         var film = filmRepository.findByRationPlot(title);
         return film.map(mapper::EntityListToDTO)
-                .orElseThrow(() -> new NoSuchElementException("Не удалось найти фильм с таким содержанием"));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
     @Override
@@ -88,10 +94,10 @@ public class FilmServiceImpl implements FilmService {
             pictureStorage.savePicture(picturePath, filmCoverDto.getPicture());
         } catch (Exception e) {
             pictureRepository.delete(picture);
-            throw new RuntimeException("Ошибка при сохранении обложки");
+            throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
         }
 
-        deleteCover(film.getPicture());
+        deleteFilmCover(film.getPicture());
 
         film.setPicture(picture);
         filmRepository.save(film);
@@ -100,13 +106,13 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public void deleteFilmCover(DeleteFilmDto filmDto) {
         var film = checkUserRoleGetFilm(filmDto.getUserId(), filmDto.getFilmId());
-        deleteCover(film.getPicture());
+        deleteFilmCover(film.getPicture());
     }
 
     @Override
     public ResponsePictureDto getFilmCover(long filmId) {
         var film = filmRepository.findById(filmId)
-                .orElseThrow(() -> new NoSuchElementException("Фильм не существует"));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         Picture cover = film.getPicture();
         if (cover != null){
             String coverPath = pictureStorage.getFilmCoverPath(cover);
@@ -114,7 +120,7 @@ public class FilmServiceImpl implements FilmService {
             try {
                 coverData = pictureStorage.getPicture(coverPath);
             }catch (Exception e){
-                throw new RuntimeException("Ошибка при получении обложки фильма");
+                throw new RuntimeException(GET_STORAGE_COVER_ERROR);
             }
             return ResponsePictureDto.builder()
                     .data(coverData)
@@ -127,21 +133,21 @@ public class FilmServiceImpl implements FilmService {
 
     private Film checkUserRoleGetFilm(long userId, long filmId){
         var user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Пользователь не существует"));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         if (!user.getRole().equals(Role.ADMIN)) {
-            throw new RuntimeException("Недостаточно прав для выполнения этой операции");
+            throw new RuntimeException(NOT_ENOUGH_RIGHT);
         }
         return filmRepository.findById(filmId)
-                .orElseThrow(() -> new NoSuchElementException("Фильм не существует"));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
-    private void deleteCover(Picture cover){
+    private void deleteFilmCover(Picture cover){
         if (cover!= null){
             String coverPath = pictureStorage.getFilmCoverPath(cover);
             try {
                 pictureStorage.deletePicture(coverPath);
             }catch (Exception e){
-                throw new RuntimeException("Ошибка при удалении обложки фильма");
+                throw new RuntimeException(DELETE_STORAGE_COVER_ERROR);
             }
             pictureRepository.delete(cover);
         }

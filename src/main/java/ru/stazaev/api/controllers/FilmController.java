@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.stazaev.api.dto.request.DeleteFilmDto;
+import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.FilmService;
 
 import java.util.List;
@@ -18,6 +20,9 @@ public class FilmController {
     private final String FIND_BY_TITLE = "/title-search/{title}";
     private final String FIND_BY_TITLE_RATIO = "/title-ratio-search/{title}";
     private final String FIND_BY_PLOT_RATIO = "/plot-ratio-search/{title}";
+    private final String UPDATE_COVER = "/cover-update";
+    private final String GET_COVER = "/{id}/cover";
+
 
 
     private final FilmService filmService;
@@ -71,5 +76,19 @@ public class FilmController {
                 .build();
     }
 
+    @PostMapping(UPDATE_COVER)
+    public ResponseEntity<Void> updateCover(@ModelAttribute UpdateFilmCoverDto filmCoverDto){
+        filmService.updateFilmCover(filmCoverDto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 
+    @GetMapping(GET_COVER)
+    public ResponseEntity<ResponsePictureDto> getCover(@PathVariable long id){
+        var cover = filmService.getFilmCover(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(cover);
+    }
 }
