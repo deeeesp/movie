@@ -33,7 +33,7 @@ public class SelectionDTOMapper {
         return Selection.builder()
                 .name(selectionDTO.getName())
                 .tag(selectionDTO.getTag())
-                .creatorId(selectionDTO.getCreatorId())
+                .owner(selectionDTO.getOwner())
                 .films(filmDTOMapper.DTOListToEntity(selectionDTO.getFilms()))
                 .build();
     }

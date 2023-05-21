@@ -13,7 +13,7 @@ import java.util.List;
 public class SaveSelectionDto {
     private String tag;
     private String name;
-    private long creatorId;
+    private long owner;
     private List<FilmDto> films = new ArrayList<>();
 
 }

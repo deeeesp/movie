@@ -17,7 +17,11 @@ public class Selection extends BaseEntity {
 
     private String tag;
     private String name;
-    private long creatorId;
+    private long owner;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
