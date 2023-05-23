@@ -1,5 +1,7 @@
 package ru.stazaev.api.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.api.services.SelectionService;
 
+@Tag(name = "Selection API", description = "Allows to find and edit selections")
 @RestController
 @RequestMapping("/api/selection")
 public class SelectionController {
@@ -30,6 +33,7 @@ public class SelectionController {
         this.selectionService = selectionService;
     }
 
+    @Operation(summary = "Get selection by id")
     @GetMapping("/{id}")
     public ResponseEntity<SelectionDto> getSelection(@PathVariable long id) {
         return ResponseEntity
@@ -37,6 +41,7 @@ public class SelectionController {
                 .body(selectionService.getById(id));
     }
 
+    @Operation(summary = "Save selection")
     @PostMapping(SAVE_PATH)
     public ResponseEntity<Void> saveSelection(@RequestBody SaveSelectionDto selectionDTO) {
         selectionService.save(selectionDTO);
@@ -45,6 +50,7 @@ public class SelectionController {
                 .build();
     }
 
+    @Operation(summary = "Add film to selection")
     @PostMapping(ADD_FILM_PATH)
     public ResponseEntity<Void> addFilmToSelectionById(@RequestParam("film") long filmId, @PathVariable long id) {
         selectionService.addFilm(id, filmId);
@@ -53,6 +59,7 @@ public class SelectionController {
                 .build();
     }
 
+    @Operation(summary = "Delete film from selection")
     @PostMapping(DELETE_FILM_PATH)
     public ResponseEntity<Void> deleteFilmFromSelection(@RequestParam("film") long filmId, @PathVariable long id) {
         selectionService.deleteFilm(id, filmId);
@@ -61,6 +68,7 @@ public class SelectionController {
                 .build();
     }
 
+    @Operation(summary = "Delete selection by id")
     @PostMapping(DELETE_BY_ID)
     public ResponseEntity<Void> deleteSelectionById(@RequestBody DeleteSelectionDto selectionDto) {
         selectionService.deleteSelectionById(selectionDto);
@@ -69,6 +77,7 @@ public class SelectionController {
                 .build();
     }
 
+    @Operation(summary = "Delete selection by tag")
     @PostMapping(DELETE_BY_TAG)
     public ResponseEntity<Void> deleteSelectionByTag(@PathVariable String tag) {
         selectionService.deleteSelectionByTag(tag);
@@ -77,6 +86,7 @@ public class SelectionController {
                 .build();
     }
 
+    @Operation(summary = "Update selection cover by id")
     @PostMapping(UPDATE_COVER)
     public ResponseEntity<Void> updateCover(@ModelAttribute UpdateSelectionCoverDto selectionCoverDto){
         selectionService.updateSelectionCover(selectionCoverDto);
@@ -85,6 +95,7 @@ public class SelectionController {
                 .build();
     }
 
+    @Operation(summary = "Get selection cover by id")
     @GetMapping(GET_COVER)
     public ResponseEntity<ResponsePictureDto> getCover(@PathVariable long id){
         var cover = selectionService.getSelectionCover(id);

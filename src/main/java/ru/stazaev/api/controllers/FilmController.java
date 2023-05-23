@@ -1,5 +1,7 @@
 package ru.stazaev.api.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import ru.stazaev.api.services.FilmService;
 
 import java.util.List;
 
+@Tag(name = "Film API", description = "Allows to find films")
 @RestController
 @RequestMapping("/api/film")
 public class FilmController {
@@ -31,6 +34,7 @@ public class FilmController {
         this.filmService = filmService;
     }
 
+    @Operation(summary = "Get film by id")
     @GetMapping(FIND_BY_ID)
     public ResponseEntity<FilmDto> getFilm(@PathVariable Long id) {
         return ResponseEntity
@@ -38,6 +42,7 @@ public class FilmController {
                 .body(filmService.getFilmById(id));
     }
 
+    @Operation(summary = "Find film by title")
     @GetMapping(FIND_BY_TITLE)
     public ResponseEntity<List<FilmDto>> getFilmByTitle(@PathVariable String title) {
         return ResponseEntity
@@ -45,6 +50,7 @@ public class FilmController {
                 .body(filmService.getByTitle(title));
     }
 
+    @Operation(summary = "Find film by content")
     @GetMapping(FIND_BY_TITLE_RATIO)
     public ResponseEntity<List<FilmDto>> getFilmByTitleRatio(@PathVariable String title) {
         return ResponseEntity
@@ -52,6 +58,7 @@ public class FilmController {
                 .body(filmService.getByTitleRatio(title));
     }
 
+    @Operation(summary = "Find film by plot ratio in title")
     @GetMapping(FIND_BY_PLOT_RATIO)
     public ResponseEntity<List<FilmDto>> getFilmByPlotRatio(@PathVariable String title) {
         return ResponseEntity
@@ -60,6 +67,7 @@ public class FilmController {
     }
 
 
+    @Operation(summary = "Delete film")
     @PostMapping(SAVE_PATH)
     public ResponseEntity<Void> saveFilm(@RequestBody FilmDto filmDTO) {
         filmService.saveFilm(filmDTO);
@@ -68,6 +76,7 @@ public class FilmController {
                 .build();
     }
 
+    @Operation(summary = "Delete film by id")
     @PostMapping(DELETE)
     public ResponseEntity<Void> deleteFilm(@RequestBody DeleteFilmDto filmDto) {
         filmService.deleteFilmById(filmDto);
@@ -76,6 +85,7 @@ public class FilmController {
                 .build();
     }
 
+    @Operation(summary = "Update film cover by id")
     @PostMapping(UPDATE_COVER)
     public ResponseEntity<Void> updateCover(@ModelAttribute UpdateFilmCoverDto filmCoverDto){
         filmService.updateFilmCover(filmCoverDto);
@@ -84,6 +94,7 @@ public class FilmController {
                 .build();
     }
 
+    @Operation(summary = "Get film cover by id")
     @GetMapping(GET_COVER)
     public ResponseEntity<ResponsePictureDto> getCover(@PathVariable long id){
         var cover = filmService.getFilmCover(id);
