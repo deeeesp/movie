@@ -2,37 +2,41 @@ package ru.stazaev.api.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.stazaev.api.dto.request.AddFilmInSelectionDTO;
 import ru.stazaev.api.dto.request.DeleteFilmDto;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.FilmService;
+import ru.stazaev.api.services.SelectionService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Tag(name = "Film API", description = "Allows to find films")
 @RestController
 @RequestMapping("/api/film")
 public class FilmController {
     private final String SAVE_PATH = "/save";
-    private final String DELETE = "/delete";
+    private final String DELETE = "/delete/{id}";
     private final String FIND_BY_ID = "/{id}";
     private final String FIND_BY_TITLE = "/title-search/{title}";
     private final String FIND_BY_TITLE_RATIO = "/title-ratio-search/{title}";
     private final String FIND_BY_PLOT_RATIO = "/plot-ratio-search/{title}";
     private final String UPDATE_COVER = "/cover-update";
     private final String GET_COVER = "/{id}/cover";
+    private final String ADD_FAVORITE_SELECTION = "/{id}/fav-sel";
+    private final String ADD_CUSTOM_SELECTION = "/{id}/cust-sel";
 
 
 
     private final FilmService filmService;
+    private final SelectionService selectionService;
 
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
-    }
 
     @Operation(summary = "Get film by id")
     @GetMapping(FIND_BY_ID)
@@ -101,5 +105,23 @@ public class FilmController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(cover);
+    }
+
+    @Operation(summary = "Add film at favorite selection")
+    @PostMapping(ADD_FAVORITE_SELECTION)
+    public ResponseEntity<Void> addToFavoriteSel(@PathVariable long id, @RequestBody AddFilmInSelectionDTO filmInSelectionDTO){
+        selectionService.addFilmToFavorite(filmInSelectionDTO.getUserId(), id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @Operation(summary = "Add film at custom selection")
+    @PostMapping(ADD_CUSTOM_SELECTION)
+    public ResponseEntity<Void> addToCustomSel(@PathVariable long id, @RequestBody AddFilmInSelectionDTO filmInSelectionDTO){
+        selectionService.addFilm(filmInSelectionDTO.getSelection_id(), id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }
