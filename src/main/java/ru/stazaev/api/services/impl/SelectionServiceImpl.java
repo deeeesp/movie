@@ -1,13 +1,14 @@
 package ru.stazaev.api.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.*;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
-import ru.stazaev.api.mappers.SelectionDTOMapper;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.api.services.PictureStorage;
+import ru.stazaev.store.entitys.Film;
 import ru.stazaev.store.entitys.Picture;
 import ru.stazaev.store.entitys.Selection;
 import ru.stazaev.store.entitys.Status;
@@ -16,7 +17,6 @@ import ru.stazaev.store.repositories.PictureRepository;
 import ru.stazaev.store.repositories.SelectionRepository;
 import ru.stazaev.store.repositories.UserRepository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -32,9 +32,11 @@ public class SelectionServiceImpl implements SelectionService {
     private final SelectionRepository selectionRepository;
     private final FilmRepository filmRepository;
     private final UserRepository userRepository;
-    private final SelectionDTOMapper mapper;
+//    private final SelectionDTOMapper Selmapper;
     private final PictureRepository pictureRepository;
     private final PictureStorage pictureStorage;
+    private final ModelMapper mapper;
+
 
 
     @Override
@@ -45,20 +47,29 @@ public class SelectionServiceImpl implements SelectionService {
 
     @Override
     public SelectionDto getById(long id) {
-        var findById = selectionRepository.findById(id);
-        return findById.map(mapper::entityToDto)
+        var findById = selectionRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+//        SelectionDto selectionDto = new SelectionDto();
+//        for (Film film : findById.getFilms()){
+//
+//        }
+        return mapper.map(findById, SelectionDto.class);
+//        return findById.map(Selmapper::entityToDto)
+//                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
     @Override
     public SelectionDto getByTag(String tag) {
-        var selection = selectionRepository.findByTag(tag);
-        return selection.map(mapper::entityToDto)
+        var selection = selectionRepository.findByTag(tag)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        return mapper.map(selection, SelectionDto.class);
+//        return selection.map(Selmapper::entityToDto)
+//                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
     public void save(SaveSelectionDto selectionDTO) {
-        var selection = mapper.DTOToEntity(selectionDTO);
+//        var selection = Selmapper.DTOToEntity(selectionDTO);
+        Selection selection = mapper.map(selectionDTO, Selection.class);
         selection.setStatus(Status.ACTIVE);
         var user = userRepository.findById(selection.getOwner())
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));

@@ -3,6 +3,7 @@ package ru.stazaev.api.services;
 import ru.stazaev.api.dto.request.DeleteFilmDto;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public interface FilmService {
     void deleteFilmById(DeleteFilmDto filmDto);
 
     void saveFilm(FilmDto filmDTO);
+    FilmSearchDto getFilm(String title);
 
     List<FilmDto> getByTitle(String title);
 

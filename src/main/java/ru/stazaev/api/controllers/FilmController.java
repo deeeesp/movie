@@ -24,6 +24,7 @@ public class FilmController {
     private final String SAVE_PATH = "/save";
     private final String DELETE = "/delete/{id}";
     private final String FIND_BY_ID = "/{id}";
+    private final String FIND_FILM = "/search/{title}";
     private final String FIND_BY_TITLE = "/title-search/{title}";
     private final String FIND_BY_TITLE_RATIO = "/title-ratio-search/{title}";
     private final String FIND_BY_PLOT_RATIO = "/plot-ratio-search/{title}";
@@ -40,11 +41,21 @@ public class FilmController {
 
     @Operation(summary = "Get film by id")
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<FilmDto> getFilm(@PathVariable Long id) {
+    public ResponseEntity<FilmDto> getFilmById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(filmService.getFilmById(id));
     }
+
+
+//    @Operation(summary = "Find film by title and plot")
+//    @GetMapping(FIND_FILM)
+//    public ResponseEntity<List<FilmDto>> getFilm(@PathVariable String title) {
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(filmService.getFilm(title));
+//    }
+
 
     @Operation(summary = "Find film by title")
     @GetMapping(FIND_BY_TITLE)

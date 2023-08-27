@@ -1,12 +1,13 @@
 package ru.stazaev.api.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.DeleteFilmDto;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
-import ru.stazaev.api.mappers.FilmDTOMapper;
 import ru.stazaev.api.services.FilmService;
 import ru.stazaev.api.services.PictureStorage;
 import ru.stazaev.store.entitys.*;
@@ -14,6 +15,7 @@ import ru.stazaev.store.repositories.FilmRepository;
 import ru.stazaev.store.repositories.PictureRepository;
 import ru.stazaev.store.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,19 +30,26 @@ public class FilmServiceImpl implements FilmService {
 
     private final FilmRepository filmRepository;
     private final UserRepository userRepository;
-    private final FilmDTOMapper mapper;
+    //    private final FilmDTOMapper mapper;
+    private final ModelMapper mapper;
+
     private final PictureRepository pictureRepository;
     private final PictureStorage pictureStorage;
 
     @Override
     public List<FilmDto> getTopFilms() {
-        return mapper.EntityListToDTO(filmRepository.findAll());
+        List<FilmDto> result = new ArrayList<>();
+        var films = filmRepository.findAll();
+        for (Film film : films) {
+            result.add(mapper.map(film, FilmDto.class));
+        }
+        return result;
     }
 
     @Override
     public FilmDto getFilmById(long id) {
         var filmById = filmRepository.findById(id);
-        return filmById.map(mapper::entityToDTO).orElse(null);
+        return mapper.map(filmById, FilmDto.class);
     }
 
     @Override
@@ -55,30 +64,50 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void saveFilm(FilmDto filmDTO) {
-        var film = mapper.DTOToEntity(filmDTO);
+        var film = mapper.map(filmDTO, Film.class);
         film.setStatus(Status.ACTIVE);
         filmRepository.save(film);
     }
 
     @Override
+    public FilmSearchDto getFilm(String title) {
+        FilmSearchDto result = new FilmSearchDto();
+        result.setTitleFilms(getByTitle(title));
+        result.setPlotFilms(getByPlotRatio(title));
+        return result;
+    }
+
+    @Override
     public List<FilmDto> getByTitle(String title) {
-        var film = filmRepository.findByTitle(title);
-        return film.map(mapper::EntityListToDTO)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        var films = filmRepository.findByTitle(title)
+                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        List<FilmDto> result = new ArrayList<>();
+        for (Film film : films) {
+            result.add(mapper.map(film, FilmDto.class));
+        }
+        return result;
     }
 
     @Override
     public List<FilmDto> getByTitleRatio(String title) {
-        var film = filmRepository.findByRationTitle(title);
-        return film.map(mapper::EntityListToDTO)
+        var films = filmRepository.findByRationTitle(title)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        List<FilmDto> result = new ArrayList<>();
+        for (Film film : films) {
+            result.add(mapper.map(film, FilmDto.class));
+        }
+        return result;
     }
 
     @Override
     public List<FilmDto> getByPlotRatio(String title) {
-        var film = filmRepository.findByRationPlot(title);
-        return film.map(mapper::EntityListToDTO)
+        var films = filmRepository.findByRationPlot(title)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        List<FilmDto> result = new ArrayList<>();
+        for (Film film : films) {
+            result.add(mapper.map(film, FilmDto.class));
+        }
+        return result;
     }
 
     @Override
@@ -114,12 +143,12 @@ public class FilmServiceImpl implements FilmService {
         var film = filmRepository.findById(filmId)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         Picture cover = film.getPicture();
-        if (cover != null){
+        if (cover != null) {
             String coverPath = pictureStorage.getFilmCoverPath(cover);
             byte[] coverData;
             try {
                 coverData = pictureStorage.getPicture(coverPath);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException(GET_STORAGE_COVER_ERROR);
             }
             return ResponsePictureDto.builder()
@@ -131,7 +160,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
 
-    private Film checkUserRoleGetFilm(long userId, long filmId){
+    private Film checkUserRoleGetFilm(long userId, long filmId) {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         if (!user.getRole().equals(Role.ADMIN)) {
@@ -141,12 +170,12 @@ public class FilmServiceImpl implements FilmService {
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
-    private void deleteFilmCover(Picture cover){
-        if (cover!= null){
+    private void deleteFilmCover(Picture cover) {
+        if (cover != null) {
             String coverPath = pictureStorage.getFilmCoverPath(cover);
             try {
                 pictureStorage.deletePicture(coverPath);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException(DELETE_STORAGE_COVER_ERROR);
             }
             pictureRepository.delete(cover);

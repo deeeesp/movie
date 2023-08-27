@@ -1,6 +1,7 @@
 package ru.stazaev.api.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.UserLoginDto;
 import ru.stazaev.api.dto.request.UserRegistrationDto;
 import ru.stazaev.api.dto.response.JwtTokensDto;
-import ru.stazaev.api.mappers.UserRegDtoToActiveUserMapper;
 import ru.stazaev.api.security.JwtTokenProvider;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.store.entitys.Role;
@@ -28,13 +28,17 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
-    private final UserRegDtoToActiveUserMapper userMapper;
+//    private final UserRegDtoToActiveUserMapper userMapper;
+    private final ModelMapper mapper;
+
 
     public JwtTokensDto  registerUser(UserRegistrationDto userRegistrationDto) {
         if (userRepository.findByUsername(userRegistrationDto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Пользователь с таким именем не существует");
         }
-        User user = userMapper.dtoToEntity(userRegistrationDto);
+//        User user = userMapper.dtoToEntity(userRegistrationDto);
+        User user = mapper.map(userRegistrationDto, User.class);
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
 
