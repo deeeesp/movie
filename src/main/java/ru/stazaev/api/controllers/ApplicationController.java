@@ -18,12 +18,12 @@ public class ApplicationController {
         this.baseService = baseService;
     }
 
-    @GetMapping(MAIN_PAGE)
-    public ResponseEntity<MainPageRequestDto> getMainPage() {
+    @GetMapping("/")
+    public ResponseEntity<String> getMainPage() {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(baseService.get());
+                .body("Server is working");
 
     }
 }

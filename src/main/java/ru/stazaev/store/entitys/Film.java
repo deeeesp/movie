@@ -1,5 +1,6 @@
 package ru.stazaev.store.entitys;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.*;
@@ -27,6 +28,7 @@ public class Film extends BaseEntity {
     @JoinColumn(name = "picture_id")
     private Picture picture;
 
+    @JsonIgnoreProperties("films")
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,

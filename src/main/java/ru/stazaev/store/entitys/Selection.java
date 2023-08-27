@@ -1,5 +1,6 @@
 package ru.stazaev.store.entitys;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "selections")
-public class Selection extends BaseEntity {
+public class Selection extends BaseEntity{
 
     private String tag;
     private String name;
@@ -23,6 +24,8 @@ public class Selection extends BaseEntity {
     @JoinColumn(name = "picture_id")
     private Picture picture;
 
+
+    @JsonIgnoreProperties("selections")
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,

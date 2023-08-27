@@ -1,6 +1,5 @@
 package ru.stazaev.store.repositories;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,10 +14,14 @@ import java.util.Optional;
 public interface SelectionRepository extends JpaRepository<Selection, Long> {
     Optional<Selection> findById(long id);
 
+    Optional<Selection> findByTag(String tag);
+
     @Modifying
     @Transactional
-    @Query("update Selection s set s.films =:filmList where s.id = 1")
-    void updateFilms(@Param("filmList") List<Film> filmList);
+    @Query("update Selection s set s.films =:filmList where s.id = :id")
+    void updateFilms(@Param("filmList") List<Film> filmList, @Param("id") long id);
     void deleteById(long id);
     void deleteByTag(String tag);
+
+
 }

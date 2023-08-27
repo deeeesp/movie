@@ -11,6 +11,7 @@ import ru.stazaev.api.dto.request.UserRegistrationDto;
 import ru.stazaev.api.dto.response.JwtTokensDto;
 import ru.stazaev.api.mappers.UserRegDtoToActiveUserMapper;
 import ru.stazaev.api.security.JwtTokenProvider;
+import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.store.entitys.Role;
 import ru.stazaev.store.entitys.Status;
 import ru.stazaev.store.entitys.User;
@@ -23,6 +24,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
+    private final SelectionService selectionService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
@@ -34,6 +36,11 @@ public class AuthService {
         }
         User user = userMapper.dtoToEntity(userRegistrationDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user = userRepository.save(user);
+
+        var selection = selectionService.createFavoriteSelection(user.getId());
+        user.setFavoriteSelection(selection);
+
         user = userRepository.save(user);
         return createTokensForUser(user);
     }
