@@ -6,12 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.*;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
+import ru.stazaev.api.services.FilmService;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.api.services.PictureStorage;
-import ru.stazaev.store.entitys.Film;
-import ru.stazaev.store.entitys.Picture;
-import ru.stazaev.store.entitys.Selection;
-import ru.stazaev.store.entitys.Status;
+import ru.stazaev.api.services.UserService;
+import ru.stazaev.store.entitys.*;
 import ru.stazaev.store.repositories.FilmRepository;
 import ru.stazaev.store.repositories.PictureRepository;
 import ru.stazaev.store.repositories.SelectionRepository;
@@ -32,11 +31,11 @@ public class SelectionServiceImpl implements SelectionService {
     private final SelectionRepository selectionRepository;
     private final FilmRepository filmRepository;
     private final UserRepository userRepository;
-//    private final SelectionDTOMapper Selmapper;
     private final PictureRepository pictureRepository;
     private final PictureStorage pictureStorage;
     private final ModelMapper mapper;
-
+    private final UserService userService;
+    private final FilmService filmService;
 
 
     @Override
@@ -46,56 +45,40 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public SelectionDto getById(long id) {
-        var findById = selectionRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-//        SelectionDto selectionDto = new SelectionDto();
-//        for (Film film : findById.getFilms()){
-//
-//        }
-        return mapper.map(findById, SelectionDto.class);
-//        return findById.map(Selmapper::entityToDto)
-//                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+    public SelectionDto getById(long selectionId) {
+        var selection = getSelectionById(selectionId);
+        return mapper.map(selection, SelectionDto.class);
     }
 
     @Override
     public SelectionDto getByTag(String tag) {
-        var selection = selectionRepository.findByTag(tag)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        var selection = getSelectionByTag(tag);
         return mapper.map(selection, SelectionDto.class);
-//        return selection.map(Selmapper::entityToDto)
-//                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
-    public void save(SaveSelectionDto selectionDTO) {
-//        var selection = Selmapper.DTOToEntity(selectionDTO);
+    public void saveNewSelection(SaveSelectionDto selectionDTO) {
         Selection selection = mapper.map(selectionDTO, Selection.class);
         selection.setStatus(Status.ACTIVE);
-        var user = userRepository.findById(selection.getOwner())
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        var user = userService.getById(selection.getOwner());
         user.getSelections().add(selection);
         userRepository.save(user);
-//        selectionRepository.save(selection);
     }
 
 
     @Override
-    public void addFilm(long id, long filmId) {
-        var film = filmRepository.findById(filmId)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        var selection = selectionRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-
-        selection.getFilms().add(film);
-        selectionRepository.save(selection);
+    public void addFilmToCustomSelection(long selectionId, long filmId, String username) {
+        var film = filmService.getById(filmId);
+        var selection = getSelectionById(selectionId);
+        if (isOwnerOrAdmin(username, selection)) {
+            selection.getFilms().add(film);
+            selectionRepository.save(selection);
+        }
     }
 
     @Override
-    public void addFilmToFavorite(long id, long filmId) {
-        var film = filmRepository.findById(filmId)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        var user = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+    public void addFilmToFavorite(String username, long filmId) {
+        var film = filmService.getById(filmId);
+        var user = userService.getByUsername(username);
 
         var selection = user.getFavoriteSelection();
         selection.getFilms().add(film);
@@ -105,40 +88,39 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public void deleteFilm(long id, long filmId) {
-        var film = filmRepository.findById(filmId)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        var selection = selectionRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-
-        selection.getFilms().remove(film);
-        selectionRepository.save(selection);
+    public void deleteFilmFromSelection(long selectionId, long filmId, String username) {
+        var film = filmService.getById(filmId);
+        var selection = getSelectionById(selectionId);
+        if (isOwnerOrAdmin(username, selection)) {
+            selection.getFilms().remove(film);
+            selectionRepository.save(selection);
+        }
     }
 
     @Override
-    public void deleteSelectionById(DeleteSelectionDto selectionDto) {
-        var selection = selectionRepository.findById(selectionDto.getSelectionId())
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-
-        if (selection.getOwner() == selectionDto.getUserId()) {
-            selectionRepository.deleteById(selectionDto.getSelectionId());
+    public void deleteSelectionById(long selectionId, String username) {
+        var selection = getSelectionById(selectionId);
+        if (isOwnerOrAdmin(username, selection)) {
+            selectionRepository.deleteById(selectionId);
         } else {
             throw new RuntimeException(NOT_ENOUGH_RIGHT);
         }
     }
 
     @Override
-    public void deleteSelectionByTag(String tag) {
-        selectionRepository.deleteByTag(tag);
+    public void deleteSelectionByTag(String tag, String username) {
+        var selection = getSelectionByTag(tag);
+        if (isOwnerOrAdmin(username, selection)) {
+            selectionRepository.deleteByTag(tag);
+        }else {
+            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+        }
     }
 
     @Override
-    public void updateSelectionCover(UpdateSelectionCoverDto filmCoverDto) {
-        var selection = selectionRepository.findById(filmCoverDto.getSelectionId())
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        var user = userRepository.findById(filmCoverDto.getUserId())
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        if (selection.getOwner() == user.getId()) {
+    public void updateSelectionCover(UpdateSelectionCoverDto filmCoverDto, String username) {
+        var selection = getSelectionById(filmCoverDto.getSelectionId());
+        if (isOwnerOrAdmin(username, selection)) {
             Picture newCover = Picture.builder()
                     .pictureType(filmCoverDto.getPictureType())
                     .build();
@@ -163,8 +145,7 @@ public class SelectionServiceImpl implements SelectionService {
 
     @Override
     public ResponsePictureDto getSelectionCover(long selectionId) {
-        var selection = selectionRepository.findById(selectionId)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        var selection = getSelectionById(selectionId);
         Picture cover = selection.getPicture();
         if (cover != null) {
             String path = pictureStorage.getSelectionCoverPath(cover);
@@ -183,12 +164,9 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public void deleteSelectionCover(DeleteSelectionDto selectionDto) {
-        var selection = selectionRepository.findById(selectionDto.getSelectionId())
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        var user = userRepository.findById(selectionDto.getUserId())
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        if (selection.getOwner() == user.getId()) {
+    public void deleteSelectionCover(Long selectionId, String username) {
+        var selection = getSelectionById(selectionId);
+        if (isOwnerOrAdmin(username, selection)) {
             deleteOldCower(selection.getPicture());
         }
     }
@@ -213,5 +191,21 @@ public class SelectionServiceImpl implements SelectionService {
             }
             pictureRepository.delete(oldCover);
         }
+    }
+
+    public Selection getSelectionById(long selectionId){
+        return selectionRepository.findById(selectionId)
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+    }
+
+    public Selection getSelectionByTag(String tag){
+        return selectionRepository.findByTag(tag)
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+    }
+
+    private boolean isOwnerOrAdmin(String username, Selection selection){
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        return (user.getRole().equals(Role.ADMIN) || (selection.getOwner() == user.getId()));
     }
 }

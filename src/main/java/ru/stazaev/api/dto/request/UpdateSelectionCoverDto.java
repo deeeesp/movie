@@ -15,8 +15,6 @@ import ru.stazaev.store.entitys.PictureType;
 public class UpdateSelectionCoverDto {
     @JsonProperty("selection_id")
     private long selectionId;
-    @JsonProperty("user_id")
-    private long userId;
     private PictureType pictureType;
     private MultipartFile picture;
 }

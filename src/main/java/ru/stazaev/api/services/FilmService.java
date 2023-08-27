@@ -1,10 +1,10 @@
 package ru.stazaev.api.services;
 
-import ru.stazaev.api.dto.request.DeleteFilmDto;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
+import ru.stazaev.store.entitys.Film;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ public interface FilmService {
 
     FilmDto getFilmById(long id);
 
-    void deleteFilmById(DeleteFilmDto filmDto);
+    void deleteFilmById(long id, String username);
 
-    void saveFilm(FilmDto filmDTO);
-    FilmSearchDto getFilm(String title);
+    void saveFilm(FilmDto filmDTO, String username);
+    FilmSearchDto getFilmByTitleOrPlot(String title);
 
     List<FilmDto> getByTitle(String title);
 
@@ -24,9 +24,11 @@ public interface FilmService {
 
     List<FilmDto> getByPlotRatio(String title);
 
-    void updateFilmCover(UpdateFilmCoverDto filmCoverDto);
+    void updateFilmCover(UpdateFilmCoverDto filmCoverDto, String username);
 
     ResponsePictureDto getFilmCover(long filmId);
 
-    void deleteFilmCover(DeleteFilmDto filmDto);
+//    void deleteFilmCover(DeleteFilmDto filmDto);
+
+    Film getById(long filmId);
 }

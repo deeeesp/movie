@@ -3,18 +3,16 @@ package ru.stazaev.api.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.stazaev.api.dto.request.AddFilmInSelectionDTO;
-import ru.stazaev.api.dto.request.DeleteFilmDto;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.FilmService;
 import ru.stazaev.api.services.SelectionService;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Tag(name = "Film API", description = "Allows to find films")
@@ -25,14 +23,10 @@ public class FilmController {
     private final String DELETE = "/delete/{id}";
     private final String FIND_BY_ID = "/{id}";
     private final String FIND_FILM = "/search/{title}";
-    private final String FIND_BY_TITLE = "/title-search/{title}";
-    private final String FIND_BY_TITLE_RATIO = "/title-ratio-search/{title}";
-    private final String FIND_BY_PLOT_RATIO = "/plot-ratio-search/{title}";
     private final String UPDATE_COVER = "/cover-update";
     private final String GET_COVER = "/{id}/cover";
-    private final String ADD_FAVORITE_SELECTION = "/{id}/fav-sel";
-    private final String ADD_CUSTOM_SELECTION = "/{id}/cust-sel";
-
+    private final String ADD_FILM_TO_FAVORITE_SELECTION = "/{filmId}/fav-sel";
+    private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{filmId}/cust-sel/{selectionId}";
 
 
     private final FilmService filmService;
@@ -48,15 +42,15 @@ public class FilmController {
     }
 
 
-//    @Operation(summary = "Find film by title and plot")
-//    @GetMapping(FIND_FILM)
-//    public ResponseEntity<List<FilmDto>> getFilm(@PathVariable String title) {
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(filmService.getFilm(title));
-//    }
+    @Operation(summary = "Find film by title and plot")
+    @GetMapping(FIND_FILM)
+    public ResponseEntity<FilmSearchDto> getFilm(@PathVariable String title) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(filmService.getFilmByTitleOrPlot(title));
+    }
 
-
+/*
     @Operation(summary = "Find film by title")
     @GetMapping(FIND_BY_TITLE)
     public ResponseEntity<List<FilmDto>> getFilmByTitle(@PathVariable String title) {
@@ -81,11 +75,15 @@ public class FilmController {
                 .body(filmService.getByPlotRatio(title));
     }
 
+ */
 
-    @Operation(summary = "Delete film")
+
+    @Operation(summary = "Save new film")
     @PostMapping(SAVE_PATH)
-    public ResponseEntity<Void> saveFilm(@RequestBody FilmDto filmDTO) {
-        filmService.saveFilm(filmDTO);
+    public ResponseEntity<Void> saveFilm(
+            @RequestBody FilmDto filmDTO,
+            Authentication authentication) {
+        filmService.saveFilm(filmDTO, authentication.getName());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
@@ -93,8 +91,10 @@ public class FilmController {
 
     @Operation(summary = "Delete film by id")
     @PostMapping(DELETE)
-    public ResponseEntity<Void> deleteFilm(@RequestBody DeleteFilmDto filmDto) {
-        filmService.deleteFilmById(filmDto);
+    public ResponseEntity<Void> deleteFilm(
+            @PathVariable long id,
+            Authentication authentication) {
+        filmService.deleteFilmById(id, authentication.getName());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -102,8 +102,10 @@ public class FilmController {
 
     @Operation(summary = "Update film cover by id")
     @PostMapping(UPDATE_COVER)
-    public ResponseEntity<Void> updateCover(@ModelAttribute UpdateFilmCoverDto filmCoverDto){
-        filmService.updateFilmCover(filmCoverDto);
+    public ResponseEntity<Void> updateCover(
+            @ModelAttribute UpdateFilmCoverDto filmCoverDto,
+            Authentication authentication) {
+        filmService.updateFilmCover(filmCoverDto, authentication.getName());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -111,7 +113,7 @@ public class FilmController {
 
     @Operation(summary = "Get film cover by id")
     @GetMapping(GET_COVER)
-    public ResponseEntity<ResponsePictureDto> getCover(@PathVariable long id){
+    public ResponseEntity<ResponsePictureDto> getCover(@PathVariable long id) {
         var cover = filmService.getFilmCover(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -119,18 +121,23 @@ public class FilmController {
     }
 
     @Operation(summary = "Add film at favorite selection")
-    @PostMapping(ADD_FAVORITE_SELECTION)
-    public ResponseEntity<Void> addToFavoriteSel(@PathVariable long id, @RequestBody AddFilmInSelectionDTO filmInSelectionDTO){
-        selectionService.addFilmToFavorite(filmInSelectionDTO.getUserId(), id);
+    @PostMapping(ADD_FILM_TO_FAVORITE_SELECTION)
+    public ResponseEntity<Void> addToFavoriteSel(
+            @PathVariable long filmId,
+            Authentication authentication) {
+        selectionService.addFilmToFavorite(authentication.getName(), filmId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
     @Operation(summary = "Add film at custom selection")
-    @PostMapping(ADD_CUSTOM_SELECTION)
-    public ResponseEntity<Void> addToCustomSel(@PathVariable long id, @RequestBody AddFilmInSelectionDTO filmInSelectionDTO){
-        selectionService.addFilm(filmInSelectionDTO.getSelection_id(), id);
+    @PostMapping(ADD_FILM_TO_CUSTOM_SELECTION)
+    public ResponseEntity<Void> addToCustomSel(
+            @PathVariable long filmId,
+            @PathVariable long selectionId,
+            Authentication authentication) {
+        selectionService.addFilmToCustomSelection(selectionId, filmId, authentication.getName());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

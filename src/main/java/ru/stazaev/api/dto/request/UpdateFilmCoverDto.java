@@ -18,9 +18,6 @@ import ru.stazaev.store.entitys.PictureType;
 public class UpdateFilmCoverDto {
     @JsonProperty("film_id")
     private long filmId;
-    @JsonProperty("user_id")
-    private long userId;
-
     private PictureType pictureType;
     private MultipartFile picture;
 }

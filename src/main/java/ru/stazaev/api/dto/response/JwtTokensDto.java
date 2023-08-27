@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class JwtTokensDto {
     private String accessToken;
     private String refreshToken;
+    private long id;
 }

@@ -34,7 +34,7 @@ public class AuthService {
 
     public JwtTokensDto  registerUser(UserRegistrationDto userRegistrationDto) {
         if (userRepository.findByUsername(userRegistrationDto.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Пользователь с таким именем не существует");
+            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
         }
 //        User user = userMapper.dtoToEntity(userRegistrationDto);
         User user = mapper.map(userRegistrationDto, User.class);
@@ -70,6 +70,6 @@ public class AuthService {
             throw new AccessDeniedException("Пользователь заблокирован");
         }
 
-        return new JwtTokensDto(tokenProvider.generateAccessToken(user), tokenProvider.generateRefreshToken(user));
+        return new JwtTokensDto(tokenProvider.generateAccessToken(user), tokenProvider.generateRefreshToken(user), user.getId());
     }
 }

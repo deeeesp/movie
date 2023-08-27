@@ -3,13 +3,13 @@ package ru.stazaev.api.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import ru.stazaev.api.dto.request.DeleteFilmDto;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.FilmService;
 import ru.stazaev.api.services.PictureStorage;
+import ru.stazaev.api.services.UserService;
 import ru.stazaev.store.entitys.*;
 import ru.stazaev.store.repositories.FilmRepository;
 import ru.stazaev.store.repositories.PictureRepository;
@@ -30,9 +30,8 @@ public class FilmServiceImpl implements FilmService {
 
     private final FilmRepository filmRepository;
     private final UserRepository userRepository;
-    //    private final FilmDTOMapper mapper;
     private final ModelMapper mapper;
-
+    private final UserService userService;
     private final PictureRepository pictureRepository;
     private final PictureStorage pictureStorage;
 
@@ -53,24 +52,27 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void deleteFilmById(DeleteFilmDto filmDto) {
-        var user = userRepository.findById(filmDto.getUserId());
-        if (user.isPresent() && user.get().getRole().equals(Role.ADMIN)) {
-            filmRepository.deleteById(filmDto.getFilmId());
+    public void deleteFilmById(long id, String username) {
+        if (userService.isAdministrator(username)) {
+            filmRepository.deleteById(id);
         } else {
             throw new RuntimeException(NOT_ENOUGH_RIGHT);
         }
     }
 
     @Override
-    public void saveFilm(FilmDto filmDTO) {
-        var film = mapper.map(filmDTO, Film.class);
-        film.setStatus(Status.ACTIVE);
-        filmRepository.save(film);
+    public void saveFilm(FilmDto filmDTO, String username) {
+        if (userService.isAdministrator(username)) {
+            var film = mapper.map(filmDTO, Film.class);
+            film.setStatus(Status.ACTIVE);
+            filmRepository.save(film);
+        } else {
+            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+        }
     }
 
     @Override
-    public FilmSearchDto getFilm(String title) {
+    public FilmSearchDto getFilmByTitleOrPlot(String title) {
         FilmSearchDto result = new FilmSearchDto();
         result.setTitleFilms(getByTitle(title));
         result.setPlotFilms(getByPlotRatio(title));
@@ -80,7 +82,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<FilmDto> getByTitle(String title) {
         var films = filmRepository.findByTitle(title)
-                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         List<FilmDto> result = new ArrayList<>();
         for (Film film : films) {
             result.add(mapper.map(film, FilmDto.class));
@@ -111,8 +113,13 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void updateFilmCover(UpdateFilmCoverDto filmCoverDto) {
-        var film = checkUserRoleGetFilm(filmCoverDto.getUserId(), filmCoverDto.getFilmId());
+    public void updateFilmCover(UpdateFilmCoverDto filmCoverDto, String username) {
+        if (!userService.isAdministrator(username)) {
+            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+        }
+        var film = getById(filmCoverDto.getFilmId());
+
+
 
         Picture picture = new Picture();
         picture.setPictureType(filmCoverDto.getPictureType());
@@ -127,21 +134,22 @@ public class FilmServiceImpl implements FilmService {
         }
 
         deleteFilmCover(film.getPicture());
-
         film.setPicture(picture);
         filmRepository.save(film);
     }
 
-    @Override
-    public void deleteFilmCover(DeleteFilmDto filmDto) {
-        var film = checkUserRoleGetFilm(filmDto.getUserId(), filmDto.getFilmId());
+//    @Override
+    public void deleteFilmCover(long filmId, String username) {
+        if (!userService.isAdministrator(username)) {
+            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+        }
+        var film = getById(filmId);
         deleteFilmCover(film.getPicture());
     }
 
     @Override
     public ResponsePictureDto getFilmCover(long filmId) {
-        var film = filmRepository.findById(filmId)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
+        var film = getById(filmId);
         Picture cover = film.getPicture();
         if (cover != null) {
             String coverPath = pictureStorage.getFilmCoverPath(cover);
@@ -159,16 +167,12 @@ public class FilmServiceImpl implements FilmService {
         return null;
     }
 
-
-    private Film checkUserRoleGetFilm(long userId, long filmId) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        if (!user.getRole().equals(Role.ADMIN)) {
-            throw new RuntimeException(NOT_ENOUGH_RIGHT);
-        }
+    @Override
+    public Film getById(long filmId) {
         return filmRepository.findById(filmId)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
+
 
     private void deleteFilmCover(Picture cover) {
         if (cover != null) {

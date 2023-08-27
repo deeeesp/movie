@@ -3,6 +3,7 @@ package ru.stazaev.api.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.stazaev.api.services.UserService;
+import ru.stazaev.store.entitys.Role;
 import ru.stazaev.store.entitys.Selection;
 import ru.stazaev.store.entitys.User;
 import ru.stazaev.store.repositories.UserRepository;
@@ -22,20 +23,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Selection getFavoriteSelection(long id) {
-        return getById(id).getFavoriteSelection();
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username).
+                orElseThrow(() -> new NoSuchElementException("Пользователь с таким именем не найден"));
     }
 
     @Override
-    public List<Selection> getCustomSelections(long id) {
-        return getById(id).getSelections();
+    public Selection getFavoriteSelection(String username) {
+        return getByUsername(username).getFavoriteSelection();
     }
 
     @Override
-    public List<Selection> getAllSelections(long id) {
-        var user = getById(id);
+    public List<Selection> getCustomSelections(String username) {
+        return getByUsername(username).getSelections();
+    }
+
+    @Override
+    public List<Selection> getAllSelections(String username) {
+        var user = getByUsername(username);
         List<Selection> selections = user.getSelections();
         selections.add(user.getFavoriteSelection());
         return selections;
+    }
+
+    @Override
+    public boolean isAdministrator(String username) {
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("Пользователь с таким именем не найден"));
+        return user.getRole().equals(Role.ADMIN);
     }
 }

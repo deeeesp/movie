@@ -8,9 +8,13 @@ import java.util.List;
 public interface UserService {
     User getById(long id);
 
-    Selection getFavoriteSelection(long id);
+    User getByUsername(String username);
 
-    List<Selection> getCustomSelections(long id);
+    Selection getFavoriteSelection(String username);
 
-    List<Selection> getAllSelections(long id);
+    List<Selection> getCustomSelections(String username);
+
+    List<Selection> getAllSelections(String username);
+
+    boolean isAdministrator(String username);
 }

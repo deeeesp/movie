@@ -10,27 +10,27 @@ public interface SelectionService {
 
     SelectionDto getSelection();
 
-    SelectionDto getById(long id);
+    SelectionDto getById(long selectionId);
 
     SelectionDto getByTag(String tag);
 
-    void save(SaveSelectionDto selectionDTO);
+    void saveNewSelection(SaveSelectionDto selectionDTO);
 
-    void addFilm(long id, long filmId);
-    void addFilmToFavorite(long id, long filmId);
+    void addFilmToCustomSelection(long selectionId, long filmId, String username);//us
+    void addFilmToFavorite(String username, long filmId);
 
-    void deleteFilm(long id, long filmId);
+    void deleteFilmFromSelection(long selectionId, long filmId, String username);//us
 
-    void deleteSelectionById(DeleteSelectionDto selectionDto);
+    void deleteSelectionById(long selectionId, String username);
 
     @Transactional
-    void deleteSelectionByTag(String tag);
+    void deleteSelectionByTag(String tag, String username);
 
-    void updateSelectionCover(UpdateSelectionCoverDto selectionCoverDto);
+    void updateSelectionCover(UpdateSelectionCoverDto selectionCoverDto, String username);
 
     ResponsePictureDto getSelectionCover(long selectionId);
 
-    void deleteSelectionCover(DeleteSelectionDto selectionDto);
+    void deleteSelectionCover(Long selectionId, String username);
 
     Selection createFavoriteSelection(long id);
 
