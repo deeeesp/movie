@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
-    private final String FIND_BY_ID = "/{id}";
+    private final String FIND_BY_ID = "/{user_id}";
     private final String GET_FAV_SELECTION = "/fav-sel";
     private final String GET_CUSTOM_SELECTION = "/cust-sel";
     private final String GET_ALL_SELECTIONS = "/all-sel";
@@ -30,7 +30,7 @@ public class UserController {
 
     @Operation(summary = "Get user by id")
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<User> getUser(@PathVariable("user_id") Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getById(id));

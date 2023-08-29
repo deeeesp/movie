@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.Operation;
 public class AuthController {
     private final String REGISTER = "/register";
     private final String LOGIN = "/login";
+    private final String REFRESH = "/refresh";
+
 
     private final AuthService authService;
 
@@ -38,5 +40,13 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(authService.loginUser(userLoginDto));
+    }
+
+    @Operation(summary = "Refresh JWT tokens if OK")
+    @PostMapping(REFRESH)
+    public ResponseEntity<JwtTokensDto> refreshToken(@RequestBody String refreshToken) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.refreshToken(refreshToken));
     }
 }

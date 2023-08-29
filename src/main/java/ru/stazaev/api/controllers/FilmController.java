@@ -20,13 +20,13 @@ import ru.stazaev.api.services.SelectionService;
 @RequestMapping("/api/film")
 public class FilmController {
     private final String SAVE_PATH = "/save";
-    private final String DELETE = "/delete/{id}";
-    private final String FIND_BY_ID = "/{id}";
+    private final String DELETE = "/delete/{film_id}";
+    private final String FIND_BY_ID = "/{film_id}";
     private final String FIND_FILM = "/search/{title}";
     private final String UPDATE_COVER = "/cover-update";
-    private final String GET_COVER = "/{id}/cover";
-    private final String ADD_FILM_TO_FAVORITE_SELECTION = "/{filmId}/fav-sel";
-    private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{filmId}/cust-sel/{selectionId}";
+    private final String GET_COVER = "/{film_id}/cover";
+    private final String ADD_FILM_TO_FAVORITE_SELECTION = "/{film_id}/fav-sel";
+    private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{film_id}/cust-sel/{selection_id}";
 
 
     private final FilmService filmService;
@@ -35,7 +35,7 @@ public class FilmController {
 
     @Operation(summary = "Get film by id")
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<FilmDto> getFilmById(@PathVariable Long id) {
+    public ResponseEntity<FilmDto> getFilmById(@PathVariable("film_id") Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(filmService.getFilmById(id));
@@ -92,7 +92,7 @@ public class FilmController {
     @Operation(summary = "Delete film by id")
     @PostMapping(DELETE)
     public ResponseEntity<Void> deleteFilm(
-            @PathVariable long id,
+            @PathVariable("film_id") long id,
             Authentication authentication) {
         filmService.deleteFilmById(id, authentication.getName());
         return ResponseEntity
@@ -113,7 +113,7 @@ public class FilmController {
 
     @Operation(summary = "Get film cover by id")
     @GetMapping(GET_COVER)
-    public ResponseEntity<ResponsePictureDto> getCover(@PathVariable long id) {
+    public ResponseEntity<ResponsePictureDto> getCover(@PathVariable("film_id") long id) {
         var cover = filmService.getFilmCover(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -123,7 +123,7 @@ public class FilmController {
     @Operation(summary = "Add film at favorite selection")
     @PostMapping(ADD_FILM_TO_FAVORITE_SELECTION)
     public ResponseEntity<Void> addToFavoriteSel(
-            @PathVariable long filmId,
+            @PathVariable("film_id") long filmId,
             Authentication authentication) {
         selectionService.addFilmToFavorite(authentication.getName(), filmId);
         return ResponseEntity
@@ -134,8 +134,8 @@ public class FilmController {
     @Operation(summary = "Add film at custom selection")
     @PostMapping(ADD_FILM_TO_CUSTOM_SELECTION)
     public ResponseEntity<Void> addToCustomSel(
-            @PathVariable long filmId,
-            @PathVariable long selectionId,
+            @PathVariable("film_id") long filmId,
+            @PathVariable("selection_id") long selectionId,
             Authentication authentication) {
         selectionService.addFilmToCustomSelection(selectionId, filmId, authentication.getName());
         return ResponseEntity

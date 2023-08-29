@@ -40,6 +40,8 @@ public class AuthService {
         User user = mapper.map(userRegistrationDto, User.class);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(Status.ACTIVE);
+        user.setRole(Role.USER);
         user = userRepository.save(user);
 
         var selection = selectionService.createFavoriteSelection(user.getId());
