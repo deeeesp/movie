@@ -2,6 +2,7 @@ package ru.stazaev.api.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
@@ -127,7 +128,7 @@ public class FilmServiceImpl implements FilmService {
 
         String picturePath = pictureStorage.getFilmCoverPath(picture);
         try {
-            pictureStorage.savePicture(picturePath, filmCoverDto.getPicture());
+            pictureStorage.savePicture(picturePath, new MockMultipartFile(picturePath, filmCoverDto.getPicture()));
         } catch (Exception e) {
             pictureRepository.delete(picture);
             throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);

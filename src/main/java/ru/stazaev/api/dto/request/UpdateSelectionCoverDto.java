@@ -17,5 +17,5 @@ public class UpdateSelectionCoverDto {
     private long selectionId;
     @JsonProperty("picture_type")
     private PictureType pictureType;
-    private MultipartFile picture;
+    private byte[] picture;
 }

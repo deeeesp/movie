@@ -3,6 +3,7 @@ package ru.stazaev.api.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.mock.web.MockMultipartFile;
 import ru.stazaev.api.dto.request.*;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
@@ -118,17 +119,17 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public void updateSelectionCover(UpdateSelectionCoverDto filmCoverDto, String username) {
-        var selection = getSelectionById(filmCoverDto.getSelectionId());
+    public void updateSelectionCover(UpdateSelectionCoverDto selectionCoverDto, String username) {
+        var selection = getSelectionById(selectionCoverDto.getSelectionId());
         if (isOwnerOrAdmin(username, selection)) {
             Picture newCover = Picture.builder()
-                    .pictureType(filmCoverDto.getPictureType())
+                    .pictureType(selectionCoverDto.getPictureType())
                     .build();
             newCover = pictureRepository.save(newCover);
 
             String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
             try {
-                pictureStorage.savePicture(newCoverPath, filmCoverDto.getPicture());
+                pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionCoverDto.getPicture()));
             } catch (Exception e) {
                 throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
             }

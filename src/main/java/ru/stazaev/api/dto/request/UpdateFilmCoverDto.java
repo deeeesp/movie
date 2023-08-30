@@ -20,5 +20,5 @@ public class UpdateFilmCoverDto {
     private long filmId;
     @JsonProperty("picture_type")
     private PictureType pictureType;
-    private MultipartFile picture;
+    private byte[] picture;
 }
