@@ -1,5 +1,6 @@
 package ru.stazaev.api.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
@@ -8,7 +9,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+    @Schema(example = "polka@mail.ru")
     private String email;
+    @Schema(example = "polka")
     private String username;
 
 }

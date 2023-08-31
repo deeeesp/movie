@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.stazaev.api.controllers.intSwagger.IFilmController;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.dto.response.FilmSearchDto;
@@ -15,10 +16,9 @@ import ru.stazaev.api.services.FilmService;
 import ru.stazaev.api.services.SelectionService;
 
 @RequiredArgsConstructor
-@Tag(name = "Film API", description = "Allows to find films")
 @RestController
 @RequestMapping("/api/film")
-public class FilmController {
+public class FilmController implements IFilmController {
     private final String SAVE_PATH = "/save";
     private final String DELETE = "/delete/{film_id}";
     private final String FIND_BY_ID = "/{film_id}";
@@ -33,7 +33,6 @@ public class FilmController {
     private final SelectionService selectionService;
 
 
-    @Operation(summary = "Get film by id")
     @GetMapping(FIND_BY_ID)
     public ResponseEntity<FilmDto> getFilmById(@PathVariable("film_id") Long id) {
         return ResponseEntity
@@ -42,7 +41,6 @@ public class FilmController {
     }
 
 
-    @Operation(summary = "Find film by title and plot")
     @GetMapping(FIND_FILM)
     public ResponseEntity<FilmSearchDto> getFilm(@PathVariable String title) {
         return ResponseEntity
@@ -78,7 +76,6 @@ public class FilmController {
  */
 
 
-    @Operation(summary = "Save new film")
     @PostMapping(SAVE_PATH)
     public ResponseEntity<Void> saveFilm(
             @RequestBody FilmDto filmDTO,
@@ -89,7 +86,6 @@ public class FilmController {
                 .build();
     }
 
-    @Operation(summary = "Delete film by id")
     @PostMapping(DELETE)
     public ResponseEntity<Void> deleteFilm(
             @PathVariable("film_id") long id,
@@ -100,10 +96,9 @@ public class FilmController {
                 .build();
     }
 
-    @Operation(summary = "Update film cover by id")
     @PostMapping(UPDATE_COVER)
     public ResponseEntity<Void> updateCover(
-            @ModelAttribute UpdateFilmCoverDto filmCoverDto,
+            @RequestBody UpdateFilmCoverDto filmCoverDto,
             Authentication authentication) {
         filmService.updateFilmCover(filmCoverDto, authentication.getName());
         return ResponseEntity
@@ -111,7 +106,6 @@ public class FilmController {
                 .build();
     }
 
-    @Operation(summary = "Get film cover by id")
     @GetMapping(GET_COVER)
     public ResponseEntity<ResponsePictureDto> getCover(@PathVariable("film_id") long id) {
         var cover = filmService.getFilmCover(id);
@@ -120,7 +114,6 @@ public class FilmController {
                 .body(cover);
     }
 
-    @Operation(summary = "Add film at favorite selection")
     @PostMapping(ADD_FILM_TO_FAVORITE_SELECTION)
     public ResponseEntity<Void> addToFavoriteSel(
             @PathVariable("film_id") long filmId,
@@ -131,7 +124,6 @@ public class FilmController {
                 .build();
     }
 
-    @Operation(summary = "Add film at custom selection")
     @PostMapping(ADD_FILM_TO_CUSTOM_SELECTION)
     public ResponseEntity<Void> addToCustomSel(
             @PathVariable("film_id") long filmId,

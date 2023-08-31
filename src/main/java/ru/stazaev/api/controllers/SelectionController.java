@@ -12,7 +12,6 @@ import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.api.services.SelectionService;
 
-@Tag(name = "Selection API", description = "Allows to find and edit selections")
 @RestController
 @RequestMapping("/api/selection")
 public class SelectionController {
@@ -22,6 +21,7 @@ public class SelectionController {
     private final String FIND_BY_ID = "/{selection_id}";
     private final String FIND_BY_TAG = "/find-tag/{tag}";
     private final String DELETE_FILM_FROM_SELECTION = "/{selection_id}/delete/{film_id}";
+    private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{selection_id}/cust-sel/{film_id}";
     private final String DELETE_SELECTION_BY_ID = "/delete/{selection_id}";
     private final String DELETE_SELECTION_BY_TAG = "/delete-tag/{tag}";
     private final String UPDATE_COVER = "/cover-update";
@@ -32,7 +32,6 @@ public class SelectionController {
         this.selectionService = selectionService;
     }
 
-    @Operation(summary = "Get selection by id")
     @GetMapping(FIND_BY_ID)
     public ResponseEntity<SelectionDto> getSelection(@PathVariable("selection_id") long selectionId) {
         return ResponseEntity
@@ -40,7 +39,6 @@ public class SelectionController {
                 .body(selectionService.getById(selectionId));
     }
 
-    @Operation(summary = "Delete selection by tag")
     @GetMapping(FIND_BY_TAG)
     public ResponseEntity<SelectionDto> getSelectionByTag(@PathVariable String tag) {
         return ResponseEntity
@@ -48,7 +46,6 @@ public class SelectionController {
                 .body(selectionService.getByTag(tag));
     }
 
-    @Operation(summary = "Save selection")
     @PostMapping(SAVE_PATH)
     public ResponseEntity<Void> saveSelection(@RequestBody SaveSelectionDto selectionDTO) {
         selectionService.saveNewSelection(selectionDTO);
@@ -57,8 +54,17 @@ public class SelectionController {
                 .build();
     }
 
+    @PostMapping(ADD_FILM_TO_CUSTOM_SELECTION)
+    public ResponseEntity<Void> addToCustomSel(
+            @PathVariable("selection_id") long selectionId,
+            @PathVariable("film_id") long filmId,
+            Authentication authentication) {
+        selectionService.addFilmToCustomSelection(selectionId, filmId, authentication.getName());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 
-    @Operation(summary = "Delete film from selection by id")
     @PostMapping(DELETE_FILM_FROM_SELECTION)
     public ResponseEntity<Void> deleteFilmFromSelection(
             @PathVariable("film_id") long filmId,
@@ -70,19 +76,16 @@ public class SelectionController {
                 .build();
     }
 
-    @Operation(summary = "Delete selection by id")
     @PostMapping(DELETE_SELECTION_BY_ID)
     public ResponseEntity<Void> deleteSelectionById(
             @PathVariable("selection_id") long selectionId,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
         selectionService.deleteSelectionById(selectionId, authentication.getName());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
-    @Operation(summary = "Delete selection by tag")
     @PostMapping(DELETE_SELECTION_BY_TAG)
     public ResponseEntity<Void> deleteSelectionByTag(
             @PathVariable String tag,
@@ -93,10 +96,9 @@ public class SelectionController {
                 .build();
     }
 
-    @Operation(summary = "Update selection cover by id")
     @PostMapping(UPDATE_COVER)
     public ResponseEntity<Void> updateCover(
-            @ModelAttribute UpdateSelectionCoverDto selectionCoverDto,
+            @RequestBody UpdateSelectionCoverDto selectionCoverDto,
             Authentication authentication) {
         selectionService.updateSelectionCover(selectionCoverDto, authentication.getName());
         return ResponseEntity
@@ -104,7 +106,6 @@ public class SelectionController {
                 .build();
     }
 
-    @Operation(summary = "Get selection cover by id")
     @GetMapping(GET_COVER)
     public ResponseEntity<ResponsePictureDto> getCover(
             @PathVariable("selection_id") long id) {

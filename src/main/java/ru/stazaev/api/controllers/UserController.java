@@ -28,7 +28,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "Get user by id")
     @GetMapping(FIND_BY_ID)
     public ResponseEntity<User> getUser(@PathVariable("user_id") Long id) {
         return ResponseEntity
@@ -36,7 +35,6 @@ public class UserController {
                 .body(userService.getById(id));
     }
 
-    @Operation(summary = "Get users favorite selection")
     @GetMapping(GET_FAV_SELECTION)
     public ResponseEntity<Selection> getUserFavoriteSelection(
             Authentication authentication){
@@ -45,7 +43,6 @@ public class UserController {
                 .body(userService.getFavoriteSelection(authentication.getName()));
     }
 
-    @Operation(summary = "Get users custom selections")
     @GetMapping(GET_CUSTOM_SELECTION)
     public ResponseEntity<List<Selection>> getUserCustomSelections(
             Authentication authentication){
@@ -54,7 +51,6 @@ public class UserController {
                 .body(userService.getCustomSelections(authentication.getName()));
     }
 
-    @Operation(summary = "Get users all selections")
     @GetMapping(GET_ALL_SELECTIONS)
     public ResponseEntity<List<Selection>> getUserAllSelections(
             Authentication authentication){

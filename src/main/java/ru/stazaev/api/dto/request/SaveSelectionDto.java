@@ -12,9 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveSelectionDto {
-    @Schema(name = "tag филмьа")
+    @Schema(example = "my-new")
     private String tag;
+    @Schema(example = "Для вечеринки")
     private String name;
+    @Schema(example = "1")
     private long owner;
     private List<FilmDto> films = new ArrayList<>();
 

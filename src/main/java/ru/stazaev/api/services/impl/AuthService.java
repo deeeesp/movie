@@ -67,6 +67,11 @@ public class AuthService {
         return createTokensForUser(dbUser);
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     private JwtTokensDto createTokensForUser(User user) {
         if (user.getStatus().equals(Status.DELETED)) {
             throw new AccessDeniedException("Пользователь заблокирован");
