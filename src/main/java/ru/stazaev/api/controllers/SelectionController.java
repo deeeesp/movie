@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import ru.stazaev.api.controllers.intSwagger.ISelectionController;
 import ru.stazaev.api.dto.request.SaveSelectionDto;
 import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
@@ -14,7 +15,7 @@ import ru.stazaev.api.services.SelectionService;
 
 @RestController
 @RequestMapping("/api/selection")
-public class SelectionController {
+public class SelectionController implements ISelectionController {
 
     private final SelectionService selectionService;
     private final String SAVE_PATH = "/save";

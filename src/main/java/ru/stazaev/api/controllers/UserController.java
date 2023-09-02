@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.stazaev.api.controllers.intSwagger.IUserController;
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.services.UserService;
 import ru.stazaev.store.entitys.Selection;
@@ -19,25 +17,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements IUserController {
     private final String FIND_BY_ID = "/{user_id}";
     private final String GET_FAV_SELECTION = "/fav-sel";
     private final String GET_CUSTOM_SELECTION = "/cust-sel";
     private final String GET_ALL_SELECTIONS = "/all-sel";
+    private final String ADD_SELECTION_TO_USER = "/add/{selection_id}";
+    private final String DELETE_SELECTION_FROM_USER = "/delete/{selection_id}";
 
 
     private final UserService userService;
 
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<User> getUser(@PathVariable("user_id") Long id) {
+    public ResponseEntity<String> getUser(@PathVariable("user_id") Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getById(id));
+                .body(userService.getById(id).getRole().toString());
     }
 
     @GetMapping(GET_FAV_SELECTION)
     public ResponseEntity<Selection> getUserFavoriteSelection(
-            Authentication authentication){
+            Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getFavoriteSelection(authentication.getName()));
@@ -45,7 +45,7 @@ public class UserController {
 
     @GetMapping(GET_CUSTOM_SELECTION)
     public ResponseEntity<List<Selection>> getUserCustomSelections(
-            Authentication authentication){
+            Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getCustomSelections(authentication.getName()));
@@ -53,9 +53,29 @@ public class UserController {
 
     @GetMapping(GET_ALL_SELECTIONS)
     public ResponseEntity<List<Selection>> getUserAllSelections(
-            Authentication authentication){
+            Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getAllSelections(authentication.getName()));
+    }
+
+    @PostMapping(ADD_SELECTION_TO_USER)
+    public ResponseEntity<Void> addSelectionToUser(
+            @PathVariable("selection_id") long selectionId,
+            Authentication authentication) {
+        userService.addSelectionToUser(authentication.getName(), selectionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PostMapping(DELETE_SELECTION_FROM_USER)
+    public ResponseEntity<Void> deleteSelectionFromUser(
+            @PathVariable("selection_id") long selectionId,
+            Authentication authentication) {
+        userService.deleteSelectionFromUser(authentication.getName(), selectionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }

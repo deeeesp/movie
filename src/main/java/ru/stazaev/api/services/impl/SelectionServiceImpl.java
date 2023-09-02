@@ -1,6 +1,7 @@
 package ru.stazaev.api.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.mock.web.MockMultipartFile;
@@ -21,6 +22,7 @@ import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
+@Setter
 public class SelectionServiceImpl implements SelectionService {
     private final String NO_SUCH_ELEMENT = "Не удалось найти элемент с таким id";
     private final String NOT_ENOUGH_RIGHT = "Недостаточно прав";
@@ -194,6 +196,7 @@ public class SelectionServiceImpl implements SelectionService {
         }
     }
 
+    @Override
     public Selection getSelectionById(long selectionId){
         return selectionRepository.findById(selectionId)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));

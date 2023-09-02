@@ -12,14 +12,16 @@ public interface SelectionService {
 
     SelectionDto getById(long selectionId);
 
+    Selection getSelectionById(long selectionId);
+
     SelectionDto getByTag(String tag);
 
     void saveNewSelection(SaveSelectionDto selectionDTO);
 
-    void addFilmToCustomSelection(long selectionId, long filmId, String username);//us
+    void addFilmToCustomSelection(long selectionId, long filmId, String username);
     void addFilmToFavorite(String username, long filmId);
 
-    void deleteFilmFromSelection(long selectionId, long filmId, String username);//us
+    void deleteFilmFromSelection(long selectionId, long filmId, String username);
 
     void deleteSelectionById(long selectionId, String username);
 

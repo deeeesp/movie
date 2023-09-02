@@ -17,4 +17,8 @@ public interface UserService {
     List<Selection> getAllSelections(String username);
 
     boolean isAdministrator(String username);
+
+    void addSelectionToUser(String username, long selectionId);
+
+    void deleteSelectionFromUser(String username, long selectionId);
 }
