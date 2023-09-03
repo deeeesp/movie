@@ -3,6 +3,7 @@ package ru.stazaev.api.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
@@ -48,7 +49,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmDto getFilmById(long id) {
-        var filmById = filmRepository.findById(id);
+        var filmById = getById(id);
         return mapper.map(filmById, FilmDto.class);
     }
 
@@ -116,7 +117,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public void updateFilmCover(UpdateFilmCoverDto filmCoverDto, String username) {
         if (!userService.isAdministrator(username)) {
-            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
         }
         var film = getById(filmCoverDto.getFilmId());
 
@@ -142,7 +143,7 @@ public class FilmServiceImpl implements FilmService {
 //    @Override
     public void deleteFilmCover(long filmId, String username) {
         if (!userService.isAdministrator(username)) {
-            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
         }
         var film = getById(filmId);
         deleteFilmCover(film.getPicture());

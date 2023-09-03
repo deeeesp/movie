@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.UserLoginDto;
 import ru.stazaev.api.dto.request.UserRegistrationDto;
 import ru.stazaev.api.dto.response.JwtTokensDto;
+import ru.stazaev.api.exception.AlreadyRegisteredUserException;
 import ru.stazaev.api.security.JwtTokenProvider;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.store.entitys.Role;
@@ -18,6 +19,7 @@ import ru.stazaev.store.entitys.User;
 import ru.stazaev.store.repositories.UserRepository;
 
 
+import java.rmi.AlreadyBoundException;
 import java.util.NoSuchElementException;
 
 @Service
@@ -34,9 +36,8 @@ public class AuthService {
 
     public JwtTokensDto  registerUser(UserRegistrationDto userRegistrationDto) {
         if (userRepository.findByUsername(userRegistrationDto.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
+            throw new AlreadyRegisteredUserException("Пользователь с таким именем уже существует");
         }
-//        User user = userMapper.dtoToEntity(userRegistrationDto);
         User user = mapper.map(userRegistrationDto, User.class);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

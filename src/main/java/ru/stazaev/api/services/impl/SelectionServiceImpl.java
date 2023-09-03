@@ -3,6 +3,7 @@ package ru.stazaev.api.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.mock.web.MockMultipartFile;
 import ru.stazaev.api.dto.request.*;
@@ -106,7 +107,7 @@ public class SelectionServiceImpl implements SelectionService {
         if (isOwnerOrAdmin(username, selection)) {
             selectionRepository.deleteById(selectionId);
         } else {
-            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
         }
     }
 
@@ -116,7 +117,7 @@ public class SelectionServiceImpl implements SelectionService {
         if (isOwnerOrAdmin(username, selection)) {
             selectionRepository.deleteByTag(tag);
         }else {
-            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
         }
     }
 
@@ -141,7 +142,7 @@ public class SelectionServiceImpl implements SelectionService {
             selection.setPicture(newCover);
             selectionRepository.save(selection);
         } else {
-            throw new RuntimeException(NOT_ENOUGH_RIGHT);
+            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
         }
 
     }
