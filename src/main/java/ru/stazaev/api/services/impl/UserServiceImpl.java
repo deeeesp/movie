@@ -38,6 +38,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Selection getWillWatchSelection(String username) {
+        return getByUsername(username).getWillWatchSelection();
+    }
+
+    @Override
     public List<Selection> getCustomSelections(String username) {
         return getByUsername(username).getSelections();
     }
@@ -47,6 +52,7 @@ public class UserServiceImpl implements UserService {
         var user = getByUsername(username);
         List<Selection> selections = user.getSelections();
         selections.add(user.getFavoriteSelection());
+        selections.add(user.getWillWatchSelection());
         return selections;
     }
 

@@ -34,6 +34,10 @@ public class User extends BaseEntity implements UserDetails {
     @JoinColumn(name = "fav_selection_id", referencedColumnName = "id")
     private Selection favoriteSelection;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "will_watch_selection_id", referencedColumnName = "id")
+    private Selection willWatchSelection;
+
 
 //    @JsonIgnoreProperties("selections")
     @ManyToMany(fetch = FetchType.LAZY,

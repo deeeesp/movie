@@ -20,6 +20,7 @@ import java.util.List;
 public class UserController implements IUserController {
     private final String FIND_BY_ID = "/{user_id}";
     private final String GET_FAV_SELECTION = "/fav-sel";
+    private final String GET_WILL_WATCH_SELECTION = "/will-watch";
     private final String GET_CUSTOM_SELECTION = "/cust-sel";
     private final String GET_ALL_SELECTIONS = "/all-sel";
     private final String ADD_SELECTION_TO_USER = "/add/{selection_id}";
@@ -41,6 +42,13 @@ public class UserController implements IUserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getFavoriteSelection(authentication.getName()));
+    }
+    @GetMapping(GET_WILL_WATCH_SELECTION)
+    public ResponseEntity<Selection> getUserWillWatchSelection(
+            Authentication authentication) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.getWillWatchSelection(authentication.getName()));
     }
 
     @GetMapping(GET_CUSTOM_SELECTION)

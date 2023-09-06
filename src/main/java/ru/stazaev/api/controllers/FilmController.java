@@ -15,17 +15,21 @@ import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.FilmService;
 import ru.stazaev.api.services.SelectionService;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/film")
 public class FilmController implements IFilmController {
     private final String SAVE_PATH = "/save";
     private final String DELETE = "/delete/{film_id}";
+    private final String ALL_FILMS = "/films";
     private final String FIND_BY_ID = "/{film_id}";
     private final String FIND_FILM = "/search/{title}";
     private final String UPDATE_COVER = "/cover-update";
-    private final String GET_COVER = "/{film_id}/cover";
+    private final String GET_COVER = "/cover/{film_id}";
     private final String ADD_FILM_TO_FAVORITE_SELECTION = "/{film_id}/fav-sel";
+    private final String ADD_FILM_TO_WLL_WATCH_SELECTION = "/{film_id}/will-watch-sel";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{film_id}/cust-sel/{selection_id}";
 
 
@@ -40,6 +44,12 @@ public class FilmController implements IFilmController {
                 .body(filmService.getFilmById(id));
     }
 
+    @GetMapping(ALL_FILMS)
+    public ResponseEntity<List<FilmDto>> getFilms() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(filmService.getAllFilms());
+    }
 
     @GetMapping(FIND_FILM)
     public ResponseEntity<FilmSearchDto> getFilm(@PathVariable String title) {
@@ -47,34 +57,6 @@ public class FilmController implements IFilmController {
                 .status(HttpStatus.OK)
                 .body(filmService.getFilmByTitleOrPlot(title));
     }
-
-/*
-    @Operation(summary = "Find film by title")
-    @GetMapping(FIND_BY_TITLE)
-    public ResponseEntity<List<FilmDto>> getFilmByTitle(@PathVariable String title) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(filmService.getByTitle(title));
-    }
-
-    @Operation(summary = "Find film by content")
-    @GetMapping(FIND_BY_TITLE_RATIO)
-    public ResponseEntity<List<FilmDto>> getFilmByTitleRatio(@PathVariable String title) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(filmService.getByTitleRatio(title));
-    }
-
-    @Operation(summary = "Find film by plot ratio in title")
-    @GetMapping(FIND_BY_PLOT_RATIO)
-    public ResponseEntity<List<FilmDto>> getFilmByPlotRatio(@PathVariable String title) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(filmService.getByPlotRatio(title));
-    }
-
- */
-
 
     @PostMapping(SAVE_PATH)
     public ResponseEntity<Void> saveFilm(
@@ -119,6 +101,16 @@ public class FilmController implements IFilmController {
             @PathVariable("film_id") long filmId,
             Authentication authentication) {
         selectionService.addFilmToFavorite(authentication.getName(), filmId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PostMapping(ADD_FILM_TO_WLL_WATCH_SELECTION)
+    public ResponseEntity<Void> addToWillWatchSel(
+            @PathVariable("film_id") long filmId,
+            Authentication authentication) {
+        selectionService.addFilmToWillWatch(authentication.getName(), filmId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

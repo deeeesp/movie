@@ -38,7 +38,7 @@ public class FilmServiceImpl implements FilmService {
     private final PictureStorage pictureStorage;
 
     @Override
-    public List<FilmDto> getTopFilms() {
+    public List<FilmDto> getAllFilms() {
         List<FilmDto> result = new ArrayList<>();
         var films = filmRepository.findAll();
         for (Film film : films) {

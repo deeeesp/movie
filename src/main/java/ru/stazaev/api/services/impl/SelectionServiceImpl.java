@@ -92,6 +92,17 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
+    public void addFilmToWillWatch(String username, long filmId) {
+        var film = filmService.getById(filmId);
+        var user = userService.getByUsername(username);
+
+        var selection = user.getWillWatchSelection();
+        selection.getFilms().add(film);
+        user.setFavoriteSelection(selection);
+        userRepository.save(user);
+    }
+
+    @Override
     public void deleteFilmFromSelection(long selectionId, long filmId, String username) {
         var film = filmService.getById(filmId);
         var selection = getSelectionById(selectionId);
@@ -99,6 +110,24 @@ public class SelectionServiceImpl implements SelectionService {
             selection.getFilms().remove(film);
             selectionRepository.save(selection);
         }
+    }
+
+    @Override
+    public void deleteFilmFromFavoriteSelection(long filmId, String username) {
+        var film = filmService.getById(filmId);
+        var user = userService.getByUsername(username);
+        var selection = user.getFavoriteSelection();
+        selection.getFilms().remove(film);
+        selectionRepository.save(selection);
+    }
+
+    @Override
+    public void deleteFilmFromWillWatchSelection(long filmId, String username) {
+        var film = filmService.getById(filmId);
+        var user = userService.getByUsername(username);
+        var selection = user.getWillWatchSelection();
+        selection.getFilms().remove(film);
+        selectionRepository.save(selection);
     }
 
     @Override
@@ -181,6 +210,15 @@ public class SelectionServiceImpl implements SelectionService {
                 .owner(id)
                 .name("Избранные фильмы")
                 .tag("favusr" + id)
+                .build();
+    }
+
+    @Override
+    public Selection createWillWatchSelection(long id) {
+        return Selection.builder()
+                .owner(id)
+                .name("Буду смотреть")
+                .tag("willwatchusr" + id)
                 .build();
     }
 

@@ -52,6 +52,33 @@ public interface ISelectionController {
     @ApiResponse(responseCode = "201", description = "Подборка сохранен")
     ResponseEntity<Void> saveSelection(@RequestBody(description = "") SaveSelectionDto selectionDTO);
 
+    @Operation(summary = "Добавить фильм в подбрку 'Мое любимое'",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильм не найден"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм добален")
+    ResponseEntity<Void> addToFavoriteSel(
+            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
+            Authentication authentication);
+
+    @Operation(summary = "Добавить фильм в подбрку 'Буду смотреть'",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильм или подборка не найдены"
+                    )})
+    @ApiResponse(responseCode = "200", description = "Фильм добален")
+    ResponseEntity<Void> addToWillWatchSel(
+            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
+            Authentication authentication);
+
     @Operation(summary = "Добавить фильм в пользовательскую подбрку",
             responses = {
                     @ApiResponse(
@@ -90,6 +117,44 @@ public interface ISelectionController {
     ResponseEntity<Void> deleteFilmFromSelection(
             @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
             @Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId,
+            Authentication authentication);
+
+    @Operation(summary = "Удалить фильм из подборки 'Мое любимое'",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильм или подборка не найдены"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "403", description = "Недостаточно прав")
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм удален")
+    ResponseEntity<Void> deleteFilmFromFavoriteSelection(
+            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
+            Authentication authentication);
+
+    @Operation(summary = "Удалить фильм из подборки 'Буду смотреть'",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильм или подборка не найдены"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "403", description = "Недостаточно прав")
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм удален")
+    ResponseEntity<Void> deleteFilmFromWillWatchSelection(
+            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
             Authentication authentication);
 
     @Operation(summary = "Удалить подборку по id",

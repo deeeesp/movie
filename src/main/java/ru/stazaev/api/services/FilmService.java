@@ -9,7 +9,7 @@ import ru.stazaev.store.entitys.Film;
 import java.util.List;
 
 public interface FilmService {
-    List<FilmDto> getTopFilms();
+    List<FilmDto> getAllFilms();
 
     FilmDto getFilmById(long id);
 

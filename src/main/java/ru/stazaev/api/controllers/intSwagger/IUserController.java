@@ -40,6 +40,19 @@ public interface IUserController {
     ResponseEntity<Selection> getUserFavoriteSelection(
             Authentication authentication);
 
+    @Operation(summary = "Получить подборку 'Буду смотреть'",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Подборка не найдена"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Подборка найдена")
+    ResponseEntity<Selection> getUserWillWatchSelection(
+            Authentication authentication);
+
     @Operation(summary = "Получить все кастомные пользовательские подборки",
             responses = {
                     @ApiResponse(

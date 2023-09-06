@@ -23,6 +23,10 @@ public class SelectionController implements ISelectionController {
     private final String FIND_BY_TAG = "/find-tag/{tag}";
     private final String DELETE_FILM_FROM_SELECTION = "/{selection_id}/delete/{film_id}";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{selection_id}/cust-sel/{film_id}";
+    private final String ADD_FILM_TO_FAVORITE_SELECTION = "/fav-sel/{film_id}";
+    private final String ADD_FILM_TO_WILL_WATCH_SELECTION = "/will-watch-sel/{film_id}";
+    private final String DELETE_FILM_FROM_FAV_SELECTION = "/delete-fav/{film_id}";
+    private final String DELETE_FILM_FROM_WILL_WATCH_SELECTION = "/delete-will-watch/{film_id}";
     private final String DELETE_SELECTION_BY_ID = "/delete/{selection_id}";
     private final String DELETE_SELECTION_BY_TAG = "/delete-tag/{tag}";
     private final String UPDATE_COVER = "/cover-update";
@@ -55,6 +59,26 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @PostMapping(ADD_FILM_TO_FAVORITE_SELECTION)
+    public ResponseEntity<Void> addToFavoriteSel(
+            @PathVariable("film_id") long filmId,
+            Authentication authentication) {
+        selectionService.addFilmToFavorite(authentication.getName(), filmId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PostMapping(ADD_FILM_TO_WILL_WATCH_SELECTION)
+    public ResponseEntity<Void> addToWillWatchSel(
+            @PathVariable("film_id") long filmId,
+            Authentication authentication) {
+        selectionService.addFilmToWillWatch(authentication.getName(), filmId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
     @PostMapping(ADD_FILM_TO_CUSTOM_SELECTION)
     public ResponseEntity<Void> addToCustomSel(
             @PathVariable("selection_id") long selectionId,
@@ -63,6 +87,26 @@ public class SelectionController implements ISelectionController {
         selectionService.addFilmToCustomSelection(selectionId, filmId, authentication.getName());
         return ResponseEntity
                 .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PostMapping(DELETE_FILM_FROM_WILL_WATCH_SELECTION)
+    public ResponseEntity<Void> deleteFilmFromWillWatchSelection(
+            @PathVariable("film_id") long filmId,
+            Authentication authentication) {
+        selectionService.deleteFilmFromWillWatchSelection(filmId, authentication.getName());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    @PostMapping(DELETE_FILM_FROM_FAV_SELECTION)
+    public ResponseEntity<Void> deleteFilmFromFavoriteSelection(
+            @PathVariable("film_id") long filmId,
+            Authentication authentication) {
+        selectionService.deleteFilmFromFavoriteSelection(filmId, authentication.getName());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .build();
     }
 

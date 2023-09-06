@@ -11,6 +11,7 @@ public interface UserService {
     User getByUsername(String username);
 
     Selection getFavoriteSelection(String username);
+    Selection getWillWatchSelection(String username);
 
     List<Selection> getCustomSelections(String username);
 

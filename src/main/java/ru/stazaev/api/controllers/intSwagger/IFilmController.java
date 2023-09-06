@@ -16,6 +16,8 @@ import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 
+import java.util.List;
+
 @Tag(name = "Film API", description = "Allows to find films")
 public interface IFilmController {
     @Operation(summary = "Получить фильм по id",
@@ -41,6 +43,18 @@ public interface IFilmController {
             })
     @ApiResponse(responseCode = "200", description = "Фильм найден")
     ResponseEntity<FilmSearchDto> getFilm(@Parameter(name = "title", description = "Название фильма", example = "Начало") String title);
+
+    @Operation(summary = "Найти все фильмы",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильмы не найдены"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм найден")
+    ResponseEntity<List<FilmDto>> getFilms();
 
     @Operation(summary = "Загрузить новый фильм",
             responses = {
@@ -111,6 +125,20 @@ public interface IFilmController {
             })
     @ApiResponse(responseCode = "200", description = "Фильм добален")
     ResponseEntity<Void> addToFavoriteSel(
+            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
+            Authentication authentication);
+
+    @Operation(summary = "Добавить фильм в подбрку - буду смотреть",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильм не найден"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм добален")
+    ResponseEntity<Void> addToWillWatchSel(
             @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
             Authentication authentication);
 
