@@ -3,7 +3,7 @@ name: Server Module Java CI/CD with Maven
 on:
   push:
     paths:
-      - '/**'
+      - '**'
       - '.github/workflows/server.yml'
 
 env:
