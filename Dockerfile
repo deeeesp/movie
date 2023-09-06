@@ -1,4 +1,8 @@
 FROM openjdk:17
-EXPOSE 8080
-ADD target/servermoviegenie-1.0.0.jar movie-genie-server.jar
-ENTRYPOINT ["java", "-jar", "/movie-genie-server.jar"]
+
+ARG GITHUB_REPO
+LABEL org.opencontainers.image.source=https://github.com/${GITHUB_REPO}
+
+ADD target/servermoviegenie-1.0.0.jar /server.jar
+
+ENTRYPOINT ["java", "--enable-preview", "-jar", "server.jar"]

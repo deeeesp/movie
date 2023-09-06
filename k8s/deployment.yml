@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-api-deployment
+  labels:
+    service: movie-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: movie-api
+  template:
+    metadata:
+      labels:
+        service: movie-api
+    spec:
+      containers:
+        - name: movie-api
+          image: ghcr.io/deeeesp/moviegenie-server/server:latest
+          ports:
+            - containerPort: 8080
