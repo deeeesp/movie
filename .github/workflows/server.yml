@@ -3,7 +3,7 @@ name: Server Module Java CI/CD with Maven
 on:
   push:
     paths:
-      - ''
+      - '**'
       - '.github/workflows/server.yml'
 
 env:
@@ -28,7 +28,7 @@ jobs:
         run: mvn package --file pom.xml
       #
       - name: Build Docker image
-        run: docker build  --build-arg GITHUB_REPO=${{ github.repository }} -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        run: docker build --build-arg GITHUB_REPO=${{ github.repository }} -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
       #
       - name: Docker login
         uses: docker/login-action@v1
