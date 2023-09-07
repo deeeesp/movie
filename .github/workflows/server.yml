@@ -53,7 +53,9 @@ jobs:
 
       - name: Set up Okteto
         run: |
-          curl https://get.okteto.com -sSfL | sh
+          curl https://get.okteto.com -sSfL > okteto_install.sh
+          chmod +x okteto_install.sh
+          ./okteto_install.sh
 
       - name: Authenticate and deploy to Kubernetes
         env:
