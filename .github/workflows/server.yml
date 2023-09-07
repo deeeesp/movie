@@ -58,5 +58,5 @@ jobs:
         run: |
           echo "$KUBECONFIG_FILE" > kubeconfig.yaml
           kubectl config use-context cloud_okteto_com-context --kubeconfig=kubeconfig.yaml
-          kubectl delete deployment --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE renty-api-deployment
-          kubectl apply --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE -f app/server/k8s
+          kubectl delete deployment --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE movie-api-deployment
+          kubectl apply --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE -f k8s
