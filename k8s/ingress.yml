@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: movie-server-api-ingress
+  name: movie-api-ingress
   annotations:
     kubernetes.io/tls-acme: "false"
 spec:
   rules:
-    - host: movie-server-api-deeeesp.cloud.okteto.net
+    - host: movie-api-deeeesp.cloud.okteto.net
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: movie-server-api-service
+                name: movie-api-service
                 port:
                   number: 8080

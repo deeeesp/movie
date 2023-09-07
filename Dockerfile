@@ -1,9 +1,8 @@
-FROM maven:3.9.1-eclipse-temurin-17-alpine AS builder
-COPY pom.xml ./pom.xml
-COPY src ./src
-RUN mvn -B clean package spring-boot:repackage -DskipTests
+FROM openjdk:17
 
-FROM amazoncorretto:17-alpine-jdk
-WORKDIR "/app"
-COPY --from=builder /target/*.jar /app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ARG GITHUB_REPO
+LABEL org.opencontainers.image.source=https://github.com/${GITHUB_REPO}
+
+COPY target/movie-server-1.0.0.jar /server.jar
+
+ENTRYPOINT ["java", "--enable-preview", "-jar", "server.jar"]

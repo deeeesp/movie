@@ -9,7 +9,7 @@
         <version>3.0.0</version>
     </parent>
     <groupId>ru.stazaev</groupId>
-    <artifactId>moviegenieserver</artifactId>
+    <artifactId>movie-server</artifactId>
     <version>1.0.0</version>
 
     <properties>
