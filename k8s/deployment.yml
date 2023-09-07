@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: movie-api
-          image: ghcr.io/deeeesp/moviegenieserver/server:latest
+          image: deeeesp/movie-server-image
           ports:
             - containerPort: 8080
