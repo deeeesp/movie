@@ -54,7 +54,7 @@ jobs:
       - name: Set up Okteto
         run: |
           curl https://get.okteto.com -sSfL | sh
-          sudo mv /root/.okteto/bin/okteto /usr/local/bin
+          export PATH="$HOME/.okteto/bin:$PATH"
 
       - name: Authenticate and deploy to Kubernetes
         env:
