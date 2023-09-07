@@ -58,4 +58,4 @@ jobs:
         run: |
           echo "$KUBECONFIG_FILE" > kubeconfig.yaml
           kubectl config use-context cloud_okteto_com-context --kubeconfig=kubeconfig.yaml
-          kubectl apply --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE -f k8s
+          kubectl apply --kubeconfig=kubeconfig.yaml --namespace="$KUBE_NAMESPACE" -f k8s
