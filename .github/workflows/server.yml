@@ -51,6 +51,11 @@ jobs:
         with:
           version: 'latest'
 
+      - name: Set up Okteto
+        run: |
+          curl https://get.okteto.com -sSfL | sh
+          export PATH="$HOME/.okteto/bin:$PATH"
+
       - name: Authenticate and deploy to Kubernetes
         env:
           KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
@@ -59,4 +64,5 @@ jobs:
           echo "$KUBECONFIG_FILE" > kubeconfig.yaml
           okteto exec --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE -- sh -c "
           kubectl delete deployment movie-api-deployment
-          kubectl apply -f k8s"
+          kubectl apply -f k8s
+          "
