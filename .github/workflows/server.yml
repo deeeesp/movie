@@ -56,7 +56,8 @@ jobs:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
           KUBE_NAMESPACE: deeeesp
         run: |
-          echo "$KUBECONFIG" > kubeconfig.yaml
-          kubectl config use-context cloud_okteto_com-context --kubeconfig=kubeconfig.yaml
-          kubectl delete deployment --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE movie-api-deployment
-          kubectl apply --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE -f k8s
+          echo "$KUBECONFIG_FILE" > kubeconfig.yaml
+          okteto feedback --kubeconfig=kubeconfig.yaml # ensure `okteto` is connected
+          okteto exec --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE -- sh -c "
+          kubectl delete deployment movie-api-deployment
+          kubectl apply -f k8s
