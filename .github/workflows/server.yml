@@ -51,6 +51,10 @@ jobs:
         with:
           version: 'latest'
 
+      - name: Set up Okteto
+        run: |
+          curl https://get.okteto.com -sSfL | sh
+
       - name: Authenticate and deploy to Kubernetes
         env:
           KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
