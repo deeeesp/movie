@@ -59,10 +59,10 @@ jobs:
 
       - name: Authenticate and deploy to Kubernetes
         env:
-          KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
           KUBE_NAMESPACE: deeeesp
         run: |
-          echo "$KUBECONFIG_FILE" > kubeconfig.yaml
+          echo "$KUBECONFIG" > kubeconfig.yaml
           kubectl config use-context cloud_okteto_com-context --kubeconfig=kubeconfig.yaml
           kubectl delete deployment --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE movie-api-deployment
           kubectl apply --kubeconfig=kubeconfig.yaml --namespace=$KUBE_NAMESPACE -f k8s
