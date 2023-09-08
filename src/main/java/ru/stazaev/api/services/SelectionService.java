@@ -6,11 +6,14 @@ import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.store.entitys.Selection;
 
+import java.util.List;
+
 public interface SelectionService {
 
     SelectionDto getSelection();
 
     SelectionDto getById(long selectionId);
+    List<SelectionDto> findAll();
 
     Selection getSelectionById(long selectionId);
 
@@ -18,18 +21,13 @@ public interface SelectionService {
 
     void saveNewSelection(SaveSelectionDto selectionDTO);
     void addFilmToCustomSelection(long selectionId, long filmId, String username);
-    void addFilmToFavorite(String username, long filmId);
     void addFilmToWillWatch(String username, long filmId);
     void deleteFilmFromSelection(long selectionId, long filmId, String username);
-    void deleteFilmFromFavoriteSelection(long filmId, String username);
     void deleteFilmFromWillWatchSelection(long filmId, String username);
-
     void deleteSelectionById(long selectionId, String username);
     @Transactional
     void deleteSelectionByTag(String tag, String username);
     void updateSelectionCover(UpdateSelectionCoverDto selectionCoverDto, String username);
     ResponsePictureDto getSelectionCover(long selectionId);
     void deleteSelectionCover(Long selectionId, String username);
-    Selection createFavoriteSelection(long id);
-    Selection createWillWatchSelection(long id);
 }

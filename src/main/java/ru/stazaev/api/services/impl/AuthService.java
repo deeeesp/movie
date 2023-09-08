@@ -45,9 +45,6 @@ public class AuthService {
         user.setRole(Role.USER);
         user = userRepository.save(user);
 
-        var selection = selectionService.createFavoriteSelection(user.getId());
-        user.setFavoriteSelection(selection);
-
         user = userRepository.save(user);
         return createTokensForUser(user);
     }

@@ -36,13 +36,6 @@ public class UserController implements IUserController {
                 .body(userService.getById(id).getRole().toString());
     }
 
-    @GetMapping(GET_FAV_SELECTION)
-    public ResponseEntity<Selection> getUserFavoriteSelection(
-            Authentication authentication) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.getFavoriteSelection(authentication.getName()));
-    }
     @GetMapping(GET_WILL_WATCH_SELECTION)
     public ResponseEntity<Selection> getUserWillWatchSelection(
             Authentication authentication) {
@@ -52,19 +45,11 @@ public class UserController implements IUserController {
     }
 
     @GetMapping(GET_CUSTOM_SELECTION)
-    public ResponseEntity<List<Selection>> getUserCustomSelections(
+    public ResponseEntity<List<Selection>> getUserSelections(
             Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getCustomSelections(authentication.getName()));
-    }
-
-    @GetMapping(GET_ALL_SELECTIONS)
-    public ResponseEntity<List<Selection>> getUserAllSelections(
-            Authentication authentication) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.getAllSelections(authentication.getName()));
     }
 
     @PostMapping(ADD_SELECTION_TO_USER)

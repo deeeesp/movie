@@ -33,27 +33,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Selection getFavoriteSelection(String username) {
-        return getByUsername(username).getFavoriteSelection();
-    }
-
-    @Override
     public Selection getWillWatchSelection(String username) {
-        return getByUsername(username).getWillWatchSelection();
+        return null;
     }
 
     @Override
     public List<Selection> getCustomSelections(String username) {
         return getByUsername(username).getSelections();
-    }
-
-    @Override
-    public List<Selection> getAllSelections(String username) {
-        var user = getByUsername(username);
-        List<Selection> selections = user.getSelections();
-        selections.add(user.getFavoriteSelection());
-        selections.add(user.getWillWatchSelection());
-        return selections;
     }
 
     @Override

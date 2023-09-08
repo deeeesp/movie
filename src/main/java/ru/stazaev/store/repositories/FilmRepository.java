@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface FilmRepository extends JpaRepository<Film, Long> {
     Optional<Film> findById(Long id);
+    @Query("select f from Film f")
     List<Film> findAll();
     void deleteById(long id);
     Optional<List<Film>> findByTitle(String title);

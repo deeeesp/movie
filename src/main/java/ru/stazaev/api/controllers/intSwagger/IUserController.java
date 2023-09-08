@@ -7,10 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.stazaev.api.dto.response.ApiErrorResponse;
 import ru.stazaev.store.entitys.Selection;
-import ru.stazaev.store.entitys.User;
 
 import java.util.List;
 
@@ -26,19 +24,6 @@ public interface IUserController {
             })
     @ApiResponse(responseCode = "200", description = "Пользователь найден")
     ResponseEntity<String> getUser(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
-
-    @Operation(summary = "Получить подборку 'Мое любимое'",
-            responses = {
-            @ApiResponse(
-                    content = {
-                            @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                    },
-                    responseCode = "404", description = "Подборка не найдена"
-            )
-    })
-    @ApiResponse(responseCode = "200", description = "Подборка найдена")
-    ResponseEntity<Selection> getUserFavoriteSelection(
-            Authentication authentication);
 
     @Operation(summary = "Получить подборку 'Буду смотреть'",
             responses = {
@@ -63,21 +48,9 @@ public interface IUserController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Подборки найдены")
-    ResponseEntity<List<Selection>> getUserCustomSelections(
+    ResponseEntity<List<Selection>> getUserSelections(
             Authentication authentication);
 
-    @Operation(summary = "Получить все пользовательские подборки",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Подборки не найдены"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Подборки найдены")
-    ResponseEntity<List<Selection>> getUserAllSelections(
-            Authentication authentication);
 
     @Operation(summary = "Добавить пользовательскую подборку пользователю",
             responses = {

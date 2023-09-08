@@ -19,6 +19,8 @@ import ru.stazaev.store.repositories.PictureRepository;
 import ru.stazaev.store.repositories.SelectionRepository;
 import ru.stazaev.store.repositories.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -55,6 +57,16 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
+    public List<SelectionDto> findAll() {
+        var selections = selectionRepository.findAll();
+        List<SelectionDto> dtos = new ArrayList<>();
+        for (Selection selection : selections){
+            dtos.add(mapper.map(selection, SelectionDto.class));
+        }
+        return dtos;
+    }
+
+    @Override
     public SelectionDto getByTag(String tag) {
         var selection = getSelectionByTag(tag);
         return mapper.map(selection, SelectionDto.class);
@@ -78,27 +90,11 @@ public class SelectionServiceImpl implements SelectionService {
             selectionRepository.save(selection);
         }
     }
-
-    @Override
-    public void addFilmToFavorite(String username, long filmId) {
-        var film = filmService.getById(filmId);
-        var user = userService.getByUsername(username);
-
-        var selection = user.getFavoriteSelection();
-        selection.getFilms().add(film);
-        user.setFavoriteSelection(selection);
-        userRepository.save(user);
-
-    }
-
     @Override
     public void addFilmToWillWatch(String username, long filmId) {
         var film = filmService.getById(filmId);
         var user = userService.getByUsername(username);
-
-        var selection = user.getWillWatchSelection();
-        selection.getFilms().add(film);
-        user.setFavoriteSelection(selection);
+        user.getWillWatchFilms().add(film);
         userRepository.save(user);
     }
 
@@ -113,21 +109,10 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public void deleteFilmFromFavoriteSelection(long filmId, String username) {
-        var film = filmService.getById(filmId);
-        var user = userService.getByUsername(username);
-        var selection = user.getFavoriteSelection();
-        selection.getFilms().remove(film);
-        selectionRepository.save(selection);
-    }
-
-    @Override
     public void deleteFilmFromWillWatchSelection(long filmId, String username) {
         var film = filmService.getById(filmId);
         var user = userService.getByUsername(username);
-        var selection = user.getWillWatchSelection();
-        selection.getFilms().remove(film);
-        selectionRepository.save(selection);
+        user.getWillWatchFilms().remove(film);
     }
 
     @Override
@@ -203,25 +188,6 @@ public class SelectionServiceImpl implements SelectionService {
             deleteOldCower(selection.getPicture());
         }
     }
-
-    @Override
-    public Selection createFavoriteSelection(long id) {
-        return Selection.builder()
-                .owner(id)
-                .name("Избранные фильмы")
-                .tag("favusr" + id)
-                .build();
-    }
-
-    @Override
-    public Selection createWillWatchSelection(long id) {
-        return Selection.builder()
-                .owner(id)
-                .name("Буду смотреть")
-                .tag("willwatchusr" + id)
-                .build();
-    }
-
 
     private void deleteOldCower(Picture oldCover) {
         if (oldCover != null) {

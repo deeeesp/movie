@@ -1,7 +1,5 @@
 package ru.stazaev.api.controllers;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,6 +10,9 @@ import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.api.services.SelectionService;
+import ru.stazaev.store.entitys.Selection;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/selection")
@@ -23,9 +24,7 @@ public class SelectionController implements ISelectionController {
     private final String FIND_BY_TAG = "/find-tag/{tag}";
     private final String DELETE_FILM_FROM_SELECTION = "/{selection_id}/delete/{film_id}";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{selection_id}/cust-sel/{film_id}";
-    private final String ADD_FILM_TO_FAVORITE_SELECTION = "/fav-sel/{film_id}";
     private final String ADD_FILM_TO_WILL_WATCH_SELECTION = "/will-watch-sel/{film_id}";
-    private final String DELETE_FILM_FROM_FAV_SELECTION = "/delete-fav/{film_id}";
     private final String DELETE_FILM_FROM_WILL_WATCH_SELECTION = "/delete-will-watch/{film_id}";
     private final String DELETE_SELECTION_BY_ID = "/delete/{selection_id}";
     private final String DELETE_SELECTION_BY_TAG = "/delete-tag/{tag}";
@@ -44,6 +43,13 @@ public class SelectionController implements ISelectionController {
                 .body(selectionService.getById(selectionId));
     }
 
+    @Override
+    public ResponseEntity<List<SelectionDto>> getAllSelections() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(selectionService.findAll());
+    }
+
     @GetMapping(FIND_BY_TAG)
     public ResponseEntity<SelectionDto> getSelectionByTag(@PathVariable String tag) {
         return ResponseEntity
@@ -56,16 +62,6 @@ public class SelectionController implements ISelectionController {
         selectionService.saveNewSelection(selectionDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
-    }
-
-    @PostMapping(ADD_FILM_TO_FAVORITE_SELECTION)
-    public ResponseEntity<Void> addToFavoriteSel(
-            @PathVariable("film_id") long filmId,
-            Authentication authentication) {
-        selectionService.addFilmToFavorite(authentication.getName(), filmId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
                 .build();
     }
 
@@ -95,16 +91,6 @@ public class SelectionController implements ISelectionController {
             @PathVariable("film_id") long filmId,
             Authentication authentication) {
         selectionService.deleteFilmFromWillWatchSelection(filmId, authentication.getName());
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
-    }
-
-    @PostMapping(DELETE_FILM_FROM_FAV_SELECTION)
-    public ResponseEntity<Void> deleteFilmFromFavoriteSelection(
-            @PathVariable("film_id") long filmId,
-            Authentication authentication) {
-        selectionService.deleteFilmFromFavoriteSelection(filmId, authentication.getName());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();

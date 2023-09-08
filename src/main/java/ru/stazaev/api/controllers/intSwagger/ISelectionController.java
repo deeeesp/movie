@@ -14,6 +14,9 @@ import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
 import ru.stazaev.api.dto.response.ApiErrorResponse;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
+import ru.stazaev.store.entitys.Selection;
+
+import java.util.List;
 
 @Tag(name = "Selection API", description = "Allows to find and edit selections")
 public interface ISelectionController {
@@ -28,6 +31,18 @@ public interface ISelectionController {
             })
     @ApiResponse(responseCode = "200", description = "Подборка найдена")
     ResponseEntity<SelectionDto> getSelection(@Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId);
+
+    @Operation(summary = "Получить все подборки",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Подборки не найдены"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Подборки найдены")
+    ResponseEntity<List<SelectionDto>> getAllSelections();
 
     @Operation(summary = "Получить подборку по тегу",
             responses = {
@@ -51,20 +66,6 @@ public interface ISelectionController {
             })
     @ApiResponse(responseCode = "201", description = "Подборка сохранен")
     ResponseEntity<Void> saveSelection(@RequestBody(description = "") SaveSelectionDto selectionDTO);
-
-    @Operation(summary = "Добавить фильм в подбрку 'Мое любимое'",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Фильм не найден"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Фильм добален")
-    ResponseEntity<Void> addToFavoriteSel(
-            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
-            Authentication authentication);
 
     @Operation(summary = "Добавить фильм в подбрку 'Буду смотреть'",
             responses = {
@@ -117,25 +118,6 @@ public interface ISelectionController {
     ResponseEntity<Void> deleteFilmFromSelection(
             @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
             @Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId,
-            Authentication authentication);
-
-    @Operation(summary = "Удалить фильм из подборки 'Мое любимое'",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Фильм или подборка не найдены"
-                    ),
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "403", description = "Недостаточно прав")
-            })
-    @ApiResponse(responseCode = "200", description = "Фильм удален")
-    ResponseEntity<Void> deleteFilmFromFavoriteSelection(
-            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
             Authentication authentication);
 
     @Operation(summary = "Удалить фильм из подборки 'Буду смотреть'",

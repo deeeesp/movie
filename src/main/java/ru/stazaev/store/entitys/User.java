@@ -30,13 +30,15 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "fav_selection_id", referencedColumnName = "id")
-    private Selection favoriteSelection;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "will_watch_selection_id", referencedColumnName = "id")
-    private Selection willWatchSelection;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "user_will_watch_films",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "films_id")})
+    private List<Film> willWatchFilms;
 
 
 //    @JsonIgnoreProperties("selections")

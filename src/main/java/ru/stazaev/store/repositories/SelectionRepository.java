@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public interface SelectionRepository extends JpaRepository<Selection, Long> {
     Optional<Selection> findById(long id);
+    @Query("select s from Selection s")
+    List<Selection> findAll();
 
     Optional<Selection> findByTag(String tag);
 
