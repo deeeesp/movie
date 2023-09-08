@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "films")
+@Table(name = "film")
 public class Film extends BaseEntity {
     private String title;
     private int releaseYear;
