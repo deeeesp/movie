@@ -4,7 +4,7 @@ services:
     image: postgres:alpine
     container_name: moviedb
     ports:
-      - "5432:5432"
+      - "5434:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -26,7 +26,7 @@ services:
     networks:
       - db-back
     environment:
-      - DB_URL=jdbc:postgresql://moviedb:5432/movie
+      - DB_URL=jdbc:postgresql://moviedb:5434/movie
       - DB_USER=postgres
       - DB_PASS=postgres
 

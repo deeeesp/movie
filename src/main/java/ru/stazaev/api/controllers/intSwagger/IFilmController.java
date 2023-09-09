@@ -114,20 +114,6 @@ public interface IFilmController {
     ResponseEntity<ResponsePictureDto> getCover(
             @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1")long id);
 
-    @Operation(summary = "Добавить фильм в подбрку - мне нравится",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Фильм не найден"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Фильм добален")
-    ResponseEntity<Void> addToFavoriteSel(
-            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long filmId,
-            Authentication authentication);
-
     @Operation(summary = "Добавить фильм в подбрку - буду смотреть",
             responses = {
                     @ApiResponse(

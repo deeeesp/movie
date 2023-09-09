@@ -28,7 +28,6 @@ public class FilmController implements IFilmController {
     private final String FIND_FILM = "/search/{title}";
     private final String UPDATE_COVER = "/cover-update";
     private final String GET_COVER = "/cover/{film_id}";
-    private final String ADD_FILM_TO_FAVORITE_SELECTION = "/{film_id}/fav-sel";
     private final String ADD_FILM_TO_WLL_WATCH_SELECTION = "/{film_id}/will-watch-sel";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{film_id}/cust-sel/{selection_id}";
 
@@ -94,16 +93,6 @@ public class FilmController implements IFilmController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(cover);
-    }
-
-    @PostMapping(ADD_FILM_TO_FAVORITE_SELECTION)
-    public ResponseEntity<Void> addToFavoriteSel(
-            @PathVariable("film_id") long filmId,
-            Authentication authentication) {
-        selectionService.addFilmToFavorite(authentication.getName(), filmId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .build();
     }
 
     @PostMapping(ADD_FILM_TO_WLL_WATCH_SELECTION)
