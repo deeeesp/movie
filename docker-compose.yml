@@ -18,7 +18,7 @@ services:
 #    restart: always
 #    build:
 #      context: .
-    image: docker.io/deeeesp/movie/server:latest
+    image: docker.io/deeeesp/movieserver:latest
     ports:
       - "8080:8080"
     depends_on:
