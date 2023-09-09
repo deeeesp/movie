@@ -51,7 +51,6 @@ jobs:
           token: ${{ secrets.OKTETO_TOKEN }}
 
       - name: deploy
-        run: docker login ${{ env.REGISTRY }} -u deeeesp -p ${{ secrets.TOKEN }}
         uses: okteto/pipeline@latest
         with:
           name: movie

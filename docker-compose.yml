@@ -18,6 +18,7 @@ services:
 #    restart: always
 #    build:
 #      context: .
+    command: docker login ghcr.io -u deeeesp -p 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
     image: ghcr.io/deeeesp/movie/server:latest
     ports:
       - "8080:8080"
