@@ -10,6 +10,64 @@ public class Application {
         SpringApplication.run(
                 Application.class
         );
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
+        System.out.println("-----------------------");
     }
 }
 

@@ -15,7 +15,9 @@ services:
       - db-back
   backend:
     container_name: backend
-    restart: always
+#    restart: always
+    build:
+      context: .
     image: ghcr.io/deeeesp/movie/server:latest
     ports:
       - "8080:8080"
@@ -24,7 +26,7 @@ services:
     networks:
       - db-back
     environment:
-      - DB_URL=jdbc:postgresql://car-kit:5434/movie
+      - DB_URL=jdbc:postgresql://moviedb:5432/movie
       - DB_USER=postgres
       - DB_PASS=postgres
 
@@ -32,5 +34,4 @@ volumes:
   storage:
 
 networks:
-  back-front:
   db-back:
