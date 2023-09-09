@@ -50,14 +50,8 @@ jobs:
         with:
           token: ${{ secrets.OKTETO_TOKEN }}
 
-      - name: Docker login
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: deeeesp
-          password: ${{ secrets.TOKEN }}
-
       - name: deploy
+        run: docker login ${{ env.REGISTRY }} -u deeeesp -p ${{ secrets.TOKEN }}
         uses: okteto/pipeline@latest
         with:
           name: movie
