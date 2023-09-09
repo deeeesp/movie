@@ -11,7 +11,7 @@ env:
   IMAGE: deeeesp/movieserver
 
 jobs:
-  build-backend:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
