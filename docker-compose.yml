@@ -16,8 +16,8 @@ services:
   backend:
     container_name: backend
 #    restart: always
-    build:
-      context: .
+#    build:
+#      context: .
     image: ghcr.io/deeeesp/movie/server:latest
     ports:
       - "8080:8080"
