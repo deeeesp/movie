@@ -1,0 +1,46 @@
+name: Server Module Java CI/CD with Maven
+
+on:
+  push:
+    paths:
+      - '**'
+      - '.github/workflows/server.yml'
+
+
+env:
+  IMAGE: deeeesp/movieserver
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Docker build and push
+        uses: mr-smithers-excellent/docker-build-push@v6.2
+        with:
+          image: ${{ env.IMAGE }}
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: context
+        uses: okteto/context@latest
+        with:
+          token: ${{ secrets.OKTETO_TOKEN }}
+
+      - name: deploy
+        uses: okteto/pipeline@latest
+        with:
+          name: movie
+          timeout: 8m
