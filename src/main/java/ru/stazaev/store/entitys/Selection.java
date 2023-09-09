@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "selections")
+@Table(name = "selection")
 public class Selection extends BaseEntity{
 
     private String tag;
@@ -25,13 +25,13 @@ public class Selection extends BaseEntity{
     private Picture picture;
 
 
-    @JsonIgnoreProperties("selections")
+    @JsonIgnoreProperties("selection")
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
-    @JoinTable(name = "films_selection",
+    @JoinTable(name = "film_selection",
             joinColumns = {@JoinColumn(name = "selection_id")},
             inverseJoinColumns = {@JoinColumn(name = "film_id")})
     private List<Film> films = new ArrayList<>();

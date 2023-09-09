@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users")
+@Table(name = "app_user")
 @Entity
 public class User extends BaseEntity implements UserDetails {
     private String email;
