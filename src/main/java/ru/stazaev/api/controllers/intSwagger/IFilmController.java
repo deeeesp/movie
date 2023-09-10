@@ -33,7 +33,7 @@ public interface IFilmController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Фильм найден")
-    ResponseEntity<FilmDtoWithCover> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
+    FilmDtoWithCover getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
 
     @Operation(summary = "Найти фильм по названию или содержанию",
             responses = {

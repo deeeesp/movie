@@ -42,10 +42,8 @@ public class FilmController implements IFilmController {
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<FilmDtoWithCover> getFilmById(@PathVariable("film_id") Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(filmService.getFilmByIdWithCover(id));
+    public FilmDtoWithCover getFilmById(@PathVariable("film_id") Long id) {
+        return filmService.getFilmByIdWithCover(id);
     }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
@@ -132,7 +130,7 @@ public class FilmController implements IFilmController {
 
     private HttpHeaders addHeaders(){
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin", "*");
+        responseHeaders.set("Access-Control-Allow-Origin", "https://movie-genie-131a7.web.app");
         responseHeaders.set("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
         responseHeaders.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         return responseHeaders;
