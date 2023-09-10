@@ -20,6 +20,8 @@ public class SelectionDtoWithCover {
     private String tag;
     @Schema(example = "Для вечеринки")
     private String name;
+    @Schema(example = "1")
+    private long owner;
     private List<FilmDto> films = new ArrayList<>();
     private ResponsePictureDto responsePictureDto;
 }
