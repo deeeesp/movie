@@ -19,8 +19,6 @@ public class FilmDto {
     private String country;
     @Schema(example = "Кристофер Нолан")
     private String director;
-    @Schema(example = "160 000 000")
-    private Long budget;
     @Schema(example = "292 576 195")
     private Long fees;
     @Schema(example = "Кобб – талантливый вор, лучший из лучших в опасном искусстве извлечения...")
