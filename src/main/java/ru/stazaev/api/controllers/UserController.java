@@ -30,6 +30,7 @@ public class UserController implements IUserController {
 
     private final UserService userService;
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(FIND_BY_ID)
     public ResponseEntity<String> getUser(@PathVariable("user_id") Long id) {
         return ResponseEntity
@@ -37,6 +38,7 @@ public class UserController implements IUserController {
                 .body(userService.getById(id).getRole().toString());
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(GET_WILL_WATCH_SELECTION)
     public ResponseEntity<List<FilmDto>> getUserWillWatchSelection(
             Authentication authentication) {
@@ -45,6 +47,7 @@ public class UserController implements IUserController {
                 .body(userService.getWillWatchSelection(authentication.getName()));
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(GET_CUSTOM_SELECTION)
     public ResponseEntity<List<Selection>> getUserSelections(
             Authentication authentication) {
@@ -53,6 +56,7 @@ public class UserController implements IUserController {
                 .body(userService.getCustomSelections(authentication.getName()));
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(ADD_SELECTION_TO_USER)
     public ResponseEntity<Void> addSelectionToUser(
             @PathVariable("selection_id") long selectionId,
@@ -63,6 +67,7 @@ public class UserController implements IUserController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(DELETE_SELECTION_FROM_USER)
     public ResponseEntity<Void> deleteSelectionFromUser(
             @PathVariable("selection_id") long selectionId,

@@ -40,6 +40,7 @@ public class SelectionController implements ISelectionController {
         this.selectionService = selectionService;
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(FIND_BY_ID)
     public ResponseEntity<SelectionDtoWithCover> getSelection(@PathVariable("selection_id") long selectionId) {
         return ResponseEntity
@@ -47,6 +48,7 @@ public class SelectionController implements ISelectionController {
                 .body(selectionService.getById(selectionId));
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(FIND_BY_ID_WITH_COVER)
     public ResponseEntity<SelectionDtoWithCover> getSelectionWithCover(@PathVariable("selection_id") long selectionId) {
         return ResponseEntity
@@ -54,6 +56,7 @@ public class SelectionController implements ISelectionController {
                 .body(selectionService.getByIdWithCover(selectionId));
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(FIND_ALL)
     public ResponseEntity<List<SelectionDtoWithCover>> getAllSelections() {
         return ResponseEntity
@@ -61,6 +64,7 @@ public class SelectionController implements ISelectionController {
                 .body(selectionService.findAll());
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(FIND_BY_TAG)
     public ResponseEntity<SelectionDtoWithCover> getSelectionByTag(@PathVariable String tag) {
         return ResponseEntity
@@ -68,6 +72,7 @@ public class SelectionController implements ISelectionController {
                 .body(selectionService.getByTag(tag));
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(SAVE_PATH)
     public ResponseEntity<Void> saveSelection(@RequestBody SaveSelectionDto selectionDTO) {
         selectionService.saveNewSelection(selectionDTO);
@@ -76,6 +81,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(ADD_FILM_TO_WILL_WATCH_SELECTION)
     public ResponseEntity<Void> addToWillWatchSel(
             @PathVariable("film_id") long filmId,
@@ -86,6 +92,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(ADD_FILM_TO_CUSTOM_SELECTION)
     public ResponseEntity<Void> addToCustomSel(
             @PathVariable("selection_id") long selectionId,
@@ -97,6 +104,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(DELETE_FILM_FROM_WILL_WATCH_SELECTION)
     public ResponseEntity<Void> deleteFilmFromWillWatchSelection(
             @PathVariable("film_id") long filmId,
@@ -107,6 +115,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(DELETE_FILM_FROM_SELECTION)
     public ResponseEntity<Void> deleteFilmFromSelection(
             @PathVariable("film_id") long filmId,
@@ -118,6 +127,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(DELETE_SELECTION_BY_ID)
     public ResponseEntity<Void> deleteSelectionById(
             @PathVariable("selection_id") long selectionId,
@@ -128,6 +138,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(DELETE_SELECTION_BY_TAG)
     public ResponseEntity<Void> deleteSelectionByTag(
             @PathVariable String tag,
@@ -138,6 +149,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(UPDATE_COVER)
     public ResponseEntity<Void> updateCover(
             @RequestBody UpdateSelectionCoverDto selectionCoverDto,
@@ -148,6 +160,7 @@ public class SelectionController implements ISelectionController {
                 .build();
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(GET_COVER)
     public ResponseEntity<ResponsePictureDto> getCover(
             @PathVariable("selection_id") long id) {

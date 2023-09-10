@@ -23,6 +23,7 @@ public class AuthController implements IAuthController {
 
     private final AuthService authService;
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(REGISTER)
     public ResponseEntity<JwtTokensDto> registerUser(
             @RequestBody UserRegistrationDto userRegistrationDto) {
@@ -31,6 +32,7 @@ public class AuthController implements IAuthController {
                 .body(authService.registerUser(userRegistrationDto));
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(LOGIN)
     public ResponseEntity<JwtTokensDto> loginUser(@RequestBody UserLoginDto userLoginDto) {
         return ResponseEntity
@@ -38,6 +40,7 @@ public class AuthController implements IAuthController {
                 .body(authService.loginUser(userLoginDto));
     }
 
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(REFRESH)
     public ResponseEntity<JwtTokensDto> refreshToken(@RequestBody String refreshToken) {
         return ResponseEntity
