@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import ru.stazaev.api.dto.response.ApiErrorResponse;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmDtoWithCover;
 import ru.stazaev.store.entitys.Selection;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public interface IUserController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Подборка найдена")
-    ResponseEntity<List<FilmDto>> getUserWillWatchSelection(
+    ResponseEntity<List<FilmDtoWithCover>> getUserWillWatchSelection(
             Authentication authentication);
 
     @Operation(summary = "Получить все кастомные пользовательские подборки",

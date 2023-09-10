@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmDtoWithCover;
+import ru.stazaev.api.dto.response.ResponsePictureDto;
+import ru.stazaev.api.services.PictureStorage;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.api.services.UserService;
-import ru.stazaev.store.entitys.Film;
-import ru.stazaev.store.entitys.Role;
-import ru.stazaev.store.entitys.Selection;
-import ru.stazaev.store.entitys.User;
+import ru.stazaev.store.entitys.*;
+import ru.stazaev.store.repositories.FilmRepository;
 import ru.stazaev.store.repositories.SelectionRepository;
 import ru.stazaev.store.repositories.UserRepository;
 
@@ -23,7 +24,10 @@ import java.util.NoSuchElementException;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SelectionRepository selectionRepository;
+    private final FilmRepository filmRepository;
     private final ModelMapper mapper;
+    private final PictureStorage pictureStorage;
+
 
 
     @Override
@@ -39,12 +43,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<FilmDto> getWillWatchSelection(String username) {
-        List<FilmDto> result = new ArrayList<>();
+    public List<FilmDtoWithCover> getWillWatchSelection(String username) {
+        List<FilmDtoWithCover> result = new ArrayList<>();
         var user = getByUsername(username);
         var films = user.getWillWatchFilms();
         for (Film film : films){
-            result.add(mapper.map(film, FilmDto.class));
+            var filmm = mapper.map(film, FilmDtoWithCover.class);
+            filmm.setResponsePictureDto(getFilmCover(film.getId()));
+            result.add(filmm);
         }
         return result;
     }
@@ -82,4 +88,24 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    public ResponsePictureDto getFilmCover(long filmId) {
+        Film film = filmRepository.findById(filmId).orElseThrow(()->new NoSuchElementException("err"));
+        Picture cover = film.getPicture();
+        if (cover != null) {
+            String coverPath = pictureStorage.getFilmCoverPath(cover);
+            byte[] coverData = null;
+            try {
+                coverData = pictureStorage.getPicture(coverPath);
+            } catch (Exception e) {
+                System.out.println("e");
+            }
+            return ResponsePictureDto.builder()
+                    .data(coverData)
+                    .pictureType(cover.getPictureType())
+                    .build();
+        }
+        return null;
+    }
+
 }

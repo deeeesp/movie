@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.stazaev.api.controllers.intSwagger.IUserController;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmDtoWithCover;
 import ru.stazaev.api.services.UserService;
 import ru.stazaev.store.entitys.Selection;
 import ru.stazaev.store.entitys.User;
@@ -40,7 +41,7 @@ public class UserController implements IUserController {
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(GET_WILL_WATCH_SELECTION)
-    public ResponseEntity<List<FilmDto>> getUserWillWatchSelection(
+    public ResponseEntity<List<FilmDtoWithCover>> getUserWillWatchSelection(
             Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.OK)
