@@ -23,6 +23,7 @@ public class SelectionController implements ISelectionController {
     private final SelectionService selectionService;
     private final String SAVE_PATH = "/save";
     private final String FIND_BY_ID = "/{selection_id}";
+    private final String FIND_ALL = "/all";
     private final String FIND_BY_ID_WITH_COVER = "/with-cover/{selection_id}";
     private final String FIND_BY_TAG = "/find-tag/{tag}";
     private final String DELETE_FILM_FROM_SELECTION = "/{selection_id}/delete/{film_id}";
@@ -53,7 +54,7 @@ public class SelectionController implements ISelectionController {
                 .body(selectionService.getByIdWithCover(selectionId));
     }
 
-    @Override
+    @GetMapping(FIND_ALL)
     public ResponseEntity<List<SelectionDtoWithCover>> getAllSelections() {
         return ResponseEntity
                 .status(HttpStatus.OK)
