@@ -9,6 +9,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import ru.stazaev.api.dto.request.*;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
+import ru.stazaev.api.dto.response.SelectionDtoWithCover;
 import ru.stazaev.api.services.FilmService;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.api.services.PictureStorage;
@@ -54,6 +55,16 @@ public class SelectionServiceImpl implements SelectionService {
     public SelectionDto getById(long selectionId) {
         var selection = getSelectionById(selectionId);
         return mapper.map(selection, SelectionDto.class);
+    }
+
+    @Override
+    public SelectionDtoWithCover getByIdWithCover(long selectionId) {
+        var sel = getById(selectionId);
+        var result = mapper.map(sel, SelectionDtoWithCover.class);
+        var cover = getSelectionCover(selectionId);
+        result.setData(cover.getData());
+        result.setPictureType(cover.getPictureType());
+        return result;
     }
 
     @Override

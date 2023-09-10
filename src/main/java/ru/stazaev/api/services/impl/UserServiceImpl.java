@@ -2,15 +2,19 @@ package ru.stazaev.api.services.impl;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.api.services.UserService;
+import ru.stazaev.store.entitys.Film;
 import ru.stazaev.store.entitys.Role;
 import ru.stazaev.store.entitys.Selection;
 import ru.stazaev.store.entitys.User;
 import ru.stazaev.store.repositories.SelectionRepository;
 import ru.stazaev.store.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -19,6 +23,8 @@ import java.util.NoSuchElementException;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SelectionRepository selectionRepository;
+    private final ModelMapper mapper;
+
 
     @Override
     public User getById(long id) {
@@ -33,8 +39,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Selection getWillWatchSelection(String username) {
-        return null;
+    public List<FilmDto> getWillWatchSelection(String username) {
+        List<FilmDto> result = new ArrayList<>();
+        var user = getByUsername(username);
+        var films = user.getWillWatchFilms();
+        for (Film film : films){
+            result.add(mapper.map(film, FilmDto.class));
+        }
+        return result;
     }
 
     @Override

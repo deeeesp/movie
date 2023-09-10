@@ -9,6 +9,7 @@ import ru.stazaev.api.dto.request.SaveSelectionDto;
 import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
+import ru.stazaev.api.dto.response.SelectionDtoWithCover;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.store.entitys.Selection;
 
@@ -21,6 +22,7 @@ public class SelectionController implements ISelectionController {
     private final SelectionService selectionService;
     private final String SAVE_PATH = "/save";
     private final String FIND_BY_ID = "/{selection_id}";
+    private final String FIND_BY_ID_WITH_COVER = "/with-cover/{selection_id}";
     private final String FIND_BY_TAG = "/find-tag/{tag}";
     private final String DELETE_FILM_FROM_SELECTION = "/{selection_id}/delete/{film_id}";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{selection_id}/cust-sel/{film_id}";
@@ -41,6 +43,13 @@ public class SelectionController implements ISelectionController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(selectionService.getById(selectionId));
+    }
+
+    @GetMapping(FIND_BY_ID_WITH_COVER)
+    public ResponseEntity<SelectionDtoWithCover> getSelectionWithCover(long selectionId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(selectionService.getByIdWithCover(selectionId));
     }
 
     @Override

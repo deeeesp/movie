@@ -37,7 +37,7 @@ public class UserController implements IUserController {
     }
 
     @GetMapping(GET_WILL_WATCH_SELECTION)
-    public ResponseEntity<Selection> getUserWillWatchSelection(
+    public ResponseEntity<List<FilmDto>> getUserWillWatchSelection(
             Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -11,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
-import ru.stazaev.api.dto.response.ApiErrorResponse;
-import ru.stazaev.api.dto.response.FilmDto;
-import ru.stazaev.api.dto.response.FilmSearchDto;
-import ru.stazaev.api.dto.response.ResponsePictureDto;
+import ru.stazaev.api.dto.response.*;
 
 import java.util.List;
 
@@ -31,6 +28,24 @@ public interface IFilmController {
             })
     @ApiResponse(responseCode = "200", description = "Фильм найден")
     ResponseEntity<FilmDto> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
+
+    @Operation(summary = "Получить фильм по id вместе с обложкой",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильм не найден"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "406", description = "Облачное хранилище не работает"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм найден")
+    ResponseEntity<FilmDtoWithCover> getFilmByIdWithCover(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
 
     @Operation(summary = "Найти фильм по названию или содержанию",
             responses = {
@@ -94,7 +109,14 @@ public interface IFilmController {
                     content = {
                             @Content(schema = @Schema(implementation = ApiErrorResponse.class))
                     },
-                    responseCode = "403", description = "Недостаточно прав")
+                    responseCode = "403", description = "Недостаточно прав"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "406", description = "Облачное хранилище не работает"
+                    )
             })
     @ApiResponse(responseCode = "200", description = "Обложка фильма обновлена")
     ResponseEntity<Void> updateCover(
@@ -108,6 +130,12 @@ public interface IFilmController {
                                     @Content(schema = @Schema(implementation = ApiErrorResponse.class))
                             },
                             responseCode = "404", description = "Фильм не найден"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "406", description = "Облачное хранилище не работает"
                     )
             })
     @ApiResponse(responseCode = "200", description = "Обложка фильма получена")

@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.stazaev.api.dto.request.*;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
+import ru.stazaev.api.dto.response.SelectionDtoWithCover;
 import ru.stazaev.store.entitys.Selection;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public interface SelectionService {
     SelectionDto getSelection();
 
     SelectionDto getById(long selectionId);
+    SelectionDtoWithCover getByIdWithCover(long selectionId);
     List<SelectionDto> findAll();
 
     Selection getSelectionById(long selectionId);

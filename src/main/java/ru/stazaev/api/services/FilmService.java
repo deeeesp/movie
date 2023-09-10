@@ -2,6 +2,7 @@ package ru.stazaev.api.services;
 
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmDtoWithCover;
 import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.store.entitys.Film;
@@ -12,6 +13,7 @@ public interface FilmService {
     List<FilmDto> getAllFilms();
 
     FilmDto getFilmById(long id);
+    FilmDtoWithCover getFilmByIdWithCover(long id);
 
     void deleteFilmById(long id, String username);
 

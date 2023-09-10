@@ -14,6 +14,7 @@ import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
 import ru.stazaev.api.dto.response.ApiErrorResponse;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
+import ru.stazaev.api.dto.response.SelectionDtoWithCover;
 import ru.stazaev.store.entitys.Selection;
 
 import java.util.List;
@@ -31,6 +32,24 @@ public interface ISelectionController {
             })
     @ApiResponse(responseCode = "200", description = "Подборка найдена")
     ResponseEntity<SelectionDto> getSelection(@Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId);
+
+    @Operation(summary = "Получить подборку по id вместе с обложкой",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Подборка не найдена"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "406", description = "Облачное хранилище не работает"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Подборка найдена")
+    ResponseEntity<SelectionDtoWithCover> getSelectionWithCover(@Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId);
 
     @Operation(summary = "Получить все подборки",
             responses = {
@@ -177,7 +196,14 @@ public interface ISelectionController {
                             content = {
                                     @Content(schema = @Schema(implementation = ApiErrorResponse.class))
                             },
-                            responseCode = "403", description = "Недостаточно прав")
+                            responseCode = "403", description = "Недостаточно прав"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "406", description = "Облачное хранилище не работает"
+                    )
             })
     @ApiResponse(responseCode = "200", description = "Обложка подборки обновлена")
     ResponseEntity<Void> updateCover(
@@ -191,6 +217,12 @@ public interface ISelectionController {
                                     @Content(schema = @Schema(implementation = ApiErrorResponse.class))
                             },
                             responseCode = "404", description = "Подборка не найдена"
+                    ),
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "406", description = "Облачное хранилище не работает"
                     )
             })
     @ApiResponse(responseCode = "200", description = "Обложка подборки получена")

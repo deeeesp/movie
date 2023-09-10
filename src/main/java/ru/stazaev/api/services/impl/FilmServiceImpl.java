@@ -7,6 +7,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.request.UpdateFilmCoverDto;
 import ru.stazaev.api.dto.response.FilmDto;
+import ru.stazaev.api.dto.response.FilmDtoWithCover;
 import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.FilmService;
@@ -51,6 +52,16 @@ public class FilmServiceImpl implements FilmService {
     public FilmDto getFilmById(long id) {
         var filmById = getById(id);
         return mapper.map(filmById, FilmDto.class);
+    }
+
+    @Override
+    public FilmDtoWithCover getFilmByIdWithCover(long id) {
+        var film = getById(id);
+        var dto = mapper.map(film,FilmDtoWithCover.class);
+        var cover = getFilmCover(id);
+        dto.setData(cover.getData());
+        dto.setPictureType(cover.getPictureType());
+        return dto;
     }
 
     @Override
