@@ -26,9 +26,5 @@ public class FilmDtoWithCover {
     private Long fees;
     @Schema(example = "Кобб – талантливый вор, лучший из лучших в опасном искусстве извлечения...")
     private String plot;
-    @Schema(example = "JPG")
-    @JsonProperty("picture_type")
-    private PictureType pictureType;
-    @Schema(example = "/9j/4AAQSkZJRgABAQAAAQAB...j4cj4cj4/wD4LcuH/wAP/9k=")
-    private byte[] data;
+    ResponsePictureDto pictureDto;
 }

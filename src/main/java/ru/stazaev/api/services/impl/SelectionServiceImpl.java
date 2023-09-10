@@ -56,8 +56,7 @@ public class SelectionServiceImpl implements SelectionService {
         var sel = getSelectionById(selectionId);
         var result = mapper.map(sel, SelectionDtoWithCover.class);
         var cover = getSelectionCover(selectionId);
-        result.setData(cover.getData());
-        result.setPictureType(cover.getPictureType());
+        result.setPictureDto(cover);
         return result;
     }
 
@@ -66,8 +65,7 @@ public class SelectionServiceImpl implements SelectionService {
         var sel = getById(selectionId);
         var result = mapper.map(sel, SelectionDtoWithCover.class);
         var cover = getSelectionCover(selectionId);
-        result.setData(cover.getData());
-        result.setPictureType(cover.getPictureType());
+        result.setPictureDto(cover);
         return result;
     }
 
@@ -78,8 +76,7 @@ public class SelectionServiceImpl implements SelectionService {
         for (Selection selection : selections){
             var temp = mapper.map(selection, SelectionDtoWithCover.class);
             var cover = getSelectionCover(selection.getId());
-            temp.setPictureType(cover.getPictureType());
-            temp.setData(cover.getData());
+            temp.setPictureDto(cover);
             dtos.add(temp);
         }
         return dtos;
@@ -90,8 +87,7 @@ public class SelectionServiceImpl implements SelectionService {
         var selection = getSelectionByTag(tag);
         var result = mapper.map(selection, SelectionDtoWithCover.class);
         var cover = getSelectionCover(selection.getId());
-        result.setData(cover.getData());
-        result.setPictureType(cover.getPictureType());
+        result.setPictureDto(cover);
         return result;
     }
 

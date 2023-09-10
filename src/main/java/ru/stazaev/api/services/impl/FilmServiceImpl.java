@@ -45,8 +45,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureType(cover.getPictureType());
-            temp.setData(cover.getData());
+            temp.setPictureDto(cover);
             result.add(temp);
         }
         return result;
@@ -57,8 +56,7 @@ public class FilmServiceImpl implements FilmService {
         var filmById = getById(id);
         var film =mapper.map(filmById, FilmDtoWithCover.class);
         var cover = getFilmCover(id);
-        film.setPictureType(cover.getPictureType());
-        film.setData(cover.getData());
+        film.setPictureDto(cover);
         return film;
     }
 
@@ -67,8 +65,7 @@ public class FilmServiceImpl implements FilmService {
         var film = getById(id);
         var dto = mapper.map(film,FilmDtoWithCover.class);
         var cover = getFilmCover(id);
-        dto.setData(cover.getData());
-        dto.setPictureType(cover.getPictureType());
+        dto.setPictureDto(cover);
         return dto;
     }
 
@@ -108,8 +105,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureType(cover.getPictureType());
-            temp.setData(cover.getData());
+            temp.setPictureDto(cover);
             result.add(temp);
         }
         return result;
@@ -123,8 +119,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureType(cover.getPictureType());
-            temp.setData(cover.getData());
+            temp.setPictureDto(cover);
             result.add(temp);
         }
         return result;
@@ -138,8 +133,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureType(cover.getPictureType());
-            temp.setData(cover.getData());
+            temp.setPictureDto(cover);
             result.add(temp);
         }
         return result;
