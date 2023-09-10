@@ -24,6 +24,8 @@ public interface FilmService {
 
     List<FilmDtoWithCover> getByTitleRatio(String title);
 
+    List<FilmDtoWithCover> make(List<Film> films);
+
     List<FilmDtoWithCover> getByPlotRatio(String title);
 
     void updateFilmCover(UpdateFilmCoverDto filmCoverDto, String username);

@@ -1,7 +1,11 @@
 package ru.stazaev.api.services;
 
 import org.springframework.web.multipart.MultipartFile;
+import ru.stazaev.api.dto.response.FilmDtoWithCover;
+import ru.stazaev.store.entitys.Film;
 import ru.stazaev.store.entitys.Picture;
+
+import java.util.List;
 
 public interface PictureStorage {
     void savePicture(String name, MultipartFile pictureFile) throws Exception;

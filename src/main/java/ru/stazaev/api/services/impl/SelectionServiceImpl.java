@@ -63,8 +63,14 @@ public class SelectionServiceImpl implements SelectionService {
     @Override
     public SelectionDtoWithCover getByIdWithCover(long selectionId) {
         var sel = getById(selectionId);
-        var result = mapper.map(sel, SelectionDtoWithCover.class);
+        var films = sel.getFilms();
+        sel.getFilms().clear();
         var cover = getSelectionCover(selectionId);
+        var result = mapper.map(sel, SelectionDtoWithCover.class);
+        for (int i = 0; i < sel.getFilms().size(); i++) {
+            long ind = sel.getFilms().get(i).getId();
+            sel.getFilms().get(i).setResponsePictureDto(filmService.getFilmCover(ind));
+        }
         result.setResponsePictureDto(cover);
         return result;
     }
@@ -76,6 +82,10 @@ public class SelectionServiceImpl implements SelectionService {
         for (Selection selection : selections){
             var temp = mapper.map(selection, SelectionDtoWithCover.class);
             var cover = getSelectionCover(selection.getId());
+            for (int i = 0; i < temp.getFilms().size(); i++) {
+                long ind = temp.getFilms().get(i).getId();
+                temp.getFilms().get(i).setResponsePictureDto(filmService.getFilmCover(ind));
+            }
             temp.setResponsePictureDto(cover);
             dtos.add(temp);
         }

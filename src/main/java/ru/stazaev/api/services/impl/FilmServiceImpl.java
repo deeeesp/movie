@@ -126,6 +126,18 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
+    public List<FilmDtoWithCover> make(List<Film> films) {
+        List<FilmDtoWithCover> result = new ArrayList<>();
+        for (Film film : films) {
+            var temp =mapper.map(film, FilmDtoWithCover.class);
+            var cover = getFilmCover(film.getId());
+            temp.setResponsePictureDto(cover);
+            result.add(temp);
+        }
+        return result;
+    }
+
+    @Override
     public List<FilmDtoWithCover> getByPlotRatio(String title) {
         var films = filmRepository.findByRationPlot(title)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
