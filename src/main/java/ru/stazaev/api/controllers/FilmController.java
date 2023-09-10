@@ -39,7 +39,7 @@ public class FilmController implements IFilmController {
 
 
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<FilmDto> getFilmById(@PathVariable("film_id") Long id) {
+    public ResponseEntity<FilmDtoWithCover> getFilmById(@PathVariable("film_id") Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(filmService.getFilmById(id));
@@ -53,7 +53,7 @@ public class FilmController implements IFilmController {
     }
 
     @GetMapping(ALL_FILMS)
-    public ResponseEntity<List<FilmDto>> getFilms() {
+    public ResponseEntity<List<FilmDtoWithCover>> getFilms() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(filmService.getAllFilms());

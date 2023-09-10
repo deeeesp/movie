@@ -52,9 +52,13 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public SelectionDto getById(long selectionId) {
-        var selection = getSelectionById(selectionId);
-        return mapper.map(selection, SelectionDto.class);
+    public SelectionDtoWithCover getById(long selectionId) {
+        var sel = getById(selectionId);
+        var result = mapper.map(sel, SelectionDtoWithCover.class);
+        var cover = getSelectionCover(selectionId);
+        result.setData(cover.getData());
+        result.setPictureType(cover.getPictureType());
+        return result;
     }
 
     @Override
@@ -68,19 +72,27 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public List<SelectionDto> findAll() {
+    public List<SelectionDtoWithCover> findAll() {
         var selections = selectionRepository.findAll();
-        List<SelectionDto> dtos = new ArrayList<>();
+        List<SelectionDtoWithCover> dtos = new ArrayList<>();
         for (Selection selection : selections){
-            dtos.add(mapper.map(selection, SelectionDto.class));
+            var temp = mapper.map(selection, SelectionDtoWithCover.class);
+            var cover = getSelectionCover(selection.getId());
+            temp.setPictureType(cover.getPictureType());
+            temp.setData(cover.getData());
+            dtos.add(temp);
         }
         return dtos;
     }
 
     @Override
-    public SelectionDto getByTag(String tag) {
+    public SelectionDtoWithCover getByTag(String tag) {
         var selection = getSelectionByTag(tag);
-        return mapper.map(selection, SelectionDto.class);
+        var result = mapper.map(selection, SelectionDtoWithCover.class);
+        var cover = getSelectionCover(selection.getId());
+        result.setData(cover.getData());
+        result.setPictureType(cover.getPictureType());
+        return result;
     }
 
     public void saveNewSelection(SaveSelectionDto selectionDTO) {

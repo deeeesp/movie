@@ -27,7 +27,7 @@ public interface IFilmController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Фильм найден")
-    ResponseEntity<FilmDto> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
+    ResponseEntity<FilmDtoWithCover> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
 
     @Operation(summary = "Получить фильм по id вместе с обложкой",
             responses = {
@@ -69,7 +69,7 @@ public interface IFilmController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Фильм найден")
-    ResponseEntity<List<FilmDto>> getFilms();
+    ResponseEntity<List<FilmDtoWithCover>> getFilms();
 
     @Operation(summary = "Загрузить новый фильм",
             responses = {

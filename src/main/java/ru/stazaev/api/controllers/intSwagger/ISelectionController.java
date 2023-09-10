@@ -31,7 +31,7 @@ public interface ISelectionController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Подборка найдена")
-    ResponseEntity<SelectionDto> getSelection(@Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId);
+    ResponseEntity<SelectionDtoWithCover> getSelection(@Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId);
 
     @Operation(summary = "Получить подборку по id вместе с обложкой",
             responses = {
@@ -61,7 +61,7 @@ public interface ISelectionController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Подборки найдены")
-    ResponseEntity<List<SelectionDto>> getAllSelections();
+    ResponseEntity<List<SelectionDtoWithCover>> getAllSelections();
 
     @Operation(summary = "Получить подборку по тегу",
             responses = {
@@ -73,7 +73,7 @@ public interface ISelectionController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Подборка найдена")
-    ResponseEntity<SelectionDto> getSelectionByTag(@Parameter(description = "Тег подбоки, заданный пользователем", example = "my-new") String tag);
+    ResponseEntity<SelectionDtoWithCover> getSelectionByTag(@Parameter(description = "Тег подбоки, заданный пользователем", example = "my-new") String tag);
 
     @Operation(summary = "Сохранить новую подборку",
             responses = {

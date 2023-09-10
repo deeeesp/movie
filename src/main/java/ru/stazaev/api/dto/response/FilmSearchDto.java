@@ -13,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class FilmSearchDto {
     @JsonProperty("title_films")
-    private List<FilmDto> titleFilms = new ArrayList<>();
+    private List<FilmDtoWithCover> titleFilms = new ArrayList<>();
     @JsonProperty("plot_films")
-    private List<FilmDto> plotFilms = new ArrayList<>();
+    private List<FilmDtoWithCover> plotFilms = new ArrayList<>();
 
 }

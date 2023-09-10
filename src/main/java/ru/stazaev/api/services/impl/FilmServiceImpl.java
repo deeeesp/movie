@@ -39,19 +39,27 @@ public class FilmServiceImpl implements FilmService {
     private final PictureStorage pictureStorage;
 
     @Override
-    public List<FilmDto> getAllFilms() {
-        List<FilmDto> result = new ArrayList<>();
+    public List<FilmDtoWithCover> getAllFilms() {
+        List<FilmDtoWithCover> result = new ArrayList<>();
         var films = filmRepository.findAll();
         for (Film film : films) {
-            result.add(mapper.map(film, FilmDto.class));
+            var temp =mapper.map(film, FilmDtoWithCover.class);
+            var cover = getFilmCover(film.getId());
+            temp.setPictureType(cover.getPictureType());
+            temp.setData(cover.getData());
+            result.add(temp);
         }
         return result;
     }
 
     @Override
-    public FilmDto getFilmById(long id) {
+    public FilmDtoWithCover getFilmById(long id) {
         var filmById = getById(id);
-        return mapper.map(filmById, FilmDto.class);
+        var film =mapper.map(filmById, FilmDtoWithCover.class);
+        var cover = getFilmCover(id);
+        film.setPictureType(cover.getPictureType());
+        film.setData(cover.getData());
+        return film;
     }
 
     @Override
@@ -93,34 +101,46 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<FilmDto> getByTitle(String title) {
+    public List<FilmDtoWithCover> getByTitle(String title) {
         var films = filmRepository.findByTitle(title)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        List<FilmDto> result = new ArrayList<>();
+        List<FilmDtoWithCover> result = new ArrayList<>();
         for (Film film : films) {
-            result.add(mapper.map(film, FilmDto.class));
+            var temp =mapper.map(film, FilmDtoWithCover.class);
+            var cover = getFilmCover(film.getId());
+            temp.setPictureType(cover.getPictureType());
+            temp.setData(cover.getData());
+            result.add(temp);
         }
         return result;
     }
 
     @Override
-    public List<FilmDto> getByTitleRatio(String title) {
+    public List<FilmDtoWithCover> getByTitleRatio(String title) {
         var films = filmRepository.findByRationTitle(title)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        List<FilmDto> result = new ArrayList<>();
+        List<FilmDtoWithCover> result = new ArrayList<>();
         for (Film film : films) {
-            result.add(mapper.map(film, FilmDto.class));
+            var temp =mapper.map(film, FilmDtoWithCover.class);
+            var cover = getFilmCover(film.getId());
+            temp.setPictureType(cover.getPictureType());
+            temp.setData(cover.getData());
+            result.add(temp);
         }
         return result;
     }
 
     @Override
-    public List<FilmDto> getByPlotRatio(String title) {
+    public List<FilmDtoWithCover> getByPlotRatio(String title) {
         var films = filmRepository.findByRationPlot(title)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
-        List<FilmDto> result = new ArrayList<>();
+        List<FilmDtoWithCover> result = new ArrayList<>();
         for (Film film : films) {
-            result.add(mapper.map(film, FilmDto.class));
+            var temp =mapper.map(film, FilmDtoWithCover.class);
+            var cover = getFilmCover(film.getId());
+            temp.setPictureType(cover.getPictureType());
+            temp.setData(cover.getData());
+            result.add(temp);
         }
         return result;
     }

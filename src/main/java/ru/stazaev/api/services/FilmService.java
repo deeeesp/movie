@@ -10,9 +10,9 @@ import ru.stazaev.store.entitys.Film;
 import java.util.List;
 
 public interface FilmService {
-    List<FilmDto> getAllFilms();
+    List<FilmDtoWithCover> getAllFilms();
 
-    FilmDto getFilmById(long id);
+    FilmDtoWithCover getFilmById(long id);
     FilmDtoWithCover getFilmByIdWithCover(long id);
 
     void deleteFilmById(long id, String username);
@@ -20,11 +20,11 @@ public interface FilmService {
     void saveFilm(FilmDto filmDTO, String username);
     FilmSearchDto getFilmByTitleOrPlot(String title);
 
-    List<FilmDto> getByTitle(String title);
+    List<FilmDtoWithCover> getByTitle(String title);
 
-    List<FilmDto> getByTitleRatio(String title);
+    List<FilmDtoWithCover> getByTitleRatio(String title);
 
-    List<FilmDto> getByPlotRatio(String title);
+    List<FilmDtoWithCover> getByPlotRatio(String title);
 
     void updateFilmCover(UpdateFilmCoverDto filmCoverDto, String username);
 

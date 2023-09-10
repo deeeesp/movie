@@ -39,28 +39,28 @@ public class SelectionController implements ISelectionController {
     }
 
     @GetMapping(FIND_BY_ID)
-    public ResponseEntity<SelectionDto> getSelection(@PathVariable("selection_id") long selectionId) {
+    public ResponseEntity<SelectionDtoWithCover> getSelection(@PathVariable("selection_id") long selectionId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(selectionService.getById(selectionId));
     }
 
     @GetMapping(FIND_BY_ID_WITH_COVER)
-    public ResponseEntity<SelectionDtoWithCover> getSelectionWithCover(long selectionId) {
+    public ResponseEntity<SelectionDtoWithCover> getSelectionWithCover(@PathVariable("selection_id") long selectionId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(selectionService.getByIdWithCover(selectionId));
     }
 
     @Override
-    public ResponseEntity<List<SelectionDto>> getAllSelections() {
+    public ResponseEntity<List<SelectionDtoWithCover>> getAllSelections() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(selectionService.findAll());
     }
 
     @GetMapping(FIND_BY_TAG)
-    public ResponseEntity<SelectionDto> getSelectionByTag(@PathVariable String tag) {
+    public ResponseEntity<SelectionDtoWithCover> getSelectionByTag(@PathVariable String tag) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(selectionService.getByTag(tag));

@@ -13,13 +13,13 @@ public interface SelectionService {
 
     SelectionDto getSelection();
 
-    SelectionDto getById(long selectionId);
+    SelectionDtoWithCover getById(long selectionId);
     SelectionDtoWithCover getByIdWithCover(long selectionId);
-    List<SelectionDto> findAll();
+    List<SelectionDtoWithCover> findAll();
 
     Selection getSelectionById(long selectionId);
 
-    SelectionDto getByTag(String tag);
+    SelectionDtoWithCover getByTag(String tag);
 
     void saveNewSelection(SaveSelectionDto selectionDTO);
     void addFilmToCustomSelection(long selectionId, long filmId, String username);
