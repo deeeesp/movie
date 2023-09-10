@@ -9,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+    @Schema(example = "1")
+    private long id;
     @Schema(example = "polka@mail.ru")
     private String email;
     @Schema(example = "polka")

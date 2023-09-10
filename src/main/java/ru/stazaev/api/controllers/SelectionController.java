@@ -16,6 +16,7 @@ import ru.stazaev.store.entitys.Selection;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/selection")
 public class SelectionController implements ISelectionController {
 

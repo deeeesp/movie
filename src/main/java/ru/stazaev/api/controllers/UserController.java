@@ -15,6 +15,7 @@ import ru.stazaev.store.entitys.User;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController implements IUserController {

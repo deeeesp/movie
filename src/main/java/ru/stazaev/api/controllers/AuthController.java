@@ -12,6 +12,7 @@ import ru.stazaev.api.services.impl.AuthService;
 
 
 @RequiredArgsConstructor
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController implements IAuthController {

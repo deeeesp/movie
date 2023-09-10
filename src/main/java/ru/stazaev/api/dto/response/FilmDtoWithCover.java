@@ -11,6 +11,8 @@ import ru.stazaev.store.entitys.PictureType;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FilmDtoWithCover {
+    @Schema(example = "1")
+    private long id;
     @Schema(example = "Начало")
     private String title;
     @JsonProperty("release_year")

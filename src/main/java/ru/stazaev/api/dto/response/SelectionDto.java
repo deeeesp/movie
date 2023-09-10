@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SelectionDto {
+    @Schema(example = "1")
+    private long id;
     @Schema(example = "my-new")
     private String tag;
     @Schema(example = "Для вечеринки")
