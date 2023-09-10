@@ -12,7 +12,7 @@ import ru.stazaev.api.services.impl.AuthService;
 
 
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://movie-genie-131a7.web.app/")
+@CrossOrigin(origins = "https://movie-genie-131a7.web.app")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController implements IAuthController {

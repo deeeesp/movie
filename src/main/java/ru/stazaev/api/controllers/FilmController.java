@@ -19,7 +19,7 @@ import ru.stazaev.api.services.SelectionService;
 import java.util.List;
 
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://movie-genie-131a7.web.app/")
+@CrossOrigin(origins = "https://movie-genie-131a7.web.app")
 @RestController
 @RequestMapping("/api/film")
 public class FilmController implements IFilmController {
