@@ -18,5 +18,5 @@ public class SelectionDto {
     private String tag;
     @Schema(example = "Для вечеринки")
     private String name;
-    private List<FilmDto> films = new ArrayList<>();
+    private List<FilmDtoWithCover> films = new ArrayList<>();
 }

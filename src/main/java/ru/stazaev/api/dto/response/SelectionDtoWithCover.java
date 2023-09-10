@@ -22,6 +22,6 @@ public class SelectionDtoWithCover {
     private String name;
     @Schema(example = "1")
     private long owner;
-    private List<FilmDto> films = new ArrayList<>();
+    private List<FilmDtoWithCover> films = new ArrayList<>();
     private ResponsePictureDto responsePictureDto;
 }
