@@ -30,7 +30,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
-//    private final UserRegDtoToActiveUserMapper userMapper;
     private final ModelMapper mapper;
 
 
