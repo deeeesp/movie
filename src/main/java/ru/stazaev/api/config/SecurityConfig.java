@@ -31,17 +31,17 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll();
 
-        http.authorizeHttpRequests().requestMatchers("/api/film/**").hasAuthority("USER");
-        http.authorizeHttpRequests().requestMatchers("/api/film/save").hasAuthority("ADMIN");
-        http.authorizeHttpRequests().requestMatchers("/api/film/delete").hasAuthority("ADMIN");
-        http.authorizeHttpRequests().requestMatchers("/api/film/get/**").permitAll();
+//        http.authorizeHttpRequests().requestMatchers("/api/film/**").hasAuthority("USER");
+//        http.authorizeHttpRequests().requestMatchers("/api/film/save").hasAuthority("ADMIN");
+//        http.authorizeHttpRequests().requestMatchers("/api/film/delete").hasAuthority("ADMIN");
+//        http.authorizeHttpRequests().requestMatchers("/api/film/get/**").permitAll();
 
-        http.authorizeHttpRequests().requestMatchers("/api/selection/**").hasAuthority("USER");
-        http.authorizeHttpRequests().requestMatchers("/api/selection/save").hasAuthority("ADMIN");
-        http.authorizeHttpRequests().requestMatchers("/api/selection/delete").hasAuthority("ADMIN");
-        http.authorizeHttpRequests().requestMatchers("/api/selection/get/**").permitAll();
+//        http.authorizeHttpRequests().requestMatchers("/api/selection/**").hasAuthority("USER");
+//        http.authorizeHttpRequests().requestMatchers("/api/selection/save").hasAuthority("ADMIN");
+//        http.authorizeHttpRequests().requestMatchers("/api/selection/delete").hasAuthority("ADMIN");
+//        http.authorizeHttpRequests().requestMatchers("/api/selection/get/**").permitAll();
 
-        http.authorizeHttpRequests().requestMatchers("/api/user/**").hasAuthority("USER");
+//        http.authorizeHttpRequests().requestMatchers("/api/user/**").hasAuthority("USER");
 
         http.authorizeHttpRequests().anyRequest().permitAll();
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
