@@ -186,11 +186,11 @@ public class FilmServiceImpl implements FilmService {
         Picture cover = film.getPicture();
         if (cover != null) {
             String coverPath = pictureStorage.getFilmCoverPath(cover);
-            byte[] coverData;
+            byte[] coverData = null;
             try {
                 coverData = pictureStorage.getPicture(coverPath);
             } catch (Exception e) {
-                throw new RuntimeException(GET_STORAGE_COVER_ERROR);
+                System.out.println(GET_STORAGE_COVER_ERROR);
             }
             return ResponsePictureDto.builder()
                     .data(coverData)

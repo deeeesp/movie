@@ -53,7 +53,7 @@ public class SelectionServiceImpl implements SelectionService {
 
     @Override
     public SelectionDtoWithCover getById(long selectionId) {
-        var sel = getById(selectionId);
+        var sel = getSelectionById(selectionId);
         var result = mapper.map(sel, SelectionDtoWithCover.class);
         var cover = getSelectionCover(selectionId);
         result.setData(cover.getData());
@@ -190,11 +190,11 @@ public class SelectionServiceImpl implements SelectionService {
         Picture cover = selection.getPicture();
         if (cover != null) {
             String path = pictureStorage.getSelectionCoverPath(cover);
-            byte[] coverData;
+            byte[] coverData = null;
             try {
                 coverData = pictureStorage.getPicture(path);
             } catch (Exception e) {
-                throw new RuntimeException(GET_STORAGE_COVER_ERROR);
+                System.out.println(GET_STORAGE_COVER_ERROR);
             }
             return ResponsePictureDto.builder()
                     .data(coverData)

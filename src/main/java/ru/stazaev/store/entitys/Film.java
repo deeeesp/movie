@@ -20,7 +20,6 @@ public class Film extends BaseEntity {
     private int releaseYear;
     private String country;
     private String director;
-    private Long budget;
     private Long fees;
     private String plot;
 

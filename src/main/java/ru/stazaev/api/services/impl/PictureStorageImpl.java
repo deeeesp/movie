@@ -47,11 +47,11 @@ public class PictureStorageImpl implements PictureStorage {
 
     @Override
     public String getFilmCoverPath(Picture picture) {
-        return "%s%d".formatted(FILM_COVER_PATH, picture.getId());
+        return FILM_COVER_PATH + picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
     }
 
     @Override
     public String getSelectionCoverPath(Picture picture) {
-        return "%s%d".formatted(SELECTION_COVER_PATH, picture.getId());
+        return SELECTION_COVER_PATH + picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
     }
 }
