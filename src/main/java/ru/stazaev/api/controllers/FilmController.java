@@ -19,6 +19,7 @@ import ru.stazaev.api.services.SelectionService;
 import java.util.List;
 
 @RequiredArgsConstructor
+@CrossOrigin
 @RestController
 @RequestMapping("/api/film")
 public class FilmController implements IFilmController {
