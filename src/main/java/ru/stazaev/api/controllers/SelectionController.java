@@ -16,7 +16,7 @@ import ru.stazaev.store.entitys.Selection;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://movie-genie-131a7.web.app/")
 @RequestMapping("/api/selection")
 public class SelectionController implements ISelectionController {
 

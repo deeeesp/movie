@@ -15,7 +15,7 @@ import ru.stazaev.store.entitys.User;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://movie-genie-131a7.web.app/")
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController implements IUserController {
