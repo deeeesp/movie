@@ -45,7 +45,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureDto(cover);
+            temp.setResponsePictureDto(cover);
             result.add(temp);
         }
         return result;
@@ -56,7 +56,7 @@ public class FilmServiceImpl implements FilmService {
         var filmById = getById(id);
         var film =mapper.map(filmById, FilmDtoWithCover.class);
         var cover = getFilmCover(id);
-        film.setPictureDto(cover);
+        film.setResponsePictureDto(cover);
         return film;
     }
 
@@ -65,7 +65,7 @@ public class FilmServiceImpl implements FilmService {
         var film = getById(id);
         var dto = mapper.map(film,FilmDtoWithCover.class);
         var cover = getFilmCover(id);
-        dto.setPictureDto(cover);
+        dto.setResponsePictureDto(cover);
         return dto;
     }
 
@@ -105,7 +105,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureDto(cover);
+            temp.setResponsePictureDto(cover);
             result.add(temp);
         }
         return result;
@@ -119,7 +119,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureDto(cover);
+            temp.setResponsePictureDto(cover);
             result.add(temp);
         }
         return result;
@@ -133,7 +133,7 @@ public class FilmServiceImpl implements FilmService {
         for (Film film : films) {
             var temp =mapper.map(film, FilmDtoWithCover.class);
             var cover = getFilmCover(film.getId());
-            temp.setPictureDto(cover);
+            temp.setResponsePictureDto(cover);
             result.add(temp);
         }
         return result;
