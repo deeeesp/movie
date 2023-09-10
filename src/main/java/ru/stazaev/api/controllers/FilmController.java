@@ -3,6 +3,7 @@ package ru.stazaev.api.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,7 @@ public class FilmController implements IFilmController {
     public ResponseEntity<List<FilmDtoWithCover>> getFilms() {
         return ResponseEntity
                 .status(HttpStatus.OK)
+                .headers(addHeaders())
                 .body(filmService.getAllFilms());
     }
 
@@ -126,5 +128,13 @@ public class FilmController implements IFilmController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
+    }
+
+    private HttpHeaders addHeaders(){
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Access-Control-Allow-Origin", "*");
+        responseHeaders.set("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
+        responseHeaders.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        return responseHeaders;
     }
 }
