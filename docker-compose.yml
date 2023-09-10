@@ -16,8 +16,6 @@ services:
   backend:
     container_name: backend
     restart: always
-#    build:
-#      context: .
     image: docker.io/deeeesp/movieserver:latest
     ports:
       - "8080:8080"

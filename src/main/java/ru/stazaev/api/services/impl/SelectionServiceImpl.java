@@ -63,7 +63,6 @@ public class SelectionServiceImpl implements SelectionService {
     @Override
     public SelectionDtoWithCover getByIdWithCover(long selectionId) {
         var sel = getById(selectionId);
-        var films = sel.getFilms();
         sel.getFilms().clear();
         var cover = getSelectionCover(selectionId);
         var result = mapper.map(sel, SelectionDtoWithCover.class);
