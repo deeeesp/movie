@@ -24,18 +24,6 @@ public interface IFilmController {
                                     @Content(schema = @Schema(implementation = ApiErrorResponse.class))
                             },
                             responseCode = "404", description = "Фильм не найден"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Фильм найден")
-    ResponseEntity<FilmDtoWithCover> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
-
-    @Operation(summary = "Получить фильм по id вместе с обложкой",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Фильм не найден"
                     ),
                     @ApiResponse(
                             content = {
@@ -45,7 +33,7 @@ public interface IFilmController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Фильм найден")
-    ResponseEntity<FilmDtoWithCover> getFilmByIdWithCover(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
+    ResponseEntity<FilmDtoWithCover> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
 
     @Operation(summary = "Найти фильм по названию или содержанию",
             responses = {

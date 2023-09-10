@@ -22,10 +22,10 @@ public class SelectionController implements ISelectionController {
 
     private final SelectionService selectionService;
     private final String SAVE_PATH = "/save";
-    private final String FIND_BY_ID = "/{selection_id}";
-    private final String FIND_ALL = "/all";
-    private final String FIND_BY_ID_WITH_COVER = "/with-cover/{selection_id}";
-    private final String FIND_BY_TAG = "/find-tag/{tag}";
+    private final String FIND_BY_ID = "/get/{selection_id}";
+    private final String FIND_ALL = "/get/all";
+    private final String FIND_BY_ID_WITH_COVER = "/get/with-cover/{selection_id}";
+    private final String FIND_BY_TAG = "/get/find-tag/{tag}";
     private final String DELETE_FILM_FROM_SELECTION = "/{selection_id}/delete/{film_id}";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{selection_id}/cust-sel/{film_id}";
     private final String ADD_FILM_TO_WILL_WATCH_SELECTION = "/will-watch-sel/{film_id}";
@@ -33,7 +33,7 @@ public class SelectionController implements ISelectionController {
     private final String DELETE_SELECTION_BY_ID = "/delete/{selection_id}";
     private final String DELETE_SELECTION_BY_TAG = "/delete-tag/{tag}";
     private final String UPDATE_COVER = "/cover-update";
-    private final String GET_COVER = "/{selection_id}/cover";
+    private final String GET_COVER = "/get/{selection_id}/cover";
 
 
     public SelectionController(SelectionService selectionService) {
