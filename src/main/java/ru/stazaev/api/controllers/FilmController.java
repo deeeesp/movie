@@ -20,7 +20,7 @@ import ru.stazaev.api.services.SelectionService;
 import java.util.List;
 
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "https://movie-genie-131a7.web.app")
+@CrossOrigin(origins = "https://movie-genie-131a7.web.app")
 @RestController
 @RequestMapping("/api/film")
 public class FilmController implements IFilmController {
@@ -51,7 +51,7 @@ public class FilmController implements IFilmController {
     public ResponseEntity<List<FilmDtoWithCover>> getFilms() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .headers(addHeaders())
+//                .headers(addHeaders())
                 .body(filmService.getAllFilms());
     }
 
@@ -128,11 +128,11 @@ public class FilmController implements IFilmController {
                 .build();
     }
 
-    private HttpHeaders addHeaders(){
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin", "https://movie-genie-131a7.web.app");
-        responseHeaders.set("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
-        responseHeaders.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        return responseHeaders;
-    }
+//    private HttpHeaders addHeaders(){
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.set("Access-Control-Allow-Origin", "https://movie-genie-131a7.web.app");
+//        responseHeaders.set("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
+//        responseHeaders.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//        return responseHeaders;
+//    }
 }
