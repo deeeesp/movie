@@ -10,10 +10,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.PictureStorage;
 import ru.stazaev.store.entitys.Picture;
+import ru.stazaev.store.repositories.FilmRepository;
+import ru.stazaev.store.repositories.PictureRepository;
+import ru.stazaev.store.repositories.SelectionRepository;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +27,10 @@ public class PictureStorageImpl implements PictureStorage {
     @Value("${yandex.cloud.storage.bucket.name}")
     private String bucketName;
 
-    private final String FILM_COVER_PATH = "film/";
-
-    private final String SELECTION_COVER_PATH = "selection/";
-
-
     private final AmazonS3 s3Client;
+    private final PictureRepository pictureRepository;
+    private final FilmRepository filmRepository;
+    private final SelectionRepository selectionRepository;
 
     @Override
     public void savePicture(String name, MultipartFile pictureFile) throws IOException, AmazonClientException {
@@ -47,11 +51,30 @@ public class PictureStorageImpl implements PictureStorage {
 
     @Override
     public String getFilmCoverPath(Picture picture) {
-        return FILM_COVER_PATH + picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
+        return  picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
     }
 
     @Override
     public String getSelectionCoverPath(Picture picture) {
-        return SELECTION_COVER_PATH + picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
+        return  picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
+    }
+
+    @Override
+    public ResponsePictureDto getPicture(long id) throws Exception {
+        var picture = pictureRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("Картинка не найдена"));
+        var path = picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
+        var pic = getPicture(path);
+        return ResponsePictureDto.builder()
+                .data(pic)
+                .pictureType(picture.getPictureType())
+                .build();
+    }
+
+    @Override
+    public List<Long> getActualPictures() {
+        var result = filmRepository.findPictureId();
+        result.addAll(selectionRepository.findPictureId());
+        return result;
     }
 }

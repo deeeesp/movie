@@ -25,5 +25,6 @@ public interface SelectionRepository extends JpaRepository<Selection, Long> {
     void deleteById(long id);
     void deleteByTag(String tag);
 
-
+    @Query("select s.picture.id from Selection s")
+    List<Long> findPictureId();
 }

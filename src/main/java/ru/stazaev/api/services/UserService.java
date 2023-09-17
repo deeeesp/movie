@@ -2,6 +2,7 @@ package ru.stazaev.api.services;
 
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.dto.response.FilmDtoWithCover;
+import ru.stazaev.api.dto.response.SelectionDtoWithCover;
 import ru.stazaev.store.entitys.Selection;
 import ru.stazaev.store.entitys.User;
 
@@ -11,7 +12,7 @@ public interface UserService {
     User getById(long id);
     User getByUsername(String username);
     List<FilmDtoWithCover> getWillWatchSelection(String username);
-    List<Selection> getCustomSelections(String username);
+    List<SelectionDtoWithCover> getCustomSelections(String username);
     boolean isAdministrator(String username);
 
     void addSelectionToUser(String username, long selectionId);

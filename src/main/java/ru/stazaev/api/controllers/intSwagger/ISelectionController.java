@@ -210,22 +210,22 @@ public interface ISelectionController {
             @RequestBody(description = "") UpdateSelectionCoverDto selectionCoverDto,
             Authentication authentication);
 
-    @Operation(summary = "Получить обложку подборки",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Подборка не найдена"
-                    ),
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "406", description = "Облачное хранилище не работает"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Обложка подборки получена")
-    ResponseEntity<ResponsePictureDto> getCover(
-            @Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long id);
+//    @Operation(summary = "Получить обложку подборки",
+//            responses = {
+//                    @ApiResponse(
+//                            content = {
+//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+//                            },
+//                            responseCode = "404", description = "Подборка не найдена"
+//                    ),
+//                    @ApiResponse(
+//                            content = {
+//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+//                            },
+//                            responseCode = "406", description = "Облачное хранилище не работает"
+//                    )
+//            })
+//    @ApiResponse(responseCode = "200", description = "Обложка подборки получена")
+//    ResponseEntity<ResponsePictureDto> getCover(
+//            @Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long id);
 }

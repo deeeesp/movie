@@ -2,6 +2,7 @@ package ru.stazaev.api.services;
 
 import org.springframework.web.multipart.MultipartFile;
 import ru.stazaev.api.dto.response.FilmDtoWithCover;
+import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.store.entitys.Film;
 import ru.stazaev.store.entitys.Picture;
 
@@ -17,4 +18,6 @@ public interface PictureStorage {
     String getFilmCoverPath(Picture picture);
 
     String getSelectionCoverPath(Picture picture);
+    ResponsePictureDto getPicture(long id) throws Exception;
+    List<Long> getActualPictures();
 }

@@ -15,9 +15,12 @@ public interface FilmRepository extends JpaRepository<Film, Long> {
     void deleteById(long id);
     Optional<List<Film>> findByTitle(String title);
 
-    @Query("select f from Film f where f.title like %:value%")
+    @Query("select f from Film f where f.title ilike %:value%")
     Optional<List<Film>> findByRationTitle(@Param("value") String value);
 
-    @Query("select f from Film f where f.plot like %:value%")
+    @Query("select f from Film f where f.plot ilike %:value%")
     Optional<List<Film>> findByRationPlot(@Param("value") String value);
+
+    @Query("select f.picture.id from Film f")
+    List<Long> findPictureId();
 }

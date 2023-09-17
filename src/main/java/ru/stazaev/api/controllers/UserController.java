@@ -7,8 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.stazaev.api.controllers.intSwagger.IUserController;
-import ru.stazaev.api.dto.response.FilmDto;
-import ru.stazaev.api.dto.response.FilmDtoWithCover;
+import ru.stazaev.api.dto.response.*;
 import ru.stazaev.api.services.UserService;
 import ru.stazaev.store.entitys.Selection;
 import ru.stazaev.store.entitys.User;
@@ -23,10 +22,13 @@ public class UserController implements IUserController {
     private final String FIND_BY_ID = "/{user_id}";
     private final String GET_FAV_SELECTION = "/fav-sel";
     private final String GET_WILL_WATCH_SELECTION = "/will-watch";
-    private final String GET_CUSTOM_SELECTION = "/cust-sel";
+    private final String GET_CUSTOM_SELECTION = "/sel";
     private final String GET_ALL_SELECTIONS = "/all-sel";
     private final String ADD_SELECTION_TO_USER = "/add/{selection_id}";
     private final String DELETE_SELECTION_FROM_USER = "/delete/{selection_id}";
+    private final String GET_ALL_LOCAL_RATING = "/rating/all-local";
+    private final String GET_LOCAL_RATING = "/rating/{film_id}";
+    private final String SAVE_LOCAL_RATING = "/rating/save";
 
 
     private final UserService userService;
@@ -48,16 +50,14 @@ public class UserController implements IUserController {
                 .body(userService.getWillWatchSelection(authentication.getName()));
     }
 
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(GET_CUSTOM_SELECTION)
-    public ResponseEntity<List<Selection>> getUserSelections(
+    public ResponseEntity<List<SelectionDtoWithCover>> getUserSelections(
             Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getCustomSelections(authentication.getName()));
     }
 
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(ADD_SELECTION_TO_USER)
     public ResponseEntity<Void> addSelectionToUser(
             @PathVariable("selection_id") long selectionId,
@@ -68,7 +68,6 @@ public class UserController implements IUserController {
                 .build();
     }
 
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(DELETE_SELECTION_FROM_USER)
     public ResponseEntity<Void> deleteSelectionFromUser(
             @PathVariable("selection_id") long selectionId,
@@ -78,4 +77,4 @@ public class UserController implements IUserController {
                 .status(HttpStatus.OK)
                 .build();
     }
-}
+    }

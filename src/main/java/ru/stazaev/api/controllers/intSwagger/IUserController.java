@@ -7,9 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import ru.stazaev.api.dto.response.ApiErrorResponse;
-import ru.stazaev.api.dto.response.FilmDto;
-import ru.stazaev.api.dto.response.FilmDtoWithCover;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import ru.stazaev.api.dto.response.*;
 import ru.stazaev.store.entitys.Selection;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public interface IUserController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Подборки найдены")
-    ResponseEntity<List<Selection>> getUserSelections(
+    ResponseEntity<List<SelectionDtoWithCover>> getUserSelections(
             Authentication authentication);
 
 
@@ -79,4 +79,5 @@ public interface IUserController {
     ResponseEntity<Void> deleteSelectionFromUser(
             @Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId,
             Authentication authentication);
+
 }

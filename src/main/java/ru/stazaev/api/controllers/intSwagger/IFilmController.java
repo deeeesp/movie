@@ -24,6 +24,18 @@ public interface IFilmController {
                                     @Content(schema = @Schema(implementation = ApiErrorResponse.class))
                             },
                             responseCode = "404", description = "Фильм не найден"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм найден")
+    ResponseEntity<FilmDtoWithCover> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
+
+    @Operation(summary = "Получить фильм по id вместе с обложкой",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильм не найден"
                     ),
                     @ApiResponse(
                             content = {
@@ -33,7 +45,7 @@ public interface IFilmController {
                     )
             })
     @ApiResponse(responseCode = "200", description = "Фильм найден")
-    FilmDtoWithCover getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
+    ResponseEntity<FilmDtoWithCover> getFilmByIdWithCover(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
 
     @Operation(summary = "Найти фильм по названию или содержанию",
             responses = {
@@ -59,6 +71,18 @@ public interface IFilmController {
     @ApiResponse(responseCode = "200", description = "Фильм найден")
     ResponseEntity<List<FilmDtoWithCover>> getFilms();
 
+    @Operation(summary = "Получить список всех фильмов, отсортированных по рейтингу",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "404", description = "Фильмы не найдены"
+                    )
+            })
+    @ApiResponse(responseCode = "200", description = "Фильм найден")
+    ResponseEntity<List<FilmDtoWithCover>> getFilmsSortedByRating();
+
     @Operation(summary = "Загрузить новый фильм",
             responses = {
                     @ApiResponse(
@@ -68,7 +92,7 @@ public interface IFilmController {
                             responseCode = "403", description = "Недостаточно прав")
             })
     @ApiResponse(responseCode = "201", description = "Фильм сохранен")
-    ResponseEntity<Void> saveFilm(
+    ResponseEntity<Long> saveFilm(
             @RequestBody(description = "") FilmDto filmDTO,
             Authentication authentication);
 
@@ -94,10 +118,10 @@ public interface IFilmController {
                             responseCode = "404", description = "Фильм не найден"
                     ),
                     @ApiResponse(
-                    content = {
-                            @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                    },
-                    responseCode = "403", description = "Недостаточно прав"
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "403", description = "Недостаточно прав"
                     ),
                     @ApiResponse(
                             content = {
@@ -108,27 +132,27 @@ public interface IFilmController {
             })
     @ApiResponse(responseCode = "200", description = "Обложка фильма обновлена")
     ResponseEntity<Void> updateCover(
-            @RequestBody(description = "") UpdateFilmCoverDto filmCoverDto,
+            @RequestBody UpdateFilmCoverDto filmCoverDto,
             Authentication authentication);
 
-    @Operation(summary = "Получить обложку фильма",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Фильм не найден"
-                    ),
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "406", description = "Облачное хранилище не работает"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Обложка фильма получена")
-    ResponseEntity<ResponsePictureDto> getCover(
-            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1")long id);
+//    @Operation(summary = "Получить обложку фильма",
+//            responses = {
+//                    @ApiResponse(
+//                            content = {
+//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+//                            },
+//                            responseCode = "404", description = "Фильм не найден"
+//                    ),
+//                    @ApiResponse(
+//                            content = {
+//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+//                            },
+//                            responseCode = "406", description = "Облачное хранилище не работает"
+//                    )
+//            })
+//    @ApiResponse(responseCode = "200", description = "Обложка фильма получена")
+//    ResponseEntity<ResponsePictureDto> getCover(
+//            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1")long id);
 
     @Operation(summary = "Добавить фильм в подбрку - буду смотреть",
             responses = {

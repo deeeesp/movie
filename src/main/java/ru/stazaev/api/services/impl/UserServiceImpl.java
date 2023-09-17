@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.stazaev.api.dto.response.FilmDto;
 import ru.stazaev.api.dto.response.FilmDtoWithCover;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
+import ru.stazaev.api.dto.response.SelectionDtoWithCover;
 import ru.stazaev.api.services.PictureStorage;
 import ru.stazaev.api.services.SelectionService;
 import ru.stazaev.api.services.UserService;
@@ -56,8 +57,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Selection> getCustomSelections(String username) {
-        return getByUsername(username).getSelections();
+    public List<SelectionDtoWithCover> getCustomSelections(String username) {
+        var user = getByUsername(username);
+        return castListToDto(user.getSelections());
     }
 
     @Override
@@ -89,23 +91,23 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public ResponsePictureDto getFilmCover(long filmId) {
-        Film film = filmRepository.findById(filmId).orElseThrow(()->new NoSuchElementException("err"));
-        Picture cover = film.getPicture();
-        if (cover != null) {
-            String coverPath = pictureStorage.getFilmCoverPath(cover);
-            byte[] coverData = null;
-            try {
-                coverData = pictureStorage.getPicture(coverPath);
-            } catch (Exception e) {
-                System.out.println("e");
-            }
-            return ResponsePictureDto.builder()
-                    .data(coverData)
-                    .pictureType(cover.getPictureType())
-                    .build();
+    private List<SelectionDtoWithCover> castListToDto(List<Selection> selections){
+        List<SelectionDtoWithCover> dtos = new ArrayList<>();
+        for (Selection selection : selections){
+            dtos.add(castToDto(selection));
         }
-        return null;
+        return dtos;
     }
 
+    private SelectionDtoWithCover castToDto(Selection selection){
+        var temp = mapper.map(selection, SelectionDtoWithCover.class);
+        var coverId = selection.getPicture().getId();
+        for (int i = 0; i < temp.getFilms().size(); i++) {
+
+            long ind = temp.getFilms().get(i).getId();
+            temp.getFilms().get(i).setPictureId(filmRepository.findById(ind).get().getPicture().getId());
+        }
+        temp.setPictureId(coverId);
+        return temp;
+    }
 }
