@@ -14,17 +14,16 @@ public interface FilmService {
 
     FilmDtoWithCover getFilmById(long id);
     FilmDtoWithCover getFilmByIdWithCover(long id);
+    List<FilmDtoWithCover> getFilmsSortedByRating();
 
     void deleteFilmById(long id, String username);
 
-    void saveFilm(FilmDto filmDTO, String username);
+    Long saveFilm(FilmDto filmDTO, String username);
     FilmSearchDto getFilmByTitleOrPlot(String title);
 
     List<FilmDtoWithCover> getByTitle(String title);
 
     List<FilmDtoWithCover> getByTitleRatio(String title);
-
-    List<FilmDtoWithCover> make(List<Film> films);
 
     List<FilmDtoWithCover> getByPlotRatio(String title);
 

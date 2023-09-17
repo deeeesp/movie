@@ -15,7 +15,9 @@ import java.util.List;
 @Entity
 @Table(name = "selection")
 public class Selection extends BaseEntity{
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String tag;
     private String name;
     private long owner;

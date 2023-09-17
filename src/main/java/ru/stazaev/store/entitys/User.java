@@ -23,6 +23,9 @@ import java.util.List;
 @Table(name = "app_user")
 @Entity
 public class User extends BaseEntity implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String email;
     private String username;
     private String password;
@@ -41,7 +44,6 @@ public class User extends BaseEntity implements UserDetails {
     private List<Film> willWatchFilms;
 
 
-//    @JsonIgnoreProperties("selections")
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,

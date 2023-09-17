@@ -11,6 +11,7 @@ import ru.stazaev.api.dto.response.FilmDtoWithCover;
 import ru.stazaev.api.dto.response.FilmSearchDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.services.FilmService;
+import ru.stazaev.api.services.KinopoiskRequestService;
 import ru.stazaev.api.services.PictureStorage;
 import ru.stazaev.api.services.UserService;
 import ru.stazaev.store.entitys.*;
@@ -19,8 +20,10 @@ import ru.stazaev.store.repositories.PictureRepository;
 import ru.stazaev.store.repositories.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,15 +40,15 @@ public class FilmServiceImpl implements FilmService {
     private final UserService userService;
     private final PictureRepository pictureRepository;
     private final PictureStorage pictureStorage;
+    private final KinopoiskRequestService kinopoiskRequestService;
 
     @Override
     public List<FilmDtoWithCover> getAllFilms() {
         List<FilmDtoWithCover> result = new ArrayList<>();
         var films = filmRepository.findAll();
         for (Film film : films) {
-            var temp =mapper.map(film, FilmDtoWithCover.class);
-            var cover = getFilmCover(film.getId());
-            temp.setResponsePictureDto(cover);
+            var temp = mapper.map(film, FilmDtoWithCover.class);
+            temp.setPictureId(film.getPicture().getId());
             result.add(temp);
         }
         return result;
@@ -54,19 +57,26 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public FilmDtoWithCover getFilmById(long id) {
         var filmById = getById(id);
-        var film =mapper.map(filmById, FilmDtoWithCover.class);
-        var cover = getFilmCover(id);
-        film.setResponsePictureDto(cover);
+        var film = mapper.map(filmById, FilmDtoWithCover.class);
+        film.setPictureId(filmById.getPicture().getId());
         return film;
     }
 
     @Override
     public FilmDtoWithCover getFilmByIdWithCover(long id) {
         var film = getById(id);
-        var dto = mapper.map(film,FilmDtoWithCover.class);
-        var cover = getFilmCover(id);
-        dto.setResponsePictureDto(cover);
+        var dto = mapper.map(film, FilmDtoWithCover.class);
+        dto.setPictureId(film.getPicture().getId());
         return dto;
+    }
+
+    @Override
+    public List<FilmDtoWithCover> getFilmsSortedByRating() {
+        return getAllFilms().stream()
+                .sorted(Comparator.comparing(
+                        FilmDtoWithCover::getRating
+                ).reversed())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -79,11 +89,17 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void saveFilm(FilmDto filmDTO, String username) {
+    public Long saveFilm(FilmDto filmDTO, String username) {
         if (userService.isAdministrator(username)) {
             var film = mapper.map(filmDTO, Film.class);
             film.setStatus(Status.ACTIVE);
-            filmRepository.save(film);
+            var picture = pictureRepository.getById(0L);
+            film.setPicture(picture);
+            var filmName = film.getTitle();
+            var rating = kinopoiskRequestService.getMovieRatings(filmName);
+            film.setRating(rating);
+            film = filmRepository.save(film);
+            return film.getId();
         } else {
             throw new RuntimeException(NOT_ENOUGH_RIGHT);
         }
@@ -92,20 +108,20 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public FilmSearchDto getFilmByTitleOrPlot(String title) {
         FilmSearchDto result = new FilmSearchDto();
-        result.setTitleFilms(getByTitle(title));
+        result.setTitleFilms(getByTitleRatio(title));
         result.setPlotFilms(getByPlotRatio(title));
         return result;
     }
 
-    @Override
+
     public List<FilmDtoWithCover> getByTitle(String title) {
         var films = filmRepository.findByTitle(title)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         List<FilmDtoWithCover> result = new ArrayList<>();
         for (Film film : films) {
-            var temp =mapper.map(film, FilmDtoWithCover.class);
-            var cover = getFilmCover(film.getId());
-            temp.setResponsePictureDto(cover);
+            var temp = mapper.map(film, FilmDtoWithCover.class);
+            temp.setPictureId(film.getPicture().getId());
+
             result.add(temp);
         }
         return result;
@@ -117,21 +133,8 @@ public class FilmServiceImpl implements FilmService {
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         List<FilmDtoWithCover> result = new ArrayList<>();
         for (Film film : films) {
-            var temp =mapper.map(film, FilmDtoWithCover.class);
-            var cover = getFilmCover(film.getId());
-            temp.setResponsePictureDto(cover);
-            result.add(temp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<FilmDtoWithCover> make(List<Film> films) {
-        List<FilmDtoWithCover> result = new ArrayList<>();
-        for (Film film : films) {
-            var temp =mapper.map(film, FilmDtoWithCover.class);
-            var cover = getFilmCover(film.getId());
-            temp.setResponsePictureDto(cover);
+            var temp = mapper.map(film, FilmDtoWithCover.class);
+            temp.setPictureId(film.getPicture().getId());
             result.add(temp);
         }
         return result;
@@ -143,9 +146,10 @@ public class FilmServiceImpl implements FilmService {
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         List<FilmDtoWithCover> result = new ArrayList<>();
         for (Film film : films) {
-            var temp =mapper.map(film, FilmDtoWithCover.class);
-            var cover = getFilmCover(film.getId());
-            temp.setResponsePictureDto(cover);
+            var temp = mapper.map(film, FilmDtoWithCover.class);
+            temp.setPictureId(film.getPicture().getId());
+
+
             result.add(temp);
         }
         return result;
@@ -157,7 +161,6 @@ public class FilmServiceImpl implements FilmService {
             throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
         }
         var film = getById(filmCoverDto.getFilmId());
-
 
 
         Picture picture = new Picture();

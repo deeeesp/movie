@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.mock.web.MockMultipartFile;
 import ru.stazaev.api.dto.request.*;
@@ -54,60 +55,47 @@ public class SelectionServiceImpl implements SelectionService {
     @Override
     public SelectionDtoWithCover getById(long selectionId) {
         var sel = getSelectionById(selectionId);
-        var result = mapper.map(sel, SelectionDtoWithCover.class);
-        var cover = getSelectionCover(selectionId);
-        result.setResponsePictureDto(cover);
-        return result;
+        return castToDto(sel);
     }
 
     @Override
     public SelectionDtoWithCover getByIdWithCover(long selectionId) {
-        var sel = getById(selectionId);
-        sel.getFilms().clear();
-        var cover = getSelectionCover(selectionId);
-        var result = mapper.map(sel, SelectionDtoWithCover.class);
-        for (int i = 0; i < sel.getFilms().size(); i++) {
-            long ind = sel.getFilms().get(i).getId();
-            sel.getFilms().get(i).setResponsePictureDto(filmService.getFilmCover(ind));
-        }
-        result.setResponsePictureDto(cover);
-        return result;
+        var sel = getSelectionById(selectionId);
+        return castToDto(sel);
     }
 
     @Override
     public List<SelectionDtoWithCover> findAll() {
         var selections = selectionRepository.findAll();
-        List<SelectionDtoWithCover> dtos = new ArrayList<>();
-        for (Selection selection : selections){
-            var temp = mapper.map(selection, SelectionDtoWithCover.class);
-            var cover = getSelectionCover(selection.getId());
-            for (int i = 0; i < temp.getFilms().size(); i++) {
-                long ind = temp.getFilms().get(i).getId();
-                temp.getFilms().get(i).setResponsePictureDto(filmService.getFilmCover(ind));
-            }
-            temp.setResponsePictureDto(cover);
-            dtos.add(temp);
-        }
-        return dtos;
+        return castListToDto(selections);
     }
 
     @Override
     public SelectionDtoWithCover getByTag(String tag) {
         var selection = getSelectionByTag(tag);
         var result = mapper.map(selection, SelectionDtoWithCover.class);
-        var cover = getSelectionCover(selection.getId());
-        result.setResponsePictureDto(cover);
+        result.setPictureId(selection.getPicture().getId());
         return result;
     }
 
-    public void saveNewSelection(SaveSelectionDto selectionDTO) {
+    public Long saveNewSelection(SaveSelectionDto selectionDTO, Authentication authentication) {
+        var films = selectionDTO.getFilms();
         Selection selection = mapper.map(selectionDTO, Selection.class);
+        selection.getFilms().clear();
+        for (int i = 0; i < films.size(); i++) {
+            var film = filmRepository.findByTitle(films.get(i).getTitle());
+            film.ifPresent(filmList -> selection.getFilms().add(filmList.get(0)));
+        }
         selection.setStatus(Status.ACTIVE);
-        var user = userService.getById(selection.getOwner());
+        var picture = pictureRepository.getById(0L);
+        selection.setPicture(picture);
+        var user = userService.getByUsername(authentication.getName());
+        selection.setOwner(user.getId());
         user.getSelections().add(selection);
-        userRepository.save(user);
+        user = userRepository.save(user);
+        var l = user.getSelections().indexOf(selection);
+        return user.getSelections().get(l).getId();
     }
-
 
     @Override
     public void addFilmToCustomSelection(long selectionId, long filmId, String username) {
@@ -140,16 +128,29 @@ public class SelectionServiceImpl implements SelectionService {
     public void deleteFilmFromWillWatchSelection(long filmId, String username) {
         var film = filmService.getById(filmId);
         var user = userService.getByUsername(username);
+
         user.getWillWatchFilms().remove(film);
+        userRepository.save(user);
     }
 
     @Override
     public void deleteSelectionById(long selectionId, String username) {
         var selection = getSelectionById(selectionId);
-        if (isOwnerOrAdmin(username, selection)) {
-            selectionRepository.deleteById(selectionId);
+        selection.getFilms().clear();
+        selection = selectionRepository.save(selection);
+        if (selection.getPicture().getId() == 0) {
+            if (isOwnerOrAdmin(username, selection)) {
+                selectionRepository.deleteById(selectionId);
+                pictureRepository.save(new Picture(0, PictureType.JPEG));
+            } else {
+                throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
+            }
         } else {
-            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
+            if (isOwnerOrAdmin(username, selection)) {
+                selectionRepository.deleteById(selectionId);
+            } else {
+                throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
+            }
         }
     }
 
@@ -179,7 +180,7 @@ public class SelectionServiceImpl implements SelectionService {
                 throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
             }
 
-            deleteOldCower(selection.getPicture());
+//            deleteOldCower(selection.getPicture());
 
             selection.setPicture(newCover);
             selectionRepository.save(selection);
@@ -227,6 +228,25 @@ public class SelectionServiceImpl implements SelectionService {
             }
             pictureRepository.delete(oldCover);
         }
+    }
+
+    public List<SelectionDtoWithCover> castListToDto(List<Selection> selections) {
+        List<SelectionDtoWithCover> dtos = new ArrayList<>();
+        for (Selection selection : selections) {
+            dtos.add(castToDto(selection));
+        }
+        return dtos;
+    }
+
+    public SelectionDtoWithCover castToDto(Selection selection) {
+        var coverId = selection.getPicture().getId();
+        var temp = mapper.map(selection, SelectionDtoWithCover.class);
+        for (int i = 0; i < temp.getFilms().size(); i++) {
+            long ind = temp.getFilms().get(i).getId();
+//            temp.getFilms().get(i).setPictureId(filmService.getFilmCoverId(ind));
+        }
+        temp.setPictureId(coverId);
+        return temp;
     }
 
     @Override

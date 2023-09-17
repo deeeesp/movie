@@ -16,12 +16,17 @@ import java.util.List;
 @Entity
 @Table(name = "film")
 public class Film extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String title;
     private int releaseYear;
     private String country;
     private String director;
     private Long fees;
     private String plot;
+    private double rating;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "picture_id")

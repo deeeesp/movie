@@ -74,11 +74,10 @@ public class SelectionController implements ISelectionController {
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(SAVE_PATH)
-    public ResponseEntity<Void> saveSelection(@RequestBody SaveSelectionDto selectionDTO) {
-        selectionService.saveNewSelection(selectionDTO);
+    public ResponseEntity<Long> saveSelection(@RequestBody SaveSelectionDto selectionDTO, Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(selectionService.saveNewSelection(selectionDTO, authentication));
     }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")

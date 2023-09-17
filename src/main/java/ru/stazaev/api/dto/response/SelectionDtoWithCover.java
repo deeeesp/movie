@@ -23,5 +23,7 @@ public class SelectionDtoWithCover {
     @Schema(example = "1")
     private long owner;
     private List<FilmDtoWithCover> films = new ArrayList<>();
-    private ResponsePictureDto responsePictureDto;
+    @Schema(example = "1")
+    @JsonProperty("picture_id")
+    private long pictureId;
 }

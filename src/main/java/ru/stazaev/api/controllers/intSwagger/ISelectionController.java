@@ -84,7 +84,7 @@ public interface ISelectionController {
                             responseCode = "403", description = "Недостаточно прав")
             })
     @ApiResponse(responseCode = "201", description = "Подборка сохранен")
-    ResponseEntity<Void> saveSelection(@RequestBody(description = "") SaveSelectionDto selectionDTO);
+    ResponseEntity<Long> saveSelection(@RequestBody(description = "") SaveSelectionDto selectionDTO, Authentication authentication);
 
     @Operation(summary = "Добавить фильм в подбрку 'Буду смотреть'",
             responses = {

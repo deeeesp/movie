@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         var films = user.getWillWatchFilms();
         for (Film film : films){
             var filmm = mapper.map(film, FilmDtoWithCover.class);
-            filmm.setResponsePictureDto(getFilmCover(film.getId()));
+            filmm.setPictureId(film.getPicture().getId());
             result.add(filmm);
         }
         return result;
