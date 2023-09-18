@@ -23,9 +23,12 @@ import java.util.List;
 @Table(name = "app_user")
 @Entity
 public class User extends BaseEntity implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,
+            generator = "app_user_sequence")
     private long id;
+
     private String email;
     private String username;
     private String password;
@@ -35,20 +38,17 @@ public class User extends BaseEntity implements UserDetails {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
+                    CascadeType.ALL
             })
-    @JoinTable(name = "user_will_watch_films",
+    @JoinTable(name = "user_film",
             joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "films_id")})
-    private List<Film> willWatchFilms;
+            inverseJoinColumns = {@JoinColumn(name = "film_id")})
+    private List<Film> willWatchFilms = new ArrayList<>();
 
 
+    //    @JsonIgnoreProperties("selections")
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+            cascade = CascadeType.ALL)
     @JoinTable(name = "user_selection",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "selection_id")})

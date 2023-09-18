@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "selection")
 public class Selection extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "selection_sequence")
     private long id;
     private String tag;
     private String name;

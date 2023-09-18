@@ -1,8 +1,8 @@
-create sequence user_sequence start with 1 increment by 1;
+create sequence app_user_sequence start with 1 increment by 1;
 
 create table app_user
 (
-    id      bigint primary key default nextVal('user_sequence'),
+    id      bigint primary key default nextVal('app_user_sequence'),
     status varchar not null,
     email varchar not null,
     password varchar not null,

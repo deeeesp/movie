@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Picture {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "picture_sequence")
     private long id;
 
     @Enumerated(EnumType.STRING)

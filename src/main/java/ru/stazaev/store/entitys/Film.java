@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "film")
 public class Film extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "film_sequence")
     private long id;
     private String title;
     private int releaseYear;
