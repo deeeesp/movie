@@ -1,4 +1,7 @@
 insert into picture(id, picture_type)
+values (0,'JPEG');
+
+insert into picture(id, picture_type)
 values (1,'JPEG');
 
 insert into picture(id, picture_type)
