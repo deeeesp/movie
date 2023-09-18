@@ -10,5 +10,6 @@ create table film
     fees bigint not null ,
     plot varchar not null,
     release_year integer not null ,
-    title varchar not null
+    title varchar not null,
+    rating real
 )
