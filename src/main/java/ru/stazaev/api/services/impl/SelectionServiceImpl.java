@@ -87,7 +87,7 @@ public class SelectionServiceImpl implements SelectionService {
             film.ifPresent(filmList -> selection.getFilms().add(filmList.get(0)));
         }
         selection.setStatus(Status.ACTIVE);
-        var picture = pictureRepository.findById(0L).orElseThrow(()-> new NoSuchElementException("e"));
+        var picture = pictureRepository.findById(0L).orElseThrow(()->new NoSuchElementException("e"));
         selection.setPicture(picture);
         var user = userService.getByUsername(authentication.getName());
         selection.setOwner(user.getId());
@@ -139,12 +139,12 @@ public class SelectionServiceImpl implements SelectionService {
         selection.getFilms().clear();
         selection = selectionRepository.save(selection);
         if (selection.getPicture().getId() == 0) {
-            if (isOwnerOrAdmin(username, selection)) {
+//            if (isOwnerOrAdmin(username, selection)) {
                 selectionRepository.deleteById(selectionId);
                 pictureRepository.save(new Picture(0, PictureType.JPEG));
-            } else {
-                throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
-            }
+//            } else {
+//                throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
+//            }
         } else {
             if (isOwnerOrAdmin(username, selection)) {
                 selectionRepository.deleteById(selectionId);
