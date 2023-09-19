@@ -87,7 +87,7 @@ public class SelectionServiceImpl implements SelectionService {
             film.ifPresent(filmList -> selection.getFilms().add(filmList.get(0)));
         }
         selection.setStatus(Status.ACTIVE);
-        var picture = pictureRepository.getById(0L);
+        var picture = pictureRepository.findById(0L).orElseThrow(()-> new NoSuchElementException("e"));
         selection.setPicture(picture);
         var user = userService.getByUsername(authentication.getName());
         selection.setOwner(user.getId());
