@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.stazaev.api.controllers.intSwagger.ISelectionController;
 import ru.stazaev.api.dto.request.SaveSelectionDto;
+import ru.stazaev.api.dto.request.SaveSelectionDtoWithCover;
 import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
 import ru.stazaev.api.dto.response.SelectionDto;
@@ -22,6 +23,7 @@ public class SelectionController implements ISelectionController {
 
     private final SelectionService selectionService;
     private final String SAVE_PATH = "/save";
+    private final String SAVE_WITH_COVER_PATH = "/save-with-cover";
     private final String FIND_BY_ID = "/{selection_id}";
     private final String FIND_ALL = "/selection";
     private final String FIND_BY_ID_WITH_COVER = "/with-cover/{selection_id}";
@@ -75,6 +77,14 @@ public class SelectionController implements ISelectionController {
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(SAVE_PATH)
     public ResponseEntity<Long> saveSelection(@RequestBody SaveSelectionDto selectionDTO, Authentication authentication) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(selectionService.saveNewSelection(selectionDTO, authentication));
+    }
+
+    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
+    @PostMapping(SAVE_WITH_COVER_PATH)
+    public ResponseEntity<Long> saveSelection(@RequestBody SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(selectionService.saveNewSelection(selectionDTO, authentication));

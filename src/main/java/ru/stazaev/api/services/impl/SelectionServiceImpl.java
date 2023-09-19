@@ -98,6 +98,37 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
+    public Long saveNewSelection(SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
+        Picture newCover = Picture.builder()
+                .pictureType(PictureType.JPEG)
+                .build();
+        newCover = pictureRepository.save(newCover);
+
+        String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
+        try {
+            pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionDTO.getPicture()));
+        } catch (Exception e) {
+            throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
+        }
+
+        var films = selectionDTO.getFilms();
+        Selection selection = mapper.map(selectionDTO, Selection.class);
+        selection.getFilms().clear();
+        for (int i = 0; i < films.size(); i++) {
+            var film = filmRepository.findByTitle(films.get(i).getTitle());
+            film.ifPresent(filmList -> selection.getFilms().add(filmList.get(0)));
+        }
+        selection.setStatus(Status.ACTIVE);
+        selection.setPicture(newCover);
+        var user = userService.getByUsername(authentication.getName());
+        selection.setOwner(user.getId());
+        user.getSelections().add(selection);
+        user = userRepository.save(user);
+        var l = user.getSelections().indexOf(selection);
+        return user.getSelections().get(l).getId();
+    }
+
+    @Override
     public void addFilmToCustomSelection(long selectionId, long filmId, String username) {
         var film = filmService.getById(filmId);
         var selection = getSelectionById(selectionId);

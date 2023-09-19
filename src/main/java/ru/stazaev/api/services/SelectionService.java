@@ -23,6 +23,7 @@ public interface SelectionService {
     SelectionDtoWithCover getByTag(String tag);
 
     Long saveNewSelection(SaveSelectionDto selectionDTO, Authentication authentication);
+    Long saveNewSelection(SaveSelectionDtoWithCover selectionDTO, Authentication authentication);
     void addFilmToCustomSelection(long selectionId, long filmId, String username);
     void addFilmToWillWatch(String username, long filmId);
     void deleteFilmFromSelection(long selectionId, long filmId, String username);

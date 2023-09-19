@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import ru.stazaev.api.dto.request.SaveSelectionDto;
+import ru.stazaev.api.dto.request.SaveSelectionDtoWithCover;
 import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
 import ru.stazaev.api.dto.response.ApiErrorResponse;
 import ru.stazaev.api.dto.response.ResponsePictureDto;
@@ -85,6 +86,17 @@ public interface ISelectionController {
             })
     @ApiResponse(responseCode = "201", description = "Подборка сохранен")
     ResponseEntity<Long> saveSelection(@RequestBody(description = "") SaveSelectionDto selectionDTO, Authentication authentication);
+
+ @Operation(summary = "Сохранить новую подборку",
+            responses = {
+                    @ApiResponse(
+                            content = {
+                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+                            },
+                            responseCode = "403", description = "Недостаточно прав")
+            })
+    @ApiResponse(responseCode = "201", description = "Подборка сохранен")
+    ResponseEntity<Long> saveSelection(@RequestBody(description = "") SaveSelectionDtoWithCover selectionDTO, Authentication authentication);
 
     @Operation(summary = "Добавить фильм в подбрку 'Буду смотреть'",
             responses = {
