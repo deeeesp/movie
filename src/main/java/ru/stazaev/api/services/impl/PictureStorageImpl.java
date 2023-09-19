@@ -60,14 +60,21 @@ public class PictureStorageImpl implements PictureStorage {
     }
 
     @Override
-    public ResponsePictureDto getPicture(long id) throws Exception {
+    public ResponsePictureDto getPicture(long id) {
         var picture = pictureRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("Картинка не найдена"));
         var path = picture.getId() + "." + String.valueOf(picture.getPictureType()).toLowerCase();
-        var pic = getPicture(path);
+        try {
+            var pic = getPicture(path);
+            return ResponsePictureDto.builder()
+                    .data(pic)
+                    .pictureType(picture.getPictureType())
+                    .build();
+        }catch (Exception e){
+            System.out.println(e);
+        }
         return ResponsePictureDto.builder()
-                .data(pic)
-                .pictureType(picture.getPictureType())
+                .data(null)
                 .build();
     }
 
