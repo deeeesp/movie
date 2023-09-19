@@ -98,7 +98,7 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public Long saveNewSelection(SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
+    public Long saveNewSelectionWithCover(SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
         Picture newCover = Picture.builder()
                 .pictureType(PictureType.valueOf("JPEG"))
                 .build();

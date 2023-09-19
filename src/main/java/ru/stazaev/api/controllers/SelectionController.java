@@ -8,11 +8,8 @@ import ru.stazaev.api.controllers.intSwagger.ISelectionController;
 import ru.stazaev.api.dto.request.SaveSelectionDto;
 import ru.stazaev.api.dto.request.SaveSelectionDtoWithCover;
 import ru.stazaev.api.dto.request.UpdateSelectionCoverDto;
-import ru.stazaev.api.dto.response.ResponsePictureDto;
-import ru.stazaev.api.dto.response.SelectionDto;
 import ru.stazaev.api.dto.response.SelectionDtoWithCover;
 import ru.stazaev.api.services.SelectionService;
-import ru.stazaev.store.entitys.Selection;
 
 import java.util.List;
 
@@ -84,10 +81,10 @@ public class SelectionController implements ISelectionController {
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(SAVE_WITH_COVER_PATH)
-    public ResponseEntity<Long> saveSelection(@RequestBody SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
+    public ResponseEntity<Long> saveSelectionWithCover(@RequestBody SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(selectionService.saveNewSelection(selectionDTO, authentication));
+                .body(selectionService.saveNewSelectionWithCover(selectionDTO, authentication));
     }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
