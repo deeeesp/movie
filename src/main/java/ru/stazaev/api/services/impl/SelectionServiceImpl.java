@@ -100,16 +100,20 @@ public class SelectionServiceImpl implements SelectionService {
     @Override
     public Long saveNewSelection(SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
         Picture newCover = Picture.builder()
-                .pictureType(PictureType.JPEG)
+                .pictureType(PictureType.valueOf("JPEG"))
                 .build();
         newCover = pictureRepository.save(newCover);
 
         String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
+        System.out.println("----------------");
+        System.out.println(newCover.getId());
+        System.out.println("----------------");
         try {
             pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionDTO.getPicture()));
         } catch (Exception e) {
             throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
         }
+        System.out.println("SAVED");
 
         var films = selectionDTO.getFilms();
         Selection selection = mapper.map(selectionDTO, Selection.class);
