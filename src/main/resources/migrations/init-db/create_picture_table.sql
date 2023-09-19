@@ -1,4 +1,4 @@
-create sequence picture_sequence start with 1 increment by 1;
+create sequence picture_sequence start with 1050 increment by 1;
 
 create table picture
 (
