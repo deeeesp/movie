@@ -20,15 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController implements IUserController {
     private final String FIND_BY_ID = "/{user_id}";
-    private final String GET_FAV_SELECTION = "/fav-sel";
     private final String GET_WILL_WATCH_SELECTION = "/will-watch";
     private final String GET_CUSTOM_SELECTION = "/sel";
-    private final String GET_ALL_SELECTIONS = "/all-sel";
     private final String ADD_SELECTION_TO_USER = "/add/{selection_id}";
     private final String DELETE_SELECTION_FROM_USER = "/delete/{selection_id}";
-    private final String GET_ALL_LOCAL_RATING = "/rating/all-local";
-    private final String GET_LOCAL_RATING = "/rating/{film_id}";
-    private final String SAVE_LOCAL_RATING = "/rating/save";
 
 
     private final UserService userService;
