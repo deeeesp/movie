@@ -156,27 +156,27 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void updateFilmCover(UpdateFilmCoverDto filmCoverDto, String username) {
-        if (!userService.isAdministrator(username)) {
-            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
-        }
-        var film = getById(filmCoverDto.getFilmId());
-
-
-        Picture picture = new Picture();
-        picture.setPictureType(filmCoverDto.getPictureType());
-        picture = pictureRepository.save(picture);
-
-        String picturePath = pictureStorage.getFilmCoverPath(picture);
-        try {
-            pictureStorage.savePicture(picturePath, new MockMultipartFile(picturePath, filmCoverDto.getPicture()));
-        } catch (Exception e) {
-            pictureRepository.delete(picture);
-            throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
-        }
-
-        deleteFilmCover(film.getPicture());
-        film.setPicture(picture);
-        filmRepository.save(film);
+//        if (!userService.isAdministrator(username)) {
+//            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
+//        }
+//        var film = getById(filmCoverDto.getFilmId());
+//
+//
+//        Picture picture = new Picture();
+//        picture.setPictureType(filmCoverDto.getPictureType());
+//        picture = pictureRepository.save(picture);
+//
+//        String picturePath = pictureStorage.getFilmCoverPath(picture);
+//        try {
+//            pictureStorage.savePicture(picturePath, new MockMultipartFile(picturePath, filmCoverDto.getPicture()));
+//        } catch (Exception e) {
+//            pictureRepository.delete(picture);
+//            throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
+//        }
+//
+//        deleteFilmCover(film.getPicture());
+//        film.setPicture(picture);
+//        filmRepository.save(film);
     }
 
 //    @Override

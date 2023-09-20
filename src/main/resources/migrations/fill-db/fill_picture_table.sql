@@ -32,6 +32,37 @@ insert into picture(id, picture_type)
 values (10,'JPEG');
 
 insert into picture(id, picture_type)
+values (11,'JPEG');
+
+insert into picture(id, picture_type)
+values (12,'JPEG');
+
+insert into picture(id, picture_type)
+values (13,'JPEG');
+
+insert into picture(id, picture_type)
+values (14,'JPEG');
+
+insert into picture(id, picture_type)
+values (15,'JPEG');
+
+insert into picture(id, picture_type)
+values (16,'JPEG');
+
+insert into picture(id, picture_type)
+values (17,'JPEG');
+
+insert into picture(id, picture_type)
+values (18,'JPEG');
+
+insert into picture(id, picture_type)
+values (19,'JPEG');
+
+insert into picture(id, picture_type)
+values (20,'JPEG');
+
+
+insert into picture(id, picture_type)
 values (1000,'JPEG');
 
 insert into picture(id, picture_type)
@@ -39,3 +70,9 @@ values (1001,'JPEG');
 
 insert into picture(id, picture_type)
 values (1002,'JPEG');
+
+insert into picture(id, picture_type)
+values (1003,'JPEG');
+
+insert into picture(id, picture_type)
+values (1004,'JPEG');
