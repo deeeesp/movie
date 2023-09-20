@@ -24,15 +24,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/film")
 public class FilmController implements IFilmController {
-    private final String SAVE_PATH = "/save";
-    private final String DELETE = "/delete/{film_id}";
     private final String ALL_FILMS = "/films";
     private final String ALL_FILMS_BY_RATING = "/films/rating";
     private final String FIND_BY_ID = "/search-id";
     private final String FIND_FILM = "/search";
-    private final String FIND_BY_ID_WITH_COVER = "/with-cover/{film_id}";
     private final String UPDATE_COVER = "/cover-update";
-    private final String GET_COVER = "/cover/{film_id}";
     private final String ADD_FILM_TO_WLL_WATCH_SELECTION = "/{film_id}/will-watch-sel";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{film_id}/cust-sel/{selection_id}";
 
@@ -54,7 +50,7 @@ public class FilmController implements IFilmController {
     public ResponseEntity<FilmDtoWithCover> getFilmByIdWithCover(Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(filmService.getFilmByIdWithCover(id));
+                .body(filmService.getFilmById(id));
     }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
@@ -82,28 +78,6 @@ public class FilmController implements IFilmController {
     }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-    @PostMapping(SAVE_PATH)
-    public ResponseEntity<Long> saveFilm(
-            @RequestBody FilmDto filmDTO,
-            Authentication authentication) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(filmService.saveFilm(filmDTO, authentication.getName()));
-//                .build();
-    }
-
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-    @PostMapping(DELETE)
-    public ResponseEntity<Void> deleteFilm(
-            @PathVariable("film_id") long id,
-            Authentication authentication) {
-        filmService.deleteFilmById(id, authentication.getName());
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .build();
-    }
-
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(UPDATE_COVER)
     public ResponseEntity<Void> updateCover(
             @RequestBody UpdateFilmCoverDto filmCoverDto,
@@ -113,15 +87,6 @@ public class FilmController implements IFilmController {
                 .status(HttpStatus.OK)
                 .build();
     }
-
-//    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-//    @GetMapping(GET_COVER)
-//    public ResponseEntity<ResponsePictureDto> getCover(@PathVariable("film_id") long id) {
-//        var cover = filmService.getFilmCover(id);
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(cover);
-//    }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @PostMapping(ADD_FILM_TO_WLL_WATCH_SELECTION)

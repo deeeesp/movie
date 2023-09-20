@@ -17,18 +17,6 @@ import java.util.List;
 
 @Tag(name = "Film API", description = "Allows to find films")
 public interface IFilmController {
-    @Operation(summary = "Получить фильм по id",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Фильм не найден"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Фильм найден")
-    ResponseEntity<FilmDtoWithCover> getFilmById(@Parameter(name = "user_id", description = "Идентификатор пользователя", example = "1") Long id);
-
     @Operation(summary = "Получить фильм по id вместе с обложкой",
             responses = {
                     @ApiResponse(
@@ -83,32 +71,6 @@ public interface IFilmController {
     @ApiResponse(responseCode = "200", description = "Фильм найден")
     ResponseEntity<List<FilmDtoWithCover>> getFilmsSortedByRating();
 
-    @Operation(summary = "Загрузить новый фильм",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "403", description = "Недостаточно прав")
-            })
-    @ApiResponse(responseCode = "201", description = "Фильм сохранен")
-    ResponseEntity<Long> saveFilm(
-            @RequestBody(description = "") FilmDto filmDTO,
-            Authentication authentication);
-
-    @Operation(summary = "Удалить фильм",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "403", description = "Недостаточно прав")
-            })
-    @ApiResponse(responseCode = "200", description = "Фильм удален")
-    ResponseEntity<Void> deleteFilm(
-            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1") long id,
-            Authentication authentication);
-
     @Operation(summary = "Загрузить новую обложку для фильма",
             responses = {
                     @ApiResponse(
@@ -134,25 +96,6 @@ public interface IFilmController {
     ResponseEntity<Void> updateCover(
             @RequestBody UpdateFilmCoverDto filmCoverDto,
             Authentication authentication);
-
-//    @Operation(summary = "Получить обложку фильма",
-//            responses = {
-//                    @ApiResponse(
-//                            content = {
-//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-//                            },
-//                            responseCode = "404", description = "Фильм не найден"
-//                    ),
-//                    @ApiResponse(
-//                            content = {
-//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-//                            },
-//                            responseCode = "406", description = "Облачное хранилище не работает"
-//                    )
-//            })
-//    @ApiResponse(responseCode = "200", description = "Обложка фильма получена")
-//    ResponseEntity<ResponsePictureDto> getCover(
-//            @Parameter(name = "film_id", description = "Идентификатор фильма", example = "1")long id);
 
     @Operation(summary = "Добавить фильм в подбрку - буду смотреть",
             responses = {

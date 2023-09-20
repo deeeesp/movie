@@ -11,27 +11,11 @@ import java.util.List;
 
 public interface FilmService {
     List<FilmDtoWithCover> getAllFilms();
-
     FilmDtoWithCover getFilmById(long id);
-    FilmDtoWithCover getFilmByIdWithCover(long id);
     List<FilmDtoWithCover> getFilmsSortedByRating();
-
-    void deleteFilmById(long id, String username);
-
-    Long saveFilm(FilmDto filmDTO, String username);
     FilmSearchDto getFilmByTitleOrPlot(String title);
-
-    List<FilmDtoWithCover> getByTitle(String title);
-
     List<FilmDtoWithCover> getByTitleRatio(String title);
-
     List<FilmDtoWithCover> getByPlotRatio(String title);
-
     void updateFilmCover(UpdateFilmCoverDto filmCoverDto, String username);
-
-    ResponsePictureDto getFilmCover(long filmId);
-
-//    void deleteFilmCover(DeleteFilmDto filmDto);
-
     Film getById(long filmId);
 }

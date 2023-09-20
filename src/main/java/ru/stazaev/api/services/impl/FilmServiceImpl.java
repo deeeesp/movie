@@ -62,7 +62,7 @@ public class FilmServiceImpl implements FilmService {
         return film;
     }
 
-    @Override
+
     public FilmDtoWithCover getFilmByIdWithCover(long id) {
         var film = getById(id);
         var dto = mapper.map(film, FilmDtoWithCover.class);
@@ -79,7 +79,7 @@ public class FilmServiceImpl implements FilmService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
     public void deleteFilmById(long id, String username) {
         if (userService.isAdministrator(username)) {
             filmRepository.deleteById(id);
@@ -88,7 +88,6 @@ public class FilmServiceImpl implements FilmService {
         }
     }
 
-    @Override
     public Long saveFilm(FilmDto filmDTO, String username) {
         if (userService.isAdministrator(username)) {
             var film = mapper.map(filmDTO, Film.class);
@@ -189,7 +188,6 @@ public class FilmServiceImpl implements FilmService {
         deleteFilmCover(film.getPicture());
     }
 
-    @Override
     public ResponsePictureDto getFilmCover(long filmId) {
         var film = getById(filmId);
         Picture cover = film.getPicture();
