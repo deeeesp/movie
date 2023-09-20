@@ -23,7 +23,6 @@ public class SelectionController implements ISelectionController {
     private final String SAVE_WITH_COVER_PATH = "/save-with-cover";
     private final String FIND_BY_ID = "/{selection_id}";
     private final String FIND_ALL = "/selection";
-    private final String FIND_BY_ID_WITH_COVER = "/with-cover/{selection_id}";
     private final String FIND_BY_TAG = "/find-tag/{tag}";
     private final String DELETE_FILM_FROM_SELECTION = "/{selection_id}/delete/{film_id}";
     private final String ADD_FILM_TO_CUSTOM_SELECTION = "/{selection_id}/cust-sel/{film_id}";
@@ -32,7 +31,6 @@ public class SelectionController implements ISelectionController {
     private final String DELETE_SELECTION_BY_ID = "/delete/{selection_id}";
     private final String DELETE_SELECTION_BY_TAG = "/delete-tag/{tag}";
     private final String UPDATE_COVER = "/cover-update";
-    private final String GET_COVER = "/{selection_id}/cover";
 
 
     public SelectionController(SelectionService selectionService) {
@@ -48,7 +46,7 @@ public class SelectionController implements ISelectionController {
     }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-    @GetMapping(FIND_BY_ID_WITH_COVER)
+    @GetMapping(FIND_BY_ID)
     public ResponseEntity<SelectionDtoWithCover> getSelectionWithCover(@PathVariable("selection_id") long selectionId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -71,16 +69,16 @@ public class SelectionController implements ISelectionController {
                 .body(selectionService.getByTag(tag));
     }
 
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-    @PostMapping(SAVE_PATH)
-    public ResponseEntity<Long> saveSelection(@RequestBody SaveSelectionDto selectionDTO, Authentication authentication) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(selectionService.saveNewSelection(selectionDTO, authentication));
-    }
+//    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
+//    @PostMapping(SAVE_PATH)
+//    public ResponseEntity<Long> saveSelection(@RequestBody SaveSelectionDto selectionDTO, Authentication authentication) {
+//        return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(selectionService.saveNewSelection(selectionDTO, authentication));
+//    }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-    @PostMapping(SAVE_WITH_COVER_PATH)
+    @PostMapping(SAVE_PATH)
     public ResponseEntity<Long> saveSelectionWithCover(@RequestBody SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)

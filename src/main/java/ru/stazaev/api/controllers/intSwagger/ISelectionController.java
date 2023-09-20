@@ -22,18 +22,6 @@ import java.util.List;
 
 @Tag(name = "Selection API", description = "Allows to find and edit selections")
 public interface ISelectionController {
-    @Operation(summary = "Получить подборку по id",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "404", description = "Подборка не найдена"
-                    )
-            })
-    @ApiResponse(responseCode = "200", description = "Подборка найдена")
-    ResponseEntity<SelectionDtoWithCover> getSelection(@Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long selectionId);
-
     @Operation(summary = "Получить подборку по id вместе с обложкой",
             responses = {
                     @ApiResponse(
@@ -76,18 +64,18 @@ public interface ISelectionController {
     @ApiResponse(responseCode = "200", description = "Подборка найдена")
     ResponseEntity<SelectionDtoWithCover> getSelectionByTag(@Parameter(description = "Тег подбоки, заданный пользователем", example = "my-new") String tag);
 
-    @Operation(summary = "Сохранить новую подборку",
-            responses = {
-                    @ApiResponse(
-                            content = {
-                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                            },
-                            responseCode = "403", description = "Недостаточно прав")
-            })
-    @ApiResponse(responseCode = "201", description = "Подборка сохранен")
-    ResponseEntity<Long> saveSelection(@RequestBody(description = "") SaveSelectionDto selectionDTO, Authentication authentication);
+//    @Operation(summary = "Сохранить новую подборку",
+//            responses = {
+//                    @ApiResponse(
+//                            content = {
+//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+//                            },
+//                            responseCode = "403", description = "Недостаточно прав")
+//            })
+//    @ApiResponse(responseCode = "201", description = "Подборка сохранен")
+//    ResponseEntity<Long> saveSelection(@RequestBody(description = "") SaveSelectionDto selectionDTO, Authentication authentication);
 
- @Operation(summary = "Сохранить новую подборку",
+    @Operation(summary = "Сохранить новую подборку",
             responses = {
                     @ApiResponse(
                             content = {
@@ -222,22 +210,4 @@ public interface ISelectionController {
             @RequestBody(description = "") UpdateSelectionCoverDto selectionCoverDto,
             Authentication authentication);
 
-//    @Operation(summary = "Получить обложку подборки",
-//            responses = {
-//                    @ApiResponse(
-//                            content = {
-//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-//                            },
-//                            responseCode = "404", description = "Подборка не найдена"
-//                    ),
-//                    @ApiResponse(
-//                            content = {
-//                                    @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-//                            },
-//                            responseCode = "406", description = "Облачное хранилище не работает"
-//                    )
-//            })
-//    @ApiResponse(responseCode = "200", description = "Обложка подборки получена")
-//    ResponseEntity<ResponsePictureDto> getCover(
-//            @Parameter(name = "selection_id", description = "Идентификатор подборки", example = "1") long id);
 }
