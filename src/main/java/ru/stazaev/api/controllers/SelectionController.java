@@ -37,13 +37,13 @@ public class SelectionController implements ISelectionController {
         this.selectionService = selectionService;
     }
 
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-    @GetMapping(FIND_BY_ID)
-    public ResponseEntity<SelectionDtoWithCover> getSelection(@PathVariable("selection_id") long selectionId) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(selectionService.getById(selectionId));
-    }
+//    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
+//    @GetMapping(FIND_BY_ID)
+//    public ResponseEntity<SelectionDtoWithCover> getSelection(@PathVariable("selection_id") long selectionId) {
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(selectionService.getById(selectionId));
+//    }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @GetMapping(FIND_BY_ID)
