@@ -87,8 +87,17 @@ public class SelectionServiceImpl implements SelectionService {
             film.ifPresent(filmList -> selection.getFilms().add(filmList.get(0)));
         }
         selection.setStatus(Status.ACTIVE);
-        var picture = pictureRepository.findById(0L).orElseThrow(()->new NoSuchElementException("e"));
-        selection.setPicture(picture);
+        var picture = pictureRepository.findById(0L);
+        Picture response;
+        if (picture.isEmpty()){
+            response = new Picture();
+            response.setPictureType(PictureType.JPEG);
+            response.setId(0);
+            pictureRepository.save(response);
+        }else {
+            response = picture.get();
+        }
+        selection.setPicture(response);
         var user = userService.getByUsername(authentication.getName());
         selection.setOwner(user.getId());
         user.getSelections().add(selection);
@@ -105,15 +114,11 @@ public class SelectionServiceImpl implements SelectionService {
         newCover = pictureRepository.save(newCover);
 
         String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
-        System.out.println("----------------");
-        System.out.println(newCover.getId());
-        System.out.println("----------------");
         try {
             pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionDTO.getPicture()));
         } catch (Exception e) {
             throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
         }
-        System.out.println("SAVED");
 
         var films = selectionDTO.getFilms();
         Selection selection = mapper.map(selectionDTO, Selection.class);
