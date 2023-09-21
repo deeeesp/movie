@@ -89,12 +89,12 @@ public class SelectionServiceImpl implements SelectionService {
         selection.setStatus(Status.ACTIVE);
         var picture = pictureRepository.findById(0L);
         Picture response;
-        if (picture.isEmpty()){
+        if (picture.isEmpty()) {
             response = new Picture();
             response.setPictureType(PictureType.JPEG);
             response.setId(0);
             pictureRepository.save(response);
-        }else {
+        } else {
             response = picture.get();
         }
         selection.setPicture(response);
@@ -108,16 +108,26 @@ public class SelectionServiceImpl implements SelectionService {
 
     @Override
     public Long saveNewSelectionWithCover(SaveSelectionDtoWithCover selectionDTO, Authentication authentication) {
-        Picture newCover = Picture.builder()
-                .pictureType(PictureType.valueOf("JPEG"))
-                .build();
-        newCover = pictureRepository.save(newCover);
+        Picture newCover;
+        if (selectionDTO.getPicture() != null) {
+            newCover = Picture.builder()
+                    .pictureType(PictureType.valueOf("JPEG"))
+                    .build();
+            newCover = pictureRepository.save(newCover);
 
-        String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
-        try {
-            pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionDTO.getPicture()));
-        } catch (Exception e) {
-            throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
+            String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
+            try {
+                pictureStorage.savePicture(newCoverPath, selectionDTO.getPicture());
+            } catch (Exception e) {
+                throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
+            }
+        } else {
+            var pic = pictureRepository.findById(0);
+            if (!pic.isEmpty()) {
+                newCover = pic.get();
+            }else {
+                newCover = pictureRepository.save(new Picture(0,PictureType.JPEG));
+            }
         }
 
         var films = selectionDTO.getFilms();
@@ -146,6 +156,7 @@ public class SelectionServiceImpl implements SelectionService {
             selectionRepository.save(selection);
         }
     }
+
     @Override
     public void addFilmToWillWatch(String username, long filmId) {
         var film = filmService.getById(filmId);
@@ -180,8 +191,8 @@ public class SelectionServiceImpl implements SelectionService {
         selection = selectionRepository.save(selection);
         if (selection.getPicture().getId() == 0) {
 //            if (isOwnerOrAdmin(username, selection)) {
-                selectionRepository.deleteById(selectionId);
-                pictureRepository.save(new Picture(0, PictureType.JPEG));
+            selectionRepository.deleteById(selectionId);
+            pictureRepository.save(new Picture(0, PictureType.JPEG));
 //            } else {
 //                throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
 //            }
@@ -199,7 +210,7 @@ public class SelectionServiceImpl implements SelectionService {
         var selection = getSelectionByTag(tag);
         if (isOwnerOrAdmin(username, selection)) {
             selectionRepository.deleteByTag(tag);
-        }else {
+        } else {
             throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
         }
     }
@@ -207,26 +218,26 @@ public class SelectionServiceImpl implements SelectionService {
     @Override
     public void updateSelectionCover(UpdateSelectionCoverDto selectionCoverDto, String username) {
         var selection = getSelectionById(selectionCoverDto.getSelectionId());
-        if (isOwnerOrAdmin(username, selection)) {
-            Picture newCover = Picture.builder()
-                    .pictureType(selectionCoverDto.getPictureType())
-                    .build();
-            newCover = pictureRepository.save(newCover);
+//        if (isOwnerOrAdmin(username, selection)) {
+        Picture newCover = Picture.builder()
+                .pictureType(selectionCoverDto.getPictureType())
+                .build();
+        newCover = pictureRepository.save(newCover);
 
-            String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
-            try {
-                pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionCoverDto.getPicture()));
-            } catch (Exception e) {
-                throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
-            }
+        String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
+        try {
+            pictureStorage.savePicture(newCoverPath, selectionCoverDto.getPicture());
+        } catch (Exception e) {
+            throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
+        }
 
 //            deleteOldCower(selection.getPicture());
 
-            selection.setPicture(newCover);
-            selectionRepository.save(selection);
-        } else {
-            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
-        }
+        selection.setPicture(newCover);
+        selectionRepository.save(selection);
+//        } else {
+//            throw new AccessDeniedException(NOT_ENOUGH_RIGHT);
+//        }
 
     }
 
@@ -290,17 +301,17 @@ public class SelectionServiceImpl implements SelectionService {
     }
 
     @Override
-    public Selection getSelectionById(long selectionId){
+    public Selection getSelectionById(long selectionId) {
         return selectionRepository.findById(selectionId)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
-    public Selection getSelectionByTag(String tag){
+    public Selection getSelectionByTag(String tag) {
         return selectionRepository.findByTag(tag)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
     }
 
-    private boolean isOwnerOrAdmin(String username, Selection selection){
+    private boolean isOwnerOrAdmin(String username, Selection selection) {
         var user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NoSuchElementException(NO_SUCH_ELEMENT));
         return (user.getRole().equals(Role.ADMIN) || (selection.getOwner() == user.getId()));
