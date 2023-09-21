@@ -37,13 +37,13 @@ public class FilmController implements IFilmController {
     private final SelectionService selectionService;
 
 
-    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
-    @GetMapping(FIND_BY_ID)
-    public ResponseEntity<FilmDtoWithCover> getFilmById(@PathVariable("film_id") Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(filmService.getFilmById(id));
-    }
+//    @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
+//    @GetMapping(FIND_BY_ID)
+//    public ResponseEntity<FilmDtoWithCover> getFilmById(@PathVariable("film_id") Long id) {
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(filmService.getFilmById(id));
+//    }
 
     @CrossOrigin(origins = "https://movie-genie-131a7.web.app")
     @Override

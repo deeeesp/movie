@@ -9,21 +9,24 @@ values (1, 1),
        (5, 1);
 
 insert into film_selection (film_id, selection_id)
-values (6, 2);
---        (27, 2),
---        (36, 2),
---        (38, 2),
+values (6, 2),
+       (8, 2),
+       (14, 2),
+       (13, 2);
 --        (48, 2),
 --        (49, 2);
 
 insert into film_selection (film_id, selection_id)
-values (7, 3), (1, 3);
+values (7, 3),
+       (1, 3);
 --        (40, 3),
 --        (47, 3),
 --        (29, 3);
 
 insert into film_selection (film_id, selection_id)
-values (8, 4);
+values (8, 4),
+       (11, 4);
+--        (18, 4);
 --        (21, 4),
 --        (30, 4),
 --        (36, 4),
