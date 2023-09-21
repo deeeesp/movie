@@ -117,7 +117,7 @@ public class SelectionServiceImpl implements SelectionService {
 
             String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
             try {
-                pictureStorage.savePicture(newCoverPath, selectionDTO.getPicture());
+                pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionDTO.getPicture()));
             } catch (Exception e) {
                 throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
             }
@@ -226,7 +226,7 @@ public class SelectionServiceImpl implements SelectionService {
 
         String newCoverPath = pictureStorage.getSelectionCoverPath(newCover);
         try {
-            pictureStorage.savePicture(newCoverPath, selectionCoverDto.getPicture());
+            pictureStorage.savePicture(newCoverPath, new MockMultipartFile(newCoverPath, selectionCoverDto.getPicture()));
         } catch (Exception e) {
             throw new RuntimeException(SAVE_STORAGE_COVER_ERROR);
         }
