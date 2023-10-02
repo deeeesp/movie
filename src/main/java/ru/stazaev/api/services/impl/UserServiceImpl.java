@@ -74,8 +74,10 @@ public class UserServiceImpl implements UserService {
         var user = getByUsername(username);
         var selection = selectionRepository.findById(selectionId)
                 .orElseThrow(() -> new NoSuchElementException("Подборка с таким id не найдена"));
-        user.getSelections().add(selection);
-        userRepository.save(user);
+        if (!user.getSelections().contains(selection)) {
+            user.getSelections().add(selection);
+            userRepository.save(user);
+        }
     }
 
     @Override

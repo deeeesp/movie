@@ -130,21 +130,26 @@ public class SelectionServiceImpl implements SelectionService {
             }
         }
 
-        var films = selectionDTO.getFilms();
-        Selection selection = mapper.map(selectionDTO, Selection.class);
-        selection.getFilms().clear();
-        for (int i = 0; i < films.size(); i++) {
-            var film = filmRepository.findByTitle(films.get(i).getTitle());
-            film.ifPresent(filmList -> selection.getFilms().add(filmList.get(0)));
+        var sel = selectionRepository.findByTag(selectionDTO.getTag());
+        if (sel.isPresent()){
+            return sel.get().getId();
+        }else {
+            var films = selectionDTO.getFilms();
+            Selection selection = mapper.map(selectionDTO, Selection.class);
+            selection.getFilms().clear();
+            for (int i = 0; i < films.size(); i++) {
+                var film = filmRepository.findByTitle(films.get(i).getTitle());
+                film.ifPresent(filmList -> selection.getFilms().add(filmList.get(0)));
+            }
+            selection.setStatus(Status.ACTIVE);
+            selection.setPicture(newCover);
+            var user = userService.getByUsername(authentication.getName());
+            selection.setOwner(user.getId());
+            user.getSelections().add(selection);
+            user = userRepository.save(user);
+            var l = user.getSelections().indexOf(selection);
+            return user.getSelections().get(l).getId();
         }
-        selection.setStatus(Status.ACTIVE);
-        selection.setPicture(newCover);
-        var user = userService.getByUsername(authentication.getName());
-        selection.setOwner(user.getId());
-        user.getSelections().add(selection);
-        user = userRepository.save(user);
-        var l = user.getSelections().indexOf(selection);
-        return user.getSelections().get(l).getId();
     }
 
     @Override
@@ -152,8 +157,10 @@ public class SelectionServiceImpl implements SelectionService {
         var film = filmService.getById(filmId);
         var selection = getSelectionById(selectionId);
         if (isOwnerOrAdmin(username, selection)) {
-            selection.getFilms().add(film);
-            selectionRepository.save(selection);
+            if (!selection.getFilms().contains(film)){
+                selection.getFilms().add(film);
+                selectionRepository.save(selection);
+            }
         }
     }
 
@@ -161,8 +168,10 @@ public class SelectionServiceImpl implements SelectionService {
     public void addFilmToWillWatch(String username, long filmId) {
         var film = filmService.getById(filmId);
         var user = userService.getByUsername(username);
-        user.getWillWatchFilms().add(film);
-        userRepository.save(user);
+        if (!user.getWillWatchFilms().contains(film)) {
+            user.getWillWatchFilms().add(film);
+            userRepository.save(user);
+        }
     }
 
     @Override
