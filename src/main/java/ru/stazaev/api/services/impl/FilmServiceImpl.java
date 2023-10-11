@@ -107,8 +107,11 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public FilmSearchDto getFilmByTitleOrPlot(String title) {
         FilmSearchDto result = new FilmSearchDto();
-        result.setTitleFilms(getByTitleRatio(title));
-        result.setPlotFilms(getByPlotRatio(title));
+        var titleFilms = getByTitleRatio(title);
+        result.setTitleFilms(titleFilms);
+        var temp = getByPlotRatio(title);
+        temp.removeAll(titleFilms);
+        result.setPlotFilms(temp);
         return result;
     }
 
