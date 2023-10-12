@@ -17,6 +17,7 @@ public interface SelectionRepository extends JpaRepository<Selection, Long> {
     List<Selection> findAll();
 
     Optional<Selection> findByTag(String tag);
+    Optional<Selection> findByName(String name);
 
     @Modifying
     @Transactional

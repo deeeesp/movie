@@ -130,7 +130,7 @@ public class SelectionServiceImpl implements SelectionService {
             }
         }
 
-        var sel = selectionRepository.findByTag(selectionDTO.getTag());
+        var sel = selectionRepository.findByName(selectionDTO.getName());
         if (sel.isPresent()){
             return sel.get().getId();
         }else {

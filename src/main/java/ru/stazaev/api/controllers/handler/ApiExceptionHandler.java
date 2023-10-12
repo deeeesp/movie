@@ -9,8 +9,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.stazaev.api.dto.response.ApiErrorResponse;
-import ru.stazaev.api.dto.response.FieldErrorResponse;
 import ru.stazaev.api.exception.AlreadyRegisteredUserException;
 
 
